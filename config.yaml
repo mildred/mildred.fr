@@ -40,10 +40,11 @@ data_sources:
     # same as the items root, but applies to layouts rather than items.
     layouts_root: /
 
-base_url: http://website.example.com/
+base_url: http://mildred.fr
 
 deploy:
   default:
+    dst: "mildred_mildredkilya@ssh.phx.nearlyfreespeech.net:/home/public"
     options: ["--rsh=ssh", '-glpPrtvz', '--del', '--delete-excluded', '--exclude=.hg', '--exclude=.git', '--exclude=.svn']
 
 tags:
