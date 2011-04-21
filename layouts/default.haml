@@ -84,7 +84,10 @@
         </p>
       %hr/
       %p
-        %a(href="gpg_key.txt") GPG Public Key
+        %a(href="#{link_path("/gpg_key.txt")}") GPG Public Key
+        %br
+        %span(style="font-size: 0.8em")
+          (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
 
     .main
       - if @item[:kind] == 'article'
