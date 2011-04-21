@@ -1,4 +1,5 @@
-Redirect permanent /Blog/blog/2010/Images-SRS/ http://mildred.fr/Blog/2010/Images-SRS/
+Redirect gone /Blog/blog/2010/Images-SRS/
+Redirect gone /Blog/2010/Images-SRS/
 
 Redirect permanent /Blog/blog/2010/10/12/hospital.html http://mildred.fr/Blog/2010/10/12/hospital/
 Redirect permanent /Blog/blog/2010/10/12/shower.html http://mildred.fr/Blog/2010/10/12/shower/
