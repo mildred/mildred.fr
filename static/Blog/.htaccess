@@ -41,7 +41,7 @@ Redirect permanent /Blog/blog/index.html  http://mildred.fr/Blog/
 Redirect permanent /Blog/blog/index2.html http://mildred.fr/Blog/2/
 Redirect permanent /Blog/blog/index3.html http://mildred.fr/Blog/3/
 Redirect permanent /Blog/blog/index4.html http://mildred.fr/Blog/4/
-Redirect permanent /Blog/blog/ http://mildred.fr/Blog/
+# Redirect permanent /Blog/blog/ http://mildred.fr/Blog/
 
 Redirect permanent /Blog/tags/dev.html     http://mildred.fr/tags/dev/
 Redirect permanent /Blog/tags/dev2.html    http://mildred.fr/tags/dev/

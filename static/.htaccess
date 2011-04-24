@@ -1,0 +1,22 @@
+Redirect permanent /blog/ http://mildred.fr/Blog/blog/
+
+Redirect permanent /tags/dev.html     http://mildred.fr/tags/dev/
+Redirect permanent /tags/dev2.html    http://mildred.fr/tags/dev/
+Redirect permanent /tags/fr.html      http://mildred.fr/tags/fr/
+Redirect permanent /tags/fr2.html     http://mildred.fr/tags/fr/
+Redirect permanent /tags/comp.html    http://mildred.fr/tags/comp/
+Redirect permanent /tags/comp2.html   http://mildred.fr/tags/comp/
+Redirect permanent /tags/en.html      http://mildred.fr/tags/en/
+Redirect permanent /tags/en2.html     http://mildred.fr/tags/en/
+Redirect permanent /tags/en3.html     http://mildred.fr/tags/en/
+Redirect permanent /tags/lisaac.html  http://mildred.fr/tags/lisaac/
+Redirect permanent /tags/lisaac2.html http://mildred.fr/tags/lisaac/
+Redirect permanent /tags/dream.html   http://mildred.fr/tags/dream/
+Redirect permanent /tags/photos.html  http://mildred.fr/tags/photos/
+Redirect permanent /tags/photos2.html http://mildred.fr/tags/photos/
+Redirect permanent /tags/fedora.html  http://mildred.fr/tags/fedora/
+Redirect permanent /tags/fedora2.html http://mildred.fr/tags/fedora/
+Redirect permanent /tags/srs.html     http://mildred.fr/tags/srs/
+Redirect permanent /tags/srs2.html    http://mildred.fr/tags/srs/
+Redirect permanent /tags/freedombox.html http://mildred.fr/tags/freedombox/
+
