@@ -66,3 +66,9 @@ Redirect permanent /Blog/tags/             http://mildred.fr/tags/
 
 Redirect permanent /Blog/Images/ http://mildred.fr/Images/
 
+Redirect permanent /Blog/1.html http://mildred.fr/Blog/1/
+Redirect permanent /Blog/2.html http://mildred.fr/Blog/2/
+Redirect permanent /Blog/3.html http://mildred.fr/Blog/3/
+Redirect permanent /Blog/4.html http://mildred.fr/Blog/4/
+Redirect permanent /Blog/5.html http://mildred.fr/Blog/5/
+
