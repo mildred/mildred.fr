@@ -1,5 +1,7 @@
 Redirect permanent /blog/ http://mildred.fr/Blog/blog/
 
+Redirect permanent /atom.xml http://mildred.fr/Blog/atom.xml
+
 Redirect permanent /tags/dev.html     http://mildred.fr/tags/dev/
 Redirect permanent /tags/dev2.html    http://mildred.fr/tags/dev/
 Redirect permanent /tags/fr.html      http://mildred.fr/tags/fr/
