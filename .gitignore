@@ -3,3 +3,4 @@
 *~
 .redo/
 .sass-cache/
+*.orig
