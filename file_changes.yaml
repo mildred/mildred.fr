@@ -1,193 +1,197 @@
 --- 
-:"content/Blog/2010-10-13-meal.md": 
-  :created_at: 2010-10-13 10:18:16.428577 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: b8cedc5976db6c5c30f915e1f46c1d1c9ae947ba
-:"content/Blog/2011-04-29-lysaac_annotations.md": 
-  :created_at: 2011-04-29 09:40:10 +02:00
-  :updated_at: 2011-04-29 10:26:56 +02:00
-  :digest: b391d6266414eb06c2b947de911e9820bb22f79b
-:"content/Blog/2011-04-22-comments.md": 
-  :created_at: 2011-04-22 14:13:08 +02:00
-  :updated_at: 2011-04-22 14:17:00 +02:00
-  :digest: add73f883b06897556599eedd186588b67b8a116
-:"content/Blog/2010-10-14-back-to-normal.md": 
-  :created_at: 2010-10-14 13:59:24.875981 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: fab8372ee4f91fc36ee86d4e22f687e5255e4cf6
-:"content/Blog/2010-10-04-today.md": 
-  :created_at: 2010-10-04 01:39:41.352615 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 9b7dd7cc8d7cee54ff92a945bb91063c9179c48d
-:"content/Blog/2011-03-23-freedombox-connectivity.md": 
-  :created_at: 2011-03-23 09:21:20.127362 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 422232bb2bf726dae029602afaf483f897b00697
-:"content/Blog/2010-12-09-censorship.md": 
-  :created_at: 2010-12-09 19:23:58.128502 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 444c7cbcfa921cff04b988483779f0a2ab299b3f
-:"content/Blog/2010-10-19-update.md": 
-  :created_at: 2010-10-19 14:49:41.379824 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 4460d5aaa991ef070dfa28a5d04d3de311aeac52
-:"content/Blog/2010-10-12-hospital.md": 
-  :created_at: 2010-10-12 00:11:38.992154 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 5328d0ffc0d5278dd96abc3bf0d7e6ec15330b44
-:"content/articles/2011-04-11-update_to_nanoc.md": 
-  :created_at: 2011-04-11 17:38:55 +0200
-  :updated_at: 2011-04-11 17:41:18 +02:00
-  :digest: 4f6f309f14a353058b3bc4fabcacac082416297d
-:"content/Blog/2010-10-03-photos.md": 
-  :created_at: 2010-10-03 13:31:25.333654 +02:00
-  :updated_at: 2011-04-11 17:20:17 +02:00
-  :digest: b86c8904872fd47ff9ac2da5aaf99fc2cf07b769
-:"content/articles/2011-04-12-lysaac_and_clusters.md": 
-  :created_at: 2011-04-12 16:35:44 +02:00
-  :updated_at: 2011-04-12 17:13:47 +02:00
-  :digest: ca87578623974f865d376b1035ed0b3403212f7d
-:"content/Blog/2010-10-12-dilation.md": 
-  :created_at: 2010-10-12 06:45:29.935458 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 060bbf14b584790a1e90aba75b3491f0c3307ff5
-:"content/Blog/2010-09-06-aliasing-strings-in-lisaac.md": 
-  :created_at: 2010-09-06 09:13:44.364009 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 2584bf2dfdd45dc45aff5ac3e61230dcb413a5a1
-:"content/Blog/2010-10-09-pain.md": 
-  :created_at: 2010-10-09 03:29:42.742573 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 106acff1aa27ed08b2b59d052ce2281ac01cc5d6
-:"content/articles/2011-04-11-update_to_nanoc_bis.md": 
-  :created_at: 2011-04-11 17:44:33 +02:00
-  :updated_at: 2011-04-11 17:44:33 +02:00
-  :digest: 7acf4efc2ad4e02c5d93d53396cb80be63099638
-:"content/Blog/2010-10-22-revision.md": 
-  :created_at: 2010-10-22 10:04:49.936016 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 3ec0785a2191568d874e322bcf6aa2726044d010
-:"content/Blog/2010-10-12-shower.md": 
-  :created_at: 2010-10-12 07:05:31.605241 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: fbbff6b0ffbac2bbbb164452c7f5e88b37729b7e
-:"content/Blog/2010-10-03-hospital.md": 
-  :created_at: 2010-10-03 16:45:16.982514 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: c1566d7c6a6a652b3f6fcd6c867831a725265945
-:"content/Blog/2010-10-13-pattaya.md": 
-  :created_at: 2010-10-13 06:42:06.141464 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: d7a7913e7de0f51f725dd0ff83e7481e4114472b
-:"content/Blog/2010-09-29-voyage.md": 
-  :created_at: 2010-09-29 11:15:12.935925 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 5c470def8fa8572b8ff818f7194c7c60beb3d691
-:"content/Blog/2010-09-07-design-patterns.md": 
-  :created_at: 2010-09-07 18:26:03.931702 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 2487af1aeb6db794c5c35688bd21b17f510c048a
-:"content/Blog/2011-04-29-stack_environments.md": 
-  :created_at: 2011-04-29 09:52:05 +02:00
-  :updated_at: 2011-04-29 09:56:29 +02:00
-  :digest: 9a66d39d336b2b0f8114c85a04db93701964da2d
-:"content/Blog/2010-11-08-end-of-srs.md": 
-  :created_at: 2010-11-08 13:14:05.827421 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: e76c19caa0d66de027048c47a18364ff62abd8eb
-:"content/Blog/2010-10-06-alive.md": 
-  :created_at: 2010-10-06 02:06:47.883448 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 797a098851f9a35eb2c31e5ea20de6d71f7350e1
-:"content/Blog/2011-05-02-lysaac_now_compiles_hello_world.md": 
-  :created_at: 2011-05-02 12:04:17 +02:00
-  :updated_at: 2011-05-02 12:12:49 +02:00
-  :digest: a3db4f2c7081eb071bb05ae63996f8f647b12504
-:"content/Blog/2011-03-29-pipe-e.md": 
-  :created_at: 2011-03-29 14:34:17.356692 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 94eb37b2272fc5c28894c46b95a78d1ea61ffee3
-:"content/Blog/2011-06-28-lysaac_on_en_parle_pas_mais_ca_avance.md": 
-  :created_at: 2011-06-28 12:51:44 +02:00
-  :updated_at: 2011-06-28 13:13:54 +02:00
-  :digest: 7b78b864048e8e9b155c3a9a360672430c8ce64a
-:"content/Blog/2011-02-11-section-interface.md": 
-  :created_at: 2011-02-11 18:54:11.698599 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 5dc7a6c96a9609d25e473aeff689e3e45691f31c
-:"content/Blog/2011-03-22-freedombox.md": 
-  :created_at: 2011-03-22 09:26:44.986870 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: aa70808263eccf89c5e265fa3beb0a736dc943ae
-:"content/Blog/2011-05-09-hmp_http_message_protocol.md": 
-  :created_at: 2011-05-09 14:40:00 +02:00
-  :updated_at: 2011-05-09 15:09:09 +02:00
-  :digest: 695955a2a370df0f90d3e87d32420a7b77cc51fd
-:"content/Blog/2011-04-24-static_website_architecture.md": 
-  :created_at: 2011-04-24 21:13:46 +02:00
-  :updated_at: 2011-04-24 22:05:27 +02:00
-  :digest: aa4b108272c4a0f29d5d8962ce66e10e94da7800
-:"content/Blog/2010-09-15-problemes-de-performance.md": 
-  :created_at: 2010-09-15 14:08:30.485455 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 5d2a266ba7f1ef7c497bde8bd492841b5e433e4e
-:"content/Blog/2010-10-09-difficult-days.md": 
-  :created_at: 2010-10-09 02:21:04.559552 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: d7b24b68e4644480101e6899b09e35dcfc9faa2a
-:"content/Blog/2010-10-02-thailand.md": 
-  :created_at: 2010-10-02 06:40:13.380667 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: e04247d363900178d6f0b93a42935b85d561ff5f
-:"content/Blog/2011-04-29-union_types_and_null.md": 
-  :created_at: 2011-04-29 09:56:47 +02:00
-  :updated_at: 2011-04-29 10:24:57 +02:00
-  :digest: e39fd8a18d16ad7a73d7ce0979f0b6e154c7bbe8
-:"content/articles/2011-04-20-clusters_in_lysaac_works.md": 
-  :created_at: 2011-04-20 11:17:37 +02:00
-  :updated_at: 2011-04-20 11:21:06 +02:00
-  :digest: 44d6d898befe982b2013f5597da8a480844450ed
-:"content/Blog/2010-09-05-first-post.md": 
-  :created_at: 2010-09-05 08:11:58.571160 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 9fb055054ad76af120ee7bc178fdcdb7766f1a23
-:"content/Blog/2011-01-26-how-i-would-want-blocks-in-lisaac.md": 
-  :created_at: 2011-01-26 22:22:12.631849 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 943322a54f5890ed33bae9574e838fe41a66213b
-:"content/Blog/2010-10-13-medecine.md": 
-  :created_at: 2010-10-13 10:02:11.442869 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 7c73556533a89a42df67891660741d670d77dd50
-:"content/Blog/2010-12-03-dream.md": 
-  :created_at: 2010-12-03 08:28:34.819531 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 38320711ff42b4ed904306f8e25ecf5db0b5f5ec
-:"content/Blog/2011-04-29-lysaac_compilation_model_and_inline_prototypes.md": 
-  :created_at: 2011-04-29 09:19:04 +02:00
-  :updated_at: 2011-04-29 09:39:24 +02:00
-  :digest: 2b1e1a3e16a4896817396e04a9e8c07680119ea5
-:"content/Blog/2011-03-22-update-bind-dns-from-avahi.md": 
-  :created_at: 2011-03-22 10:10:37.138277 +01:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 6941f67abc459f5b1a0d053bf2499fc8e93ed962
-:"content/Blog/2010-10-13-hormones.md": 
-  :created_at: 2010-10-13 10:30:16.112476 +02:00
-  :updated_at: 2011-04-11 10:27:48 +02:00
-  :digest: 830d49db33b2da84f9f7ab9a49ea8d31fc9b40d1
 :"content/Blog/2010-09-28-probleme-fedora-14.md": 
-  :created_at: 2010-09-28 14:03:55.772917 +02:00
   :updated_at: 2011-04-11 10:27:48 +02:00
   :digest: f8a94830bfbdfaf2491329497e7c758914b72913
+  :created_at: 2010-09-28 14:03:55.772917 +02:00
+:"content/Blog/2010-10-09-difficult-days.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: d7b24b68e4644480101e6899b09e35dcfc9faa2a
+  :created_at: 2010-10-09 02:21:04.559552 +02:00
+:"content/Blog/2011-04-29-stack_environments.md": 
+  :updated_at: 2011-04-29 09:56:29 +02:00
+  :digest: 9a66d39d336b2b0f8114c85a04db93701964da2d
+  :created_at: 2011-04-29 09:52:05 +02:00
+:"content/articles/2011-04-12-lysaac_and_clusters.md": 
+  :updated_at: 2011-04-12 17:13:47 +02:00
+  :digest: ca87578623974f865d376b1035ed0b3403212f7d
+  :created_at: 2011-04-12 16:35:44 +02:00
+:"content/Blog/2010-10-13-meal.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: b8cedc5976db6c5c30f915e1f46c1d1c9ae947ba
+  :created_at: 2010-10-13 10:18:16.428577 +02:00
+:"content/Blog/2010-10-13-medecine.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 7c73556533a89a42df67891660741d670d77dd50
+  :created_at: 2010-10-13 10:02:11.442869 +02:00
+:"content/Blog/2011-02-11-section-interface.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 5dc7a6c96a9609d25e473aeff689e3e45691f31c
+  :created_at: 2011-02-11 18:54:11.698599 +01:00
+:"content/Blog/2010-10-12-shower.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: fbbff6b0ffbac2bbbb164452c7f5e88b37729b7e
+  :created_at: 2010-10-12 07:05:31.605241 +02:00
+:"content/Blog/2010-12-09-censorship.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 444c7cbcfa921cff04b988483779f0a2ab299b3f
+  :created_at: 2010-12-09 19:23:58.128502 +01:00
 :"content/Blog/2011-06-28-lysaac_not_talking_about_it_but_goes_forward.md": 
-  :created_at: 2011-06-28 12:51:44 +02:00
   :updated_at: 2011-06-28 13:13:37 +02:00
   :digest: 5a90ebae7138088029f953e9dab7b98c5dbbdf53
+  :created_at: 2011-06-28 12:51:44 +02:00
+:"content/Blog/2010-10-02-thailand.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: e04247d363900178d6f0b93a42935b85d561ff5f
+  :created_at: 2010-10-02 06:40:13.380667 +02:00
+:"content/Blog/2010-11-08-end-of-srs.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: e76c19caa0d66de027048c47a18364ff62abd8eb
+  :created_at: 2010-11-08 13:14:05.827421 +01:00
+:"content/Blog/2010-10-12-dilation.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 060bbf14b584790a1e90aba75b3491f0c3307ff5
+  :created_at: 2010-10-12 06:45:29.935458 +02:00
+:"content/Blog/2011-04-29-lysaac_annotations.md": 
+  :updated_at: 2011-04-29 10:26:56 +02:00
+  :digest: b391d6266414eb06c2b947de911e9820bb22f79b
+  :created_at: 2011-04-29 09:40:10 +02:00
+:"content/Blog/2010-12-03-dream.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 38320711ff42b4ed904306f8e25ecf5db0b5f5ec
+  :created_at: 2010-12-03 08:28:34.819531 +01:00
+:"content/Blog/2011-03-22-freedombox.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: aa70808263eccf89c5e265fa3beb0a736dc943ae
+  :created_at: 2011-03-22 09:26:44.986870 +01:00
+:"content/Blog/2010-10-03-hospital.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: c1566d7c6a6a652b3f6fcd6c867831a725265945
+  :created_at: 2010-10-03 16:45:16.982514 +02:00
+:"content/Blog/2010-10-19-update.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 4460d5aaa991ef070dfa28a5d04d3de311aeac52
+  :created_at: 2010-10-19 14:49:41.379824 +02:00
 :"content/Blog/2011-06-28-home_directory_package_manager.md": 
-  :created_at: 2011-06-28 12:17:55 +02:00
   :updated_at: 2011-06-28 12:40:46 +02:00
   :digest: e309287a5d569f7beca15407c671595643f9b193
+  :created_at: 2011-06-28 12:17:55 +02:00
+:"content/Blog/2011-04-29-union_types_and_null.md": 
+  :updated_at: 2011-04-29 10:24:57 +02:00
+  :digest: e39fd8a18d16ad7a73d7ce0979f0b6e154c7bbe8
+  :created_at: 2011-04-29 09:56:47 +02:00
+:"content/Blog/2010-10-06-alive.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 797a098851f9a35eb2c31e5ea20de6d71f7350e1
+  :created_at: 2010-10-06 02:06:47.883448 +02:00
+:"content/Blog/2010-09-06-aliasing-strings-in-lisaac.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 2584bf2dfdd45dc45aff5ac3e61230dcb413a5a1
+  :created_at: 2010-09-06 09:13:44.364009 +02:00
+:"content/Blog/2011-04-22-comments.md": 
+  :updated_at: 2011-04-22 14:17:00 +02:00
+  :digest: add73f883b06897556599eedd186588b67b8a116
+  :created_at: 2011-04-22 14:13:08 +02:00
+:"content/Blog/2011-04-29-lysaac_compilation_model_and_inline_prototypes.md": 
+  :updated_at: 2011-04-29 09:39:24 +02:00
+  :digest: 2b1e1a3e16a4896817396e04a9e8c07680119ea5
+  :created_at: 2011-04-29 09:19:04 +02:00
+:"content/Blog/2011-05-09-hmp_http_message_protocol.md": 
+  :updated_at: 2011-05-09 15:09:09 +02:00
+  :digest: 695955a2a370df0f90d3e87d32420a7b77cc51fd
+  :created_at: 2011-05-09 14:40:00 +02:00
+:"content/Blog/2010-10-13-pattaya.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: d7a7913e7de0f51f725dd0ff83e7481e4114472b
+  :created_at: 2010-10-13 06:42:06.141464 +02:00
+:"content/Blog/2010-10-12-hospital.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 5328d0ffc0d5278dd96abc3bf0d7e6ec15330b44
+  :created_at: 2010-10-12 00:11:38.992154 +02:00
 :"content/Blog/2010-09-07-prototypes.md": 
-  :created_at: 2010-09-07 18:16:34.678733 +02:00
   :updated_at: 2011-04-11 10:27:48 +02:00
   :digest: d971b44476a61ff3903e976c36e3eb70da305c8c
+  :created_at: 2010-09-07 18:16:34.678733 +02:00
+:"content/articles/2011-04-20-clusters_in_lysaac_works.md": 
+  :updated_at: 2011-04-20 11:21:06 +02:00
+  :digest: 44d6d898befe982b2013f5597da8a480844450ed
+  :created_at: 2011-04-20 11:17:37 +02:00
+:"content/Blog/2011-05-02-lysaac_now_compiles_hello_world.md": 
+  :updated_at: 2011-05-02 12:12:49 +02:00
+  :digest: a3db4f2c7081eb071bb05ae63996f8f647b12504
+  :created_at: 2011-05-02 12:04:17 +02:00
+:"content/Blog/2010-10-09-pain.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 106acff1aa27ed08b2b59d052ce2281ac01cc5d6
+  :created_at: 2010-10-09 03:29:42.742573 +02:00
+:"content/Blog/2010-10-14-back-to-normal.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: fab8372ee4f91fc36ee86d4e22f687e5255e4cf6
+  :created_at: 2010-10-14 13:59:24.875981 +02:00
+:"content/Blog/2011-03-22-update-bind-dns-from-avahi.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 6941f67abc459f5b1a0d053bf2499fc8e93ed962
+  :created_at: 2011-03-22 10:10:37.138277 +01:00
+:"content/Blog/2011-04-24-static_website_architecture.md": 
+  :updated_at: 2011-04-24 22:05:27 +02:00
+  :digest: aa4b108272c4a0f29d5d8962ce66e10e94da7800
+  :created_at: 2011-04-24 21:13:46 +02:00
+:"content/Blog/2010-09-29-voyage.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 5c470def8fa8572b8ff818f7194c7c60beb3d691
+  :created_at: 2010-09-29 11:15:12.935925 +02:00
+:"content/articles/2011-04-11-update_to_nanoc.md": 
+  :updated_at: 2011-04-11 17:41:18 +02:00
+  :digest: 4f6f309f14a353058b3bc4fabcacac082416297d
+  :created_at: 2011-04-11 17:38:55 +0200
+:"content/articles/2011-07-25-les_adresses_utiles.md": 
+  :updated_at: 2011-08-05 09:40:01 +02:00
+  :digest: 189e4b00ae8f6e52245ef233fbb30d969530b0b0
+  :created_at: 2011-07-25 15:09:09 +02:00
+:"content/Blog/2010-09-05-first-post.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 9fb055054ad76af120ee7bc178fdcdb7766f1a23
+  :created_at: 2010-09-05 08:11:58.571160 +02:00
+:"content/Blog/2011-03-29-pipe-e.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 94eb37b2272fc5c28894c46b95a78d1ea61ffee3
+  :created_at: 2011-03-29 14:34:17.356692 +02:00
+:"content/articles/2011-04-11-update_to_nanoc_bis.md": 
+  :updated_at: 2011-04-11 17:44:33 +02:00
+  :digest: 7acf4efc2ad4e02c5d93d53396cb80be63099638
+  :created_at: 2011-04-11 17:44:33 +02:00
+:"content/Blog/2010-10-04-today.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 9b7dd7cc8d7cee54ff92a945bb91063c9179c48d
+  :created_at: 2010-10-04 01:39:41.352615 +02:00
+:"content/Blog/2010-10-13-hormones.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 830d49db33b2da84f9f7ab9a49ea8d31fc9b40d1
+  :created_at: 2010-10-13 10:30:16.112476 +02:00
+:"content/Blog/2010-09-15-problemes-de-performance.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 5d2a266ba7f1ef7c497bde8bd492841b5e433e4e
+  :created_at: 2010-09-15 14:08:30.485455 +02:00
+:"content/Blog/2010-09-07-design-patterns.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 2487af1aeb6db794c5c35688bd21b17f510c048a
+  :created_at: 2010-09-07 18:26:03.931702 +02:00
+:"content/Blog/2010-10-03-photos.md": 
+  :updated_at: 2011-04-11 17:20:17 +02:00
+  :digest: b86c8904872fd47ff9ac2da5aaf99fc2cf07b769
+  :created_at: 2010-10-03 13:31:25.333654 +02:00
+:"content/Blog/2011-01-26-how-i-would-want-blocks-in-lisaac.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 943322a54f5890ed33bae9574e838fe41a66213b
+  :created_at: 2011-01-26 22:22:12.631849 +01:00
+:"content/Blog/2011-06-28-lysaac_on_en_parle_pas_mais_ca_avance.md": 
+  :updated_at: 2011-06-28 13:13:54 +02:00
+  :digest: 7b78b864048e8e9b155c3a9a360672430c8ce64a
+  :created_at: 2011-06-28 12:51:44 +02:00
+:"content/Blog/2010-10-22-revision.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 3ec0785a2191568d874e322bcf6aa2726044d010
+  :created_at: 2010-10-22 10:04:49.936016 +02:00
+:"content/Blog/2011-03-23-freedombox-connectivity.md": 
+  :updated_at: 2011-04-11 10:27:48 +02:00
+  :digest: 422232bb2bf726dae029602afaf483f897b00697
+  :created_at: 2011-03-23 09:21:20.127362 +01:00

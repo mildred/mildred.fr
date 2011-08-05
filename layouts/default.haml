@@ -15,7 +15,7 @@
 !!! 5
 %html
   %head
-    %title= "#{@item[:title]}"
+    %title= "#{@item[:title]} - #{@config[:site_name]}"
     %meta(charset="utf-8")/
     %meta(http-equiv="Content-Type" content="text/html; charset=utf-8")/
     %meta(name="keywords"    content="#{keywords}")/
@@ -31,6 +31,7 @@
     %script(src="#{link_path("/Scripts/json/json2.js")}" type="text/javascript")
     %script(src="#{link_path("/Scripts/jquery.min.js")}" type="text/javascript")
     %script(src="#{link_path("/Scripts/comments.js")}" type="text/javascript")
+    %script(src="#{link_path("/Scripts/local.js")}" type="text/javascript")
     -if @item.identifier == '/'
       :plain
         <!-- Home Page Special Links -->
@@ -48,28 +49,36 @@
   %body
     -# needed since some content render <pre> blocks
     - content = find_and_preserve(yield)
-    
+
     .header
-      %h1 Mildred's Website
-      
-      .links
-        %ul
-          %li
-            %a(href="#{link_item("/")}") Home
-          %li
-            %a(href="#{link_item("/Blog/")}") Blog
-      
-      .content
+      %p.access-links
+        %a(href="#menu") Go to Menu
+        %br
+        %a(href="#content") Go to Content
+
+      .left
+        %a(href="#{link_item("/")}")
+          %img(src="#{link_path("/Images/IMG_5669_square_128.jpeg")}" alt="")
+
+      .title
+        %h1
+          %a(href="#{link_item("/")}")= @config[:site_name]
+      .float-right
+      .clear-right
+
+      .right
         %strong Tags:
         %ul.tags
           - tags.each do |tag|
             %li
               %a{:href => link_item("/tags/#{tag}/"), :class=>'tag'}= tag
+
+      .content
+        = render "_menu"      
       
       .clear
     
     .leftcol
-      %img(class="photo" src="#{link_path("/Images/IMG_5669_square_128.jpeg")}" alt="My photo")/
       %img(class="photo" src="#{link_path("/Images/all128.jpeg")}" alt="My avatar")/
       %hr/
       :plain
@@ -83,7 +92,7 @@
         %span(style="font-size: 0.8em")
           (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
 
-    .main
+    .main#content
       - if @item[:kind] == 'article'
         = render('_article', :item => @item, :content => content)
         %noscript
