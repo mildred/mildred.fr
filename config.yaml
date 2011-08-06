@@ -41,6 +41,7 @@ data_sources:
     layouts_root: /
 
 base_url: http://mildred.fr
+site_name: Mildred's Website
 
 deploy:
   default:
@@ -56,6 +57,8 @@ tags:
     layout: default
     page_size: 10
 
+author:
+  Mildred: "http://mildred.fr"
 
 # Atom feed
 
