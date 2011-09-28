@@ -47,9 +47,6 @@
         <!--link rel="openid.server"   href="http://openid.xmpp.za.net/server"-->
         <!--link rel="openid.delegate" href="http://openid.xmpp.za.net/base64/bWlsZHJlZEBqYWJiZXIuZnI="-->
   %body
-    -# needed since some content render <pre> blocks
-    - content = find_and_preserve(yield)
-
     .header
       %p.access-links
         %a(href="#menu") Go to Menu
@@ -94,7 +91,10 @@
 
     .main#content
       - if @item[:kind] == 'article'
-        = render('_article', :item => @item, :content => content)
+        -# needed since some content render <pre> blocks
+        -# warning: find_and_preserve should be done at the last moment
+        -#          it is dependant upon the haml identation
+        = render('_article', :item => @item, :content => yield)
         %noscript
           %p
             Scripts are disabled on your computer. In order to access existing
@@ -105,7 +105,10 @@
             server to both retrieve the comments and post a new comment.
         .clear
       - else
-        = content
+        -# needed since some content render <pre> blocks
+        -# warning: find_and_preserve should be done at the last moment
+        -#          it is dependant upon the haml identation
+        = find_and_preserve(yield)
         .clear
 
     .clear
