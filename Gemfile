@@ -13,4 +13,4 @@ gem 'haml'      # HTML
 gem 'rdiscount' # haml markdown
 gem 'kramdown'  # markdown
 
-
+gem 'rake'
