@@ -38,9 +38,6 @@ require 'rexml/document'
 
 module Jekyll
 
-  # Change config_root_url to reflect the site you are using
-  config_root_url = "http://www.mysite.com"
-
   class Post
     attr_accessor :name
 
@@ -48,8 +45,8 @@ module Jekyll
       File.join(@base, @name)
     end
 
-    def location_on_server
-      "#{config_root_url}#{url}"
+    def location_on_server(root_url)
+      "#{root_url}#{url}"
     end
   end
 
@@ -60,8 +57,8 @@ module Jekyll
       File.join(@base, @dir, @name)
     end
 
-    def location_on_server
-      location = "#{config_root_url}#{@dir}#{url}"
+    def location_on_server(root_url)
+      location = "#{root_url}#{@dir}#{url}"
       location.gsub(/index.html$/, "")
     end
   end
@@ -95,26 +92,21 @@ module Jekyll
     # Returns nothing
     def generate(site)
       # Load configuration
-      config_root_url = site.config[:sitemap][:root_url]
+      site.config['sitemap'] = {} if site.config['sitemap'].nil?
+      @root_url = site.config['sitemap']['root_url']
+
+      sitemap_xml = site.config['sitemap']['file']
+      sitemap_xml = "sitemap.xml" if sitemap_xml.nil?
+
+      @excluded_files = site.config['sitemap']['excluded']
+      @excluded_files = [] if @excluded_files.nil?
+
+      @pages_include_posts = site.config['sitemap']['include_posts']
+      @pages_include_posts = [] if @pages_include_posts.nil?
 
       begin
-        sitemap_xml = site.config[:sitemap][:file]
-      rescue
-        sitemap_xml = "sitemap.xml"
-      end
-      begin
-        @excluded_files = site.config[:sitemap][:excluded]
-      rescue
-        @excluded_files = []
-      end
-      begin
-        @pages_include_posts = site.config[:sitemap][:include_posts]
-      rescue
-        @pages_include_posts = []
-      end
-      begin
         @custom_var = {:change_frequency => "change_frequency", :priority => "priority"}
-        @custom_var.merge!(site.config[:sitemap][:variables])
+        @custom_var.merge!(Hash[site.config['sitemap']['variables'].map{|k,v| [k.to_sym, v]}])
       rescue
       end
 
@@ -220,7 +212,7 @@ module Jekyll
     # Returns the location of the page or post
     def fill_location(page_or_post)
       loc = REXML::Element.new "loc"
-      loc.text = page_or_post.location_on_server
+      loc.text = page_or_post.location_on_server(@root_url)
 
       loc
     end
