@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'jekyll'
+gem 'jekyll', :git => 'https://github.com/mildred/jekyll.git'
 
 gem 'sass'
 gem 'haml'

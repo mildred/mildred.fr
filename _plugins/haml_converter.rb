@@ -1,6 +1,20 @@
 # https://gist.github.com/481456
 
 module Jekyll
+
+  class Converter
+    attr_accessor :item
+  end
+
+  module Convertible
+    alias old_transform transform
+
+    def transform(*args)
+      converter.item = self
+      old_transform(*args)
+    end
+  end
+
   require 'haml'
   class HamlConverter < Converter
     safe true
@@ -14,9 +28,9 @@ module Jekyll
       ".html"
     end
 
-    def convert(content)
+    def run(content, item)
       engine = Haml::Engine.new(content)
-      engine.render
+      engine.render Object.new, :config => @config, :item => item
     end
   end
 
