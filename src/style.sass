@@ -1,0 +1,213 @@
+---
+title:         CSS Style
+route_default: /style.css
+---
+
+$debug: 0
+$color_link: #125AA7
+$font_size_menu: 0.8em
+$width_menu: 10em
+
+@if $debug != 0
+  /***** DEBUG *****/
+  *
+    border: solid 1px transparent
+  *:hover
+    border: solid 1px black
+
+
+html
+  font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif
+
+.header
+  a
+    text-decoration: none
+  border-bottom: 1px solid #ddd
+  .access-links
+    float: right
+    font-size: 0.7em
+    opacity: 0.5
+  .left
+    float: left
+    width: 10em
+    height: 100%
+    img
+      max-width: 9.5em
+  .title
+    border-bottom: 2px solid #125AA7
+    h1
+      margin: 0
+  .title, .content
+    margin-left: 10em
+  .right
+    float: right
+    width: 10em
+    & > *
+      font-size: $font_size_menu
+  .links
+    ul
+      margin: 0
+    a
+      font-weight: bold
+      color: $color_link
+    & > ul
+      padding: 0
+      & > li
+        // width: $width_menu
+        display: inline-block
+        vertical-align: top
+        margin: 0
+        padding:
+          left: 0.5em
+          right: 0.5em
+        &:last-child
+          border-right: none
+        border-right: 1px solid #ddd
+        list-style-type: none
+        & > *
+          font-size: $font_size_menu
+
+.leftcol
+  float: left
+  width: 10em
+  min-width: 150px
+  font-size: 0.7em
+
+.main
+  padding-left: 11em
+  margin:
+    right: 1em
+    left: 1em
+  max-width: 80em
+  text-align: justify
+
+.footer
+  font-style: italic
+
+.meta
+  margin:
+    top: -1em
+    //left: 1em
+  font-size:  0.8em
+  .date
+    font-weight: bold
+  .author
+    padding-left: 1em
+    .author-name
+      font-weight: bold
+
+
+
+
+.clear
+  clear: both
+.clear-left
+  clear: left
+.clear-right
+  clear: right
+.float-left
+  float: left
+.float-right
+  float: right
+
+h1, h2
+  text-shadow: 2px 2px 3px rgba(135, 145, 135, 0.65)
+
+h1,h2,h3,h4,h5,h6
+  color: #111
+  a
+    text-decoration: none
+
+a[href]
+  color: $color_link
+  &:hover
+    text-decoration: underline
+    color: #000
+
+blockquote
+  color: #606060
+
+tt, code, pre
+  background:   #eee
+
+pre
+  border:       1px solid #ddd
+  margin-left:  2em
+  margin-right: 1em
+  padding:      0.5em
+  -moz-border-radius-topleft:    1em
+  -webkit-border-radius-topleft: 1em
+  border-radius-topleft:         1em
+  -moz-border-radius-bottomright:    1em
+  -webkit-border-radius-bottomright: 1em
+  border-radius-bottomright:         1em
+
+hr
+  background: #B2CCFF
+  color:      #B2CCFF
+
+table
+  border-top:     1px solid #ddd
+  border-left:    1px solid #ddd
+
+th,td
+  border-bottom:  1px solid #ddd
+  border-right:   1px solid #ddd
+
+
+dt
+  margin-top: 0.7em
+  margin-bottom: 0.3em
+  font-style: italic
+
+ul.tags, ul.page-list, .tags
+  display: inline
+  padding: 0
+  margin:
+    left: 1em
+    right: 1em
+    top: 0
+    bottom: 0
+  *
+    margin: 0
+    padding: 0
+  li, .tag
+    display: inline
+    padding-left:  0.25em
+    border-left:   1px solid #ddd
+    &:first-child
+      border-left: none
+      padding-left: 0
+  a
+    text-decoration: none
+  a:hover
+    background-color: #eee
+
+@media screen and (min-width: 20em)
+  // If we want to implement a menu, put here the code for workstation computers
+
+@media screen and (max-width: 20em)
+  // If we want to implement a menu, put here the code for smartphones
+  .header
+    .title, .content
+      margin: 0
+      clear: both
+  .leftcol
+    float: none
+  .main
+    margin: 0
+    padding: 0
+
+.comments
+  .comment
+    width: 100%
+    max-width: 40em
+    border-bottom: 1px solid #ddd
+    .meta
+      margin-top: 0.5em
+  .comment-reply
+    textarea
+      width: 100%
+      max-width: 40em
+      height: 5em
+
