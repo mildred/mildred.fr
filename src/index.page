@@ -1,6 +1,6 @@
 ---
 title: Mildred's Website
-output_path_style: [index, :ext]
+index: true
 blocks:
   default:
     pipeline: haml

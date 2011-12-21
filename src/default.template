@@ -26,8 +26,7 @@
     %script(type="text/javascript" src="#{link_path("/Scripts/jquery.min.js")}")
     %script(type="text/javascript" src="#{link_path("/Scripts/comments.js")}")
     %script(type="text/javascript" src="#{link_path("/Scripts/local.js")}")
-    - warn "TODO: if '#{node.path}' == '/' ???"
-    - if node.path == '/'
+    - if node.path == '/index.html'
       :plain
         <!-- Home Page Special Links -->
         <link rel="pavatar" href="http://mildred.fr/Images/IMG_5669_square_80.jpeg" />

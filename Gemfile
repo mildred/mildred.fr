@@ -1,5 +1,8 @@
 source :rubygems
 
+# webgen
+gem 'webgen', :git => 'git://github.com/mildred/webgen.git'
+
 # nanoc and nanoc helpers
 gem 'nanoc', '~> 3'
 gem 'adsf'       # nanoc view
