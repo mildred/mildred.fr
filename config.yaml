@@ -21,15 +21,16 @@
 # Some common use cases are shown below.
 #####
 
+sources:
+  - [/, Webgen::Source::FileSystem, src]
+
 patterns:
-  Page:
-    add: [**/*.md, **/*.mdwn, **/*.markdown, **/*.haml]
   Copy:
-    add: [**/*.pdf, **/*.djvu]
+    add: [**/*.css, **/*.js, **/*.jpeg, **/*.txt]
 
 default_processing_pipeline:
   Page: markdown,fragments
-  Template: haml
+  Template: hamlplus
 
 website.lang: fr
 
@@ -37,8 +38,11 @@ sourcehandler.casefold: false
 output.do_deletion: true
 
 default_meta_info:
+  Page:
+    output_path_style: [:parent, :basename, [., :lang], "/index", :ext]
   Template:
-    site_name: Site Name
+    base_url: http://mildred.fr
+    site_name: Mildred's Website
 
 
 ###################################

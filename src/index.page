@@ -1,5 +1,9 @@
 ---
 title: Mildred's Website
+output_path_style: [index, :ext]
+blocks:
+  default:
+    pipeline: haml
 ---
 
 - year = Time.now.year

@@ -1,8 +1,4 @@
 :ruby
-
-  extend Webgen::Template
-  @context = context
-
   tags = node['tags'] || []
   keywords = tags + (node['keywords'] || [])
   keywords = keywords.join ", "
