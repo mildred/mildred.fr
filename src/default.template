@@ -19,7 +19,7 @@
     %link(rel="canonical"     href="#{link_absolute context.node}")/
     %link(rel="icon"          href="#{link_path("/favicon.png")}" type="image/png")/
     %link(rel="shortcut icon" href="#{link_path("/favicon.png")}" type="image/png")/
-    %link(rel="stylesheet"    href="#{link_path("/style.css")}"   type="text/css" media="screen")/
+    %link(rel="stylesheet"    href="#{link_path("/style.sass")}"   type="text/css" media="screen")/
     - if not atom.nil? and not atom.path.nil?
       %link(rel="alternate"   href="#{link_item(atom)}"           type="application/atom+xml" title="ATOM Feed")/
     %script(type="text/javascript" src="#{link_path("/Scripts/json/json2.js")}")

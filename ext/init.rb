@@ -7,5 +7,23 @@
 #
 # The +config+ variable below can be used to access the Webgen::Configuration object for the current
 # website.
+
 config = Webgen::WebsiteAccess.website.config
+
+module Webgen
+  class Configuration
+    module Helpers
+
+      def pre_exec(commands)
+        Dir.chdir(File.join(File.dirname(__FILE__), '..')) do
+          commands.each do |cmd|
+            puts "Execute #{cmd}"
+            system cmd
+          end
+        end
+      end
+    
+    end
+  end
+end
 

@@ -25,6 +25,8 @@ sources:
   - [/, Webgen::Source::FileSystem, src]
 
 patterns:
+  Page:
+    add: [**/*.sass]
   Copy:
     add: [**/*.css, **/*.js, **/*.jpeg, **/*.txt]
 
@@ -44,6 +46,9 @@ default_meta_info:
     base_url: http://mildred.fr
     site_name: Mildred's Website
 
+
+pre_exec:
+  - rsync -a --exclude=.git --exclude='*~' static/. out/
 
 ###################################
 ## nanoc ##
