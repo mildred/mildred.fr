@@ -1,0 +1,8 @@
+
+kind_attribute: kind
+tag_attribute:  tag
+
+act_on:
+  - page
+
+capitalize: false
