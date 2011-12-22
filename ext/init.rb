@@ -9,5 +9,3 @@
 # website.
 config = Webgen::WebsiteAccess.website.config
 
-require File.join(File.dirname(__FILE__), 'hamlplus')
-
