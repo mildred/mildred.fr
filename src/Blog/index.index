@@ -1,6 +1,6 @@
 ---
 title:      Articles
-template:   /index_page.template
+template:   /templates/index.template
 ---
 
 act_on: article
