@@ -3,18 +3,7 @@ title:      Articles
 template:   /index_page.template
 ---
 
-kind_attribute: kind
-
-act_on:
-  - page
-
-should_match:
-
-index_size:  10
-index_order: newest-first
-
-archive_size:  10
-archive_order: oldest-first
+act_on: article
 
 # TODO: define page names
 # TODO: define relation with feeds

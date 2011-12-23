@@ -17,3 +17,4 @@ gem 'rdiscount' # haml markdown
 gem 'kramdown'  # markdown
 
 gem 'rake'
+gem 'awesome_print'

@@ -11,6 +11,7 @@ GEM
   specs:
     adsf (1.0.1)
       rack (>= 1.0.0)
+    awesome_print (1.0.2)
     builder (3.0.0)
     cmdparse (2.0.3)
     cri (2.0.2)
@@ -31,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   adsf
+  awesome_print
   builder
   haml
   kramdown
