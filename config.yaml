@@ -35,6 +35,7 @@ default_processing_pipeline:
   Template: haml
 
 website.lang: fr
+website.url: http://mildred.fr/
 
 sourcehandler.casefold: false
 output.do_deletion: true

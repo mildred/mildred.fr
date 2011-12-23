@@ -5,6 +5,9 @@ template:   /templates/index.template
 
 act_on: article
 
+feed.config:
+  author: Mildred
+
 # TODO: define page names
 # TODO: define relation with feeds
 

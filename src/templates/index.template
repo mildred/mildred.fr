@@ -1,7 +1,6 @@
 ---
 template: ~
 ---
-- warn "index.template"
 !!! 5
 %html
   %head
