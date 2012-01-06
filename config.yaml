@@ -34,7 +34,7 @@ default_processing_pipeline:
   Page: rdiscount,fragments
   Template: haml
 
-website.lang: fr
+website.lang: ~
 website.url: http://mildred.fr/
 
 sourcehandler.casefold: false

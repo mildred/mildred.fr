@@ -3,8 +3,8 @@
   keywords = tags + (node['keywords'] || [])
   keywords = keywords.join ", "
   
-  warn "TODO: alternate atom not implemented"
-  atom = nil
+  atom = node.node_info[:atom]
+  rss  = node.node_info[:rss]
 
 !!! 5
 %html
@@ -19,9 +19,11 @@
     %link(rel="canonical"     href="#{link_absolute context.node}")/
     %link(rel="icon"          href="#{link_path("/favicon.png")}" type="image/png")/
     %link(rel="shortcut icon" href="#{link_path("/favicon.png")}" type="image/png")/
-    %link(rel="stylesheet"    href="#{link_path("/style.sass")}"   type="text/css" media="screen")/
-    - if not atom.nil? and not atom.path.nil?
+    %link(rel="stylesheet"    href="#{link_item("/style.sass")}"   type="text/css" media="screen")/
+    - if not atom.nil?
       %link(rel="alternate"   href="#{link_item(atom)}"           type="application/atom+xml" title="ATOM Feed")/
+    - if not rss.nil?
+      %link(rel="alternate"   href="#{link_item(rss)}"            type="application/rss+xml" title="RSS Feed")/
     %script(type="text/javascript" src="#{link_path("/Scripts/json/json2.js")}")
     %script(type="text/javascript" src="#{link_path("/Scripts/jquery.min.js")}")
     %script(type="text/javascript" src="#{link_path("/Scripts/comments.js")}")
