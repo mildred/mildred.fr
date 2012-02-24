@@ -1,8 +1,12 @@
 ---
 title:      Articles
 template:   /templates/index.template
----
 
+--- name:config_index
+# Configuration for index pages
+
+
+page_basename: %s/index
 act_on: article
 
 feed.config:
@@ -10,5 +14,4 @@ feed.config:
 
 # TODO: define page names
 # TODO: define relation with feeds
-
 

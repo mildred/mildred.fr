@@ -1,0 +1,11 @@
+---
+title:             Robots
+output_path_style: [:parent, "robots.txt"]
+template:          ~
+blocks:
+  default:
+    pipeline: ~
+---
+User-agent: *
+Sitemap: /sitemap.xml
+

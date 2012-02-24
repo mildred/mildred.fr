@@ -42,7 +42,7 @@ output.do_deletion: true
 
 default_meta_info:
   Page:
-    output_path_style: [:parent, :basename, {ifne: [:lang, ''], then: [., :lang]}, {ifnot: :_index, then: "/index"}, :ext]
+    output_path_style: [:parent, :basename, {ifne: [:lang, ''], then: [., :lang]}, {ifnot: :index?	, then: "/index"}, :ext]
   Template:
     base_url: http://mildred.fr
     site_name: Mildred's Website
