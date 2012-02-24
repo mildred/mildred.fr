@@ -4,8 +4,8 @@ output_path_style: [:parent, "robots.txt"]
 template:          ~
 blocks:
   default:
-    pipeline: ~
+    pipeline: erb
 ---
 User-agent: *
-Sitemap: /sitemap.xml
+Sitemap: <%= config['website.url'] %>sitemap.xml
 

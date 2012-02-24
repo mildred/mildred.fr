@@ -1,10 +1,11 @@
 :ruby
   tags = node['tags'] || []
   keywords = tags + (node['keywords'] || [])
-  keywords = keywords.join ", "
   
   atom = node.node_info[:atom]
   rss  = node.node_info[:rss]
+
+  all_tags = node.resolve('/tags.tags').node_info[:tags]
 
 !!! 5
 %html
@@ -12,11 +13,11 @@
     %title= "#{node['title']} - #{ref_node['site_name']}"
     %meta(charset="utf-8")/
     %meta(http-equiv="Content-Type" content="text/html; charset=utf-8")/
-    %meta(name="keywords"     content="#{keywords}")/
+    %meta(name="keywords"     content="#{keywords.join(', ')}")/
     %meta(name="description"  content="#{node['excerpt']}")/
     %meta(name="viewport"     content="initial-scale=1.0, width=device-width")/
     %meta(name="x-kind"       content="#{node['kind']}")/
-    %link(rel="canonical"     href="#{link_absolute context.node}")/
+    %link(rel="canonical"     href="#{link_absolute node}")/
     %link(rel="icon"          href="#{link_path("/favicon.png")}" type="image/png")/
     %link(rel="shortcut icon" href="#{link_path("/favicon.png")}" type="image/png")/
     %link(rel="stylesheet"    href="#{link_item("/style.sass")}"   type="text/css" media="screen")/
@@ -62,7 +63,7 @@
       .right
         %strong Tags:
         %ul.tags
-          - tags.each do |tag|
+          - all_tags.keys.sort.each do |tag|
             %li
               %a{:href => link_item("/tags/#{tag}/"), :class=>'tag'}= tag
 
