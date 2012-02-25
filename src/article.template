@@ -1,0 +1,7 @@
+%h1= node['title']
+= block(:content, :render => "/article-meta.template")
+.excerpt
+  = block(:excerpt, :notfound => :ignore)
+.body
+  = block(:content)
+

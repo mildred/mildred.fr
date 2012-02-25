@@ -1,6 +1,5 @@
 ---
 title:      Articles
-template:   /templates/index.template
 
 --- name:config_index
 # Configuration for index pages

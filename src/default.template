@@ -6,11 +6,16 @@
   rss  = node.node_info[:rss]
 
   all_tags = node.resolve('/tags.tags').node_info[:tags]
+  
+  title = node['title']
+  if node['kind'] == 'tag'
+    title = "Category: %s" % node['tag']
+  end
 
 !!! 5
 %html
   %head
-    %title= "#{node['title']} - #{ref_node['site_name']}"
+    %title= "#{title} - #{ref_node['site_name']}"
     %meta(charset="utf-8")/
     %meta(http-equiv="Content-Type" content="text/html; charset=utf-8")/
     %meta(name="keywords"     content="#{keywords.join(', ')}")/
@@ -102,10 +107,26 @@
             server to both retrieve the comments and post a new comment.
         .clear
       - else
-        = block(:content)
+        = block(:content, :notfound => :ignore)
         .clear
 
-    .clear
+      - if dest_node.node_info[:sub_nodes]
+        - if node['kind'] == 'tag'
+          %h1= title
+          %p= "Articles from TODO to TODO"
+          .article-list
+            - dest_node.node_info[:sub_nodes].each do |sub_node|
+              .sub-article
+                %h2
+                  %a{:class => 'permalink', :href => ""} TODO
+                %div= block(:content, :chain => sub_node, :render => '/article-excerpt.template')
+                .clear
+          .page-list TODO
+          .clear
+        - else
+          - dest_node.node_info[:sub_nodes].each do |sub_node|
+            %div= block(:content, :chain => sub_node)
+            .clear
 
     .footer
       %hr/
