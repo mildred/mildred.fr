@@ -1,1 +1,1 @@
-rake deploy:rsync >&2
+false

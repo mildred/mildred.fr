@@ -2,6 +2,7 @@
 /output/
 *~
 .redo/
+*.redo
 .sass-cache/
 *.orig
 /webgen.cache

@@ -71,13 +71,6 @@ task :auto_webgen do
   end
 end
 
-
-
-########################################
-## nanoc ##
-###########
-
-require 'nanoc3/tasks'
 require 'fileutils'
 
 namespace :create do
@@ -106,13 +99,15 @@ namespace :create do
 ---
 title:      "#{title}"
 created_at: #{@datetime}
-excerpt:
 author:     #{`whoami`.strip.capitalize}
 kind:       article
 publish:    true
 tags:
   - misc
----
+
+--- name:excerpt
+
+--- name:content
 
 TODO: Add content to `#{full_path}.`
 TEMPLATE
@@ -124,7 +119,7 @@ TEMPLATE
 
   def calc_path(title)
     #year, month_day = @ymd.split('-', 2)
-    path = "content/Blog/"
+    path = "src/Blog/"
     filename = @ymd + "-" + title.tr("A-Z", "a-z").gsub(/[^a-z0-9_-]+/, '_').gsub(/^_*/, "").gsub(/_*$/, "") + ".md"
     [path, filename, path + filename]
   end
