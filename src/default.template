@@ -107,7 +107,7 @@
             server to both retrieve the comments and post a new comment.
         .clear
       - else
-        = block(:content, :notfound => :ignore)
+        ~ block(:content, :notfound => :ignore)
         .clear
 
       - if dest_node.node_info[:sub_nodes]
@@ -138,7 +138,7 @@
           .clear
         - else
           - dest_node.node_info[:sub_nodes].each do |sub_node|
-            %div= block(:content, :chain => sub_node)
+            %div~ block(:content, :chain => sub_node)
             .clear
 
     .clear

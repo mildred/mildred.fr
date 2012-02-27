@@ -1,7 +1,7 @@
 = block(:content, :render => "/article-meta.template")
 .excerpt
   - if node.node_info[:page] and node.node_info[:page].blocks[:excerpt]
-    = block(:excerpt)
+    ~ block(:excerpt)
   - else
-    = block(:content)
+    ~ block(:content)
 
