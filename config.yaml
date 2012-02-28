@@ -42,7 +42,9 @@ contentprocessor.haml:
   format: :html5
 
 sourcehandler.casefold: false
-output.do_deletion: true
+
+# false or else files copied via rsync would be deleted
+output.do_deletion: false
 
 default_meta_info:
   Page:
