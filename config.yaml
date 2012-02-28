@@ -32,6 +32,7 @@ patterns:
 
 default_processing_pipeline:
   Page: rdiscount,fragments
+  # TODO: use kramdown, but fix errors
   Template: haml
 
 website.lang: ~

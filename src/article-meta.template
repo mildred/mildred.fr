@@ -1,7 +1,8 @@
 %p.meta
-  %span.date-time
-    %span.date= node['created_at'].strftime('%a %d %b %Y,')
-    %span.time= node['created_at'].strftime('%I:%M %p')
+  - if node['created_at']:
+    %span.date-time
+      %span.date= node['created_at'].strftime('%a %d %b %Y,')
+      %span.time= node['created_at'].strftime('%I:%M %p')
   - if node['author']
     %span.author
       by
@@ -12,3 +13,4 @@
       - node['tags'].sort.each do |tag|
         %span.tag
           %a{:href => link_path("./tags/#{tag}/"), :class => 'tag'}= tag
+
