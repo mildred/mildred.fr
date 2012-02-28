@@ -87,7 +87,7 @@ namespace :create do
       exit 1
     end
 
-    title = ENV['title'].capitalize
+    title = ENV['title']
     path, filename, full_path = calc_path(title)
 
     if File.exists?(full_path)
@@ -99,7 +99,7 @@ namespace :create do
 ---
 title:      "#{title}"
 created_at: #{@datetime}
-author:     #{`whoami`.strip.capitalize}
+author:     #{`grep "^$(whoami):" /etc/passwd | cut -d: -f5`.strip}
 kind:       article
 publish:    true
 tags:
@@ -107,9 +107,11 @@ tags:
 
 --- name:excerpt
 
+TODO: Add content to `#{full_path}.`
+
 --- name:content
 
-TODO: Add content to `#{full_path}.`
+
 TEMPLATE
 
     FileUtils.mkdir_p(path) if !File.exists?(path)
