@@ -1,0 +1,4 @@
+- remove webgen.cache because when a new tag is created or removed, webgen still
+  use the cache about it. If the tag is created, it will warn about a non
+  existant page at the tag location. If the tag is removed, it will still show
+  the tag just as it was.
