@@ -1,6 +1,6 @@
 # -*- ruby -*-
 
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'webgen', 'lib'))
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), 'webgen', 'lib'))
 
 #
 # This is a sample Rakefile to which you can add tasks to manage your website. For example, users

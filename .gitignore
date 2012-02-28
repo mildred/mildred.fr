@@ -7,3 +7,4 @@
 *.orig
 /webgen.cache
 /out/
+/httpd.conf

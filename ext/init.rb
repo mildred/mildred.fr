@@ -8,7 +8,7 @@
 # The +config+ variable below can be used to access the Webgen::Configuration object for the current
 # website.
 
-require 'awesome_print'
+# require 'awesome_print'
 
 config = Webgen::WebsiteAccess.website.config
 
