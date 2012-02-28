@@ -122,7 +122,7 @@ TEMPLATE
   def calc_path(title)
     #year, month_day = @ymd.split('-', 2)
     path = "src/Blog/"
-    filename = @ymd + "-" + title.tr("A-Z", "a-z").gsub(/[^a-z0-9_-]+/, '_').gsub(/^_*/, "").gsub(/_*$/, "") + ".md"
+    filename = @ymd + "-" + title.tr("A-Z", "a-z").gsub(/[^a-z0-9_-]+/, '_').gsub(/^_*/, "").gsub(/_*$/, "") + ".page"
     [path, filename, path + filename]
   end
 end
