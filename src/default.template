@@ -107,7 +107,9 @@
             server to both retrieve the comments and post a new comment.
         .clear
       - else
-        ~ block(:content, :notfound => :ignore)
+        - block(:content, :notfound => :ignore) do |content|
+          ~ content
+          .clear
 
       - if dest_node.node_info[:sub_nodes]
         - if node['kind'] == 'tag' or node['kind'] == 'index'
