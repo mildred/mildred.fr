@@ -1,6 +1,5 @@
 ---
 title: Mildred's Website
-index: true
 blocks:
   default:
     pipeline: haml

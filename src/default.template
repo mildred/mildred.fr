@@ -106,9 +106,8 @@
             In order to implement comments, a XmlHttpRequest is made on an API
             server to both retrieve the comments and post a new comment.
         .clear
-      - elsif node.node_info[:page] and node.node_info[:page].blocks[:content]
-        ~ block(:content)
-        .clear
+      - else
+        ~ block(:content, :notfound => :ignore)
 
       - if dest_node.node_info[:sub_nodes]
         - if node['kind'] == 'tag' or node['kind'] == 'index'
