@@ -41,8 +41,14 @@ website.url: http://mildred.fr/
 contentprocessor.haml:
   format: :html5
 
+common.sitemap.used_kinds:
+  - page
+  - tags
+  - index
+
 sourcehandler.casefold: false
 
+output: ["Webgen::Output::FileSystem", "out"]
 # false or else files copied via rsync would be deleted
 output.do_deletion: false
 
