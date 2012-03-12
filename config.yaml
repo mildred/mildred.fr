@@ -65,6 +65,9 @@ default_meta_info:
     site_name: Mildred's Website
 
 
-pre_exec:
-  - rsync -a --exclude=.git --exclude='*~' static/. out/
-
+extensions:
+  PreExec:
+    - rsync -a --exclude=.git --exclude='*~' static/. out/
+  MailDirSource:
+    from: maildir
+    to: src/Blog/%Y-%m-%d-%%s.page

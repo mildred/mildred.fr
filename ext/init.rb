@@ -10,32 +10,3 @@
 
 # require 'awesome_print'
 
-config = Webgen::WebsiteAccess.website.config
-
-module Webgen
-  class Configuration
-    module Helpers
-
-      def pre_exec(commands)
-        Dir.chdir(File.join(File.dirname(__FILE__), '..')) do
-          commands.each do |cmd|
-            puts "Execute #{cmd}"
-            system cmd
-          end
-        end
-      end
-    
-    end
-  end
-end
-
-require File.join(File.dirname(__FILE__), 'maildir_to_page')
-
-maildir = File.join(File.dirname(__FILE__), "..", "maildir")
-outdir  = File.join(File.dirname(__FILE__), "..", "src", "Blog")
-
-maildir_to_page(maildir, outdir, "%Y-%m-%d-%%s.page")
-
-
-
-
