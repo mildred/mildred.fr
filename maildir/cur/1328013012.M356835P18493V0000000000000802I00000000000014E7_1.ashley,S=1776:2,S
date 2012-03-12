@@ -1,0 +1,42 @@
+Delivered-To: mildred@mildred.fr
+Return-Path: <shanti.bouchez@gmail.com>
+Received: from mail-gy0-f179.google.com (mail-gy0-f179.google.com [::ffff:209.85.160.179])
+  (TLS: TLSv1/SSLv3,128bits,AES128-SHA)
+  by ashley.mildred.fr with ESMTPS; Tue, 31 Jan 2012 13:30:11 +0100
+  id 00000000000005E1.4F27DED3.00004839
+Received: by ghbg19 with SMTP id g19so247990ghb.38
+        for <mildred@mildred.fr>; Tue, 31 Jan 2012 04:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=o7W+c4Fh6jV+1myjepc8a3S66vEgGbfZNwi1GsLE5KA=;
+        b=wxivYdF9cUDNpouKU/UB2o9+JLD+E13ZLDX4LISubYEFaMzmTaJeTlsg1Nw8l9e7Bm
+         6j9k6OBumbgSIUeWWxSo6wdGN5iHTA3x7XudW/33DT9NJ7dJpbtdKTTHEknEcyMwsO5h
+         m6vVH70NfMhEsgzb0aNMSYwD9EdVHtfCMnwho=
+Mime-Version: 1.0
+Content-Type: multipart/alternative; boundary="=_ashley-18489-1328013012-0001-2"
+Received: by 10.236.201.232 with SMTP id b68mr33609503yho.34.1328012981802;
+ Tue, 31 Jan 2012 04:29:41 -0800 (PST)
+Received: by 10.236.26.100 with HTTP; Tue, 31 Jan 2012 04:29:41 -0800 (PST)
+Date: Tue, 31 Jan 2012 13:29:41 +0100
+Message-ID: <CAB7SYSiCXgBXTTh4-hph7OEKUOyMnP4aF9Mb4tMim1R1YrdGBg@mail.gmail.com>
+Subject: alive
+From: =?ISO-8859-1?Q?Shanti_Bouchez_Mongard=E9?= <shanti.bouchez@gmail.com>
+To: mildred@mildred.fr
+
+This is a MIME-formatted message.  If you see this text it means that your
+E-mail software does not support MIME-formatted messages.
+
+--=_ashley-18489-1328013012-0001-2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 7bit
+
+
+
+--=_ashley-18489-1328013012-0001-2
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: 7bit
+
+<br>
+
+--=_ashley-18489-1328013012-0001-2--
