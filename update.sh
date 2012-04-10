@@ -1,5 +1,17 @@
 #!/bin/sh
 
+pidfile(){
+  : >> "$2"
+  local pid="$(cat "$2")"
+  if [ -n "$pid" ] && [ -e /proc/$pid ]; then
+    return 1
+  else
+    echo $$ >"$2"
+    return 0
+  fi
+}
+
+
 if [ -f "./config" ]; then
   . "./config"
 fi
@@ -24,6 +36,11 @@ Subject: $1
 $2
 EOF
 }
+
+if ! pidfile $$ update.pid; then
+  log "Already Running"
+  exit 0
+fi
 
 log "Updating website at $(pwd)..."
 

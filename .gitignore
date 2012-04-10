@@ -10,3 +10,4 @@
 /httpd.conf
 /config
 /out.rev
+/update.pid
