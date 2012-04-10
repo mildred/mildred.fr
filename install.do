@@ -6,7 +6,7 @@ if [ -e ./config ]; then
 fi
 : ${site_name:=$(pwd | xargs basename)}
 
-cp cron /etc/cron.d/http.$site_name
+cp cron /etc/cron.d/http-$site_name
 cp httpd.conf "/etc/apache2/sites-available/$site_name"
 a2ensite "$site_name"
 service apache2 reload
