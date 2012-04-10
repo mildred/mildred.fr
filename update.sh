@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd "$(dirname "$0")"
+
 pidfile(){
   : >> "$2"
   local pid="$(cat "$2")"
