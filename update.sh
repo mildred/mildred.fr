@@ -48,13 +48,20 @@ git fetch $origin
 git add -A
 git stash
 git reset --hard $origin/master
+
+# Changes above this line will require manual changes on the server
+
 git submodule foreach --recursive git reset --hard
 git submodule update --recursive
 : >> out.rev
 rev=$(git rev-parse HEAD)
 if [ "$rev" != "$(cat out.rev)" ]; then
   log "Git change: $(cat out.rev) -> $rev"
-  notice "Updating website $(pwd)" "Git change: $(cat out.rev) -> $rev\n\n$(rake 2>&1)"
+  echo "Git change: $(cat out.rev) -> $rev" > logfile
+  echo >> logfile
+  rake >>logfile 2>>logfile
+  notice "Updating website $(pwd)" "$(cat logfile)"
+  rm -f logfile
 fi
 echo "$rev" > out.rev
 
