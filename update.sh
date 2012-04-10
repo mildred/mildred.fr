@@ -48,12 +48,13 @@ git fetch $origin
 git add -A
 git stash
 git reset --hard $origin/master
+git submodule foreach --recursive git reset --hard
 git submodule update --recursive
 : >> out.rev
 rev=$(git rev-parse HEAD)
 if [ "$rev" != "$(cat out.rev)" ]; then
   log "Git change: $(cat out.rev) -> $rev"
-  notice "Updating website $(pwd)" "Git change: $(cat out.rev) -> $rev\n\n$(rake)"
+  notice "Updating website $(pwd)" "Git change: $(cat out.rev) -> $rev\n\n$(rake 2>&1)"
 fi
 echo "$rev" > out.rev
 
