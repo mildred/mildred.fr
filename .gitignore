@@ -8,3 +8,5 @@
 /webgen.cache
 /out/
 /httpd.conf
+/config
+/out.rev
