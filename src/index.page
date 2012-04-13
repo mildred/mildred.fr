@@ -51,12 +51,24 @@ blocks:
       :plain
         <a class="email" href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a>
     %p
-      Note: I manage my own mail server at mildred.fr. I currently have problems
-      with the server that keeps shutting down. i think it's a hardware problem.
-      usually, if a mail cannot be delivered right away, it is put in a queue to
-      be delevered at a later time. After a couple of days (usually 5), it is
-      returned to the sender. If you get a returned mail, please send it back to
-      me.
+      Note: I manage my own mail server at mildred.fr. the server might not be
+      up all time, although I think I fixed the problem. When the server is
+      down, mails can be delayed, and in extreme case, rejected after a few
+      days.
+    
+    %p
+      The following graph is the server availability over the past week. If you
+      notice the graph dropping to zero, it means the server was not available
+      and your mail was probably delayed (if you sent it to me around that
+      time):
+
+    %p
+      %a(href="http://status.mildred.fr/localdomain/localhost.localdomain/")
+        %img(src="http://status.mildred.fr/localdomain/localhost.localdomain/cpu-week.png")
+
+    %p
+      %strong
+        If this website is not available, it means the server is currently down.
   %dt GTalk, Jabber, XMPP:
   %dd
     %img(src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/avatar-64.png" alt="" style="float: left")/
