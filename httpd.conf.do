@@ -1,7 +1,7 @@
 
 cat >"$3" <<EOF
 
-# Sgouldbe present at least once
+# Should be present at least once
 # NameVirtualHost *:80
 
 <VirtualHost *:80>
