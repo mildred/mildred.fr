@@ -8,6 +8,8 @@
 /webgen.cache
 /out/
 /httpd.conf
+/nginx.conf
 /config
+/cron
 /out.rev
 /update.pid
