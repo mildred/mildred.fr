@@ -12,4 +12,7 @@ pidfile(){
   fi
 }
 
-pidfile 1 update.pid
+if ! pidfile 1 update.pid; then
+  echo "Already locked" >&2
+  exit 1
+fi

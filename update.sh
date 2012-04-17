@@ -8,7 +8,7 @@ pidfile(){
   if [ -n "$pid" ] && [ -e /proc/$pid ]; then
     return 1
   else
-    echo $$ >"$2"
+    echo $1 >"$2"
     return 0
   fi
 }
