@@ -5,14 +5,14 @@ cat >"$3" <<EOF
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;
-  server_name $domain;
-  rewrite ^ http://$vhost.$domain\$request_uri? permanent;
+  server_name $vhost.$domain;
+  rewrite ^ http://$domain\$request_uri? permanent;
 }
 
 server {
   listen 80;
   listen [::]:80;
-  server_name $vhost.$domain;
+  server_name $domain;
   root "${PWD}/out";
 
 EOF

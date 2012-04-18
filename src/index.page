@@ -65,6 +65,7 @@ blocks:
     %p
       %a(href="http://status.mildred.fr/localdomain/localhost.localdomain/")
         %img(src="http://status.mildred.fr/localdomain/localhost.localdomain/cpu-week.png")
+        %img(src="http://status.mildred.fr/localdomain/localhost.localdomain/uptime-week.png")
 
     %p
       %strong
