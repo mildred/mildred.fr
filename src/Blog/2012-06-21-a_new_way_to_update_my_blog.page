@@ -1,12 +1,17 @@
 --- 
 kind: article
-created_at: 2012-06-21T15:05:59+02:00
+created_at: 2012-06-21T15:08:09+02:00
 author: Mildred Ki'Lya
 title: A new way to update my blog
+tags: 
+- en
+- dev
+- website
 publish: true
 author_email: mildred@mildred.fr
-message_id: 4FE31C37.8010706@mildred.fr
+message_id: 4FE31CB9.1070601@mildred.fr
 ---
+
 Hi everyone, I just developed a new way to update my blog. I am just 
 using my mailer (which is currently Thunderbird for a lack of a better 
 alternative). As you may know, I already manage my own server. I have a 
