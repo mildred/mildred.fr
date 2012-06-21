@@ -1,0 +1,38 @@
+--- 
+kind: article
+created_at: 2012-06-21T15:05:59+02:00
+author: Mildred Ki'Lya
+title: A new way to update my blog
+publish: true
+author_email: mildred@mildred.fr
+message_id: 4FE31C37.8010706@mildred.fr
+---
+Hi everyone, I just developed a new way to update my blog. I am just 
+using my mailer (which is currently Thunderbird for a lack of a better 
+alternative). As you may know, I already manage my own server. I have a 
+nginx web server and my website is just plain old static pages generated 
+from markdown using my own version of webgen.
+
+My code is available at two locations:
+
+- [my personal git server](http://git.mildred.fr)
+- [github](http://github.com/mildred/)
+
+I just developed a few scripts which does the following:
+
+- hooked in /etc/aliases, receive e-mail from a special e-mail address. 
+Put this mail in an inbox directory on the server
+- another daemon (a shell script run by daemontools actually) run as the 
+www-data user is monitoring the inbox using inotifywait. When a mail 
+comes, or every 60 seconds, it process the mail using a ruby script that 
+convert the mail to a markdown page, and run webgen on the website. It 
+also commit and push the changes.
+
+And that's all.
+
+The one thing I couldn't automate is the creation of the private key to 
+push the changes back to the git server.
+
+All the code [is 
+there](http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=summary). I 
+just don't know if I have a public URl for these repos :)
