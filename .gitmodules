@@ -4,3 +4,6 @@
 [submodule "webgen"]
 	path = webgen
 	url = git@github.com:mildred/webgen.git
+[submodule "wwwsupport"]
+	path = wwwsupport
+	url = git@git.mildred.fr:pub/mildred/wwwsupport.git
