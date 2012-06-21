@@ -13,6 +13,9 @@ $:.unshift File.expand_path(File.join(File.dirname(__FILE__), 'webgen', 'lib'))
 
 require 'webgen/webgentask'
 require 'webgen/website'
+require 'yaml'
+
+YAML::ENGINE.yamler = 'syck'
 
 task :default => :webgen
 

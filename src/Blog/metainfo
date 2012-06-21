@@ -1,6 +1,28 @@
 --- name:paths
 /**/????-??-??-*.page:
-  output_path_style: [:parent, :year, /, :month, /, :day, /, {subject: :basename, regexp: "^[0-9]{4}-[0-9]{2}-[0-9]{2}-", replace: ""}, {ifne: [:lang, ''], then: [., :lang]}, {ifnot: :_index, then: "/index"}, :ext]
+  output_path_style:
+   - :parent
+   - :year
+   - /
+   - :month
+   - /
+   - :day
+   - /
+   -
+     subject: :basename
+     regexp:  "^[0-9]{4}-[0-9]{2}-[0-9]{2}-"
+     replace: ""
+   -
+     ifne:
+      - :lang
+      - ""
+     then:
+      - "."
+      - :lang
+   -
+     ifnot: :_index
+     then: "/index"
+   - :ext
 
 --- name:alcn
 

@@ -22,13 +22,13 @@
 #####
 
 sources:
-  - [/, Webgen::Source::FileSystem, src]
+  - [/, "Webgen::Source::FileSystem", src]
 
 patterns:
   Page:
-    add: [**/*.sass]
+    add: ["**/*.sass"]
   Copy:
-    add: [**/*.css, **/*.js, **/*.jpeg, **/*.txt]
+    add: ["**/*.css", "**/*.js", "**/*.jpeg", "**/*.txt"]
 
 default_processing_pipeline:
   Page: rdiscount,fragments
@@ -57,8 +57,8 @@ default_meta_info:
     output_path_style:
       - :parent
       - :basename
-      - {ifne: [:lang, ''], then: [., :lang]}
-      - {ifnot: :index?	, then: "/index"}
+      - {ifne: [':lang', ''], then: [".", ':lang']}
+      - {ifnot: ':index?'	, then: "/index"}
       - :ext
   Template:
     base_url: http://mildred.fr
@@ -66,5 +66,5 @@ default_meta_info:
 
 
 pre_exec:
-  - rsync -a --exclude=.git --exclude='*~' static/. out/
+  - "rsync -a --exclude=.git --exclude='*~' static/. out/"
 
