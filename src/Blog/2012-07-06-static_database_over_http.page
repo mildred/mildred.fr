@@ -1,0 +1,99 @@
+--- 
+kind: article
+created_at: 2012-07-06T11:08:36+02:00
+author: Mildred Ki'Lya
+title: Static database over HTTP
+tags: 
+- en
+- idea
+publish: true
+author_email: mildred@mildred.fr
+message_id: 4FF6AB14.2030107@mildred.fr
+---
+
+Websites should be static. Any dynamic thingy (scripting using php, 
+ruby, python and the like) should be limited to a set of features that 
+absolutely cannot be implemented otherwise. Most GET requests should 
+lead to a static resolution (there can be exceptions such as GET queries 
+of search engines for instance).
+
+Respecting this principle is quite simple, just generate the static 
+pages when they are updated, and no not worry about them afterwards. 
+This is what I try to use for my website, and it works quite well.
+
+Advantages of this technique :
+
+- your data will always be readable in the future, even if you may not 
+write it any more
+- improved security: normal operations only involve static files. You 
+get to spend more time with update actions (POST and PUT) and design 
+them better.
+
+Now, I had the idea to extend this to databases. Do you know about 
+[CouchDB](https://en.wikipedia.org/wiki/CouchDB) ? It's a database which 
+has a web interface only. I very like its design but again, I'd like it 
+to use the same principle as above.
+
+The idea of such a database came with the feature I developed for my 
+blog: the user comments. In this blog, the user comments are completely 
+managed with JavaScript. If you don't have JavaScript, you don't have 
+comments at all. How do that work ?
+
+Comments
+--------------
+
+To get the comments for an article, the JavaScript will contact a simple 
+PHP application in another server (a free hosting service). This simple 
+application is able to store and get JSON data using REST requests. The 
+JavaScript will then use `XmlHttpRequest` to contact the server and give 
+it the canonical URL (`<link rel=canonical>`). The server will answer a 
+JSON object with the comments.
+
+Storing a comments is done the same way, using a `POST` request instead 
+of a `GET` request.
+
+To a Database Server
+---------------------------
+
+This is very simple yet powerful. Why not extend this design to:
+
+- allow any kind of data, not just comments
+- allow simple `GET` requests to bypass any script and just fetch the 
+raw data
+
+We can imagine the data store to be publicly accessible using URL that 
+end up with the `.json` suffix. There would be a similar URL with 
+`.json.meta` to access the metadata about an object (its current 
+version, right access, ...). We can imagine the web applications of the 
+future being completely implemented on the client side. The server side 
+would be just a shared database.
+
+We would obviously need a security layer to prevent anyone to read 
+anything if they should not be allowed. We can imagine three levels of 
+permissions:
+
+- read and write by everyone
+- read by everyone, write only by authorized user
+- read and write only by authorized user
+
+We could imagine many different authentication mechanisms. For most 
+data, the mechanism could be of a shared secret. The metadata of a json 
+file would contain :
+
+     "auth": "shared-secret",
+     "secret": "path/to/another/file"
+
+To get access to the file, the client would have to provide the exact 
+content of the file `"path/to/another/file"`, which would obviously be a 
+protected file, readable only by authorized access. It could be a 
+login/password or anything else.
+
+Update operations would be :
+
+- `PUT`: to update the entire content of the file
+- `POST`: append to the existing data (the data should be a JSON array)
+
+The data file will have an associated version which will be in the form 
+of "sha1:<sha1 of the file>". To successfully update a data file, the 
+existing version of the file must be given. If it is not the same, the 
+client should retry. This is the same concept as in CouchDB.
