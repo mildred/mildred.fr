@@ -1,0 +1,283 @@
+--- 
+kind: article
+created_at: 2012-07-26T12:37:15+02:00
+author: Mildred Ki'Lya
+title: A New Architecture for the Web
+tags: 
+- en
+- idea
+- web
+publish: true
+author_email: mildred@mildred.fr
+message_id: 50111DDB.70707@mildred.fr
+---
+
+I want a new architecture for the web. But what web ?
+
+The Traditional Web
+-------------------
+
+A Web Site is a collection of Web Pages. A Web Page is a document, a 
+static document I might add. The document contains text, images, sound 
+and videos to present some information to the public. This is the 
+traditional version of the web that I respect very much.
+
+There is no need to change this as it works very well. The web was 
+designed to allow a collection of documents to be accessed and does the 
+job very well
+
+The one this that is sensible to do however is not to use any scripting 
+language to render the content of the pages. By definitions, these pages 
+are static, using a scripting language like PHP is not only going to be 
+inefficient, but is going to be a security risk.
+
+Web Applications
+----------------
+
+This is an entire different thing, and the way we do this is completely 
+wrong. We think that a web application is a collection of dynamic web 
+pages. This should be erased from your mind.
+
+**A Web Application is an application of its own right.**
+
+Most unfortunately, applications are written in HTML which is not suited 
+for this purpose. The widgets are very few and the framework is not 
+suited to create complex User Interfaces.
+
+### The very bad thing to do
+
+**You should not do this.** Unfortunately, this is how it works for most.
+
+A very bad programmer is going to create a web page for each of the 
+different aspects of its program. The web page would be dynamically 
+generated on the server using a template engine. Some JavaScript would 
+be included in this mess to avoid refreshing a page while in fact you 
+should.
+
+This is bad because you'll have a ton of page refresh, and that's bad 
+for the user. If you're not using JavaScript, this is the old way of web 
+applications and is acceptable, but if you're using JavaScript for more 
+than a few things, it's bad.
+
+You shouldn't use JavaScript to change the content of a page to match 
+what the server would generate just to avoid a refresh. Just because 
+this is just a way to recreate a template engine on the client that is 
+redundant with the one on the server.
+
+And if you are using JavaScript to change the content of a page to get 
+the content that you should generally see in another page, you're a 
+moron. This breaks the back/forward mechanism and is very bad.
+
+The only sensible thing to do  in this configuration with JavaScript is 
+to script the user interface. Show hidden sections, enable a button. 
+Don't contact the server using AJAX, you are already getting information 
+from the server using normal page reload.
+
+### The sensible thing to do
+
+**Please do this!!!**
+
+An application is an application. It's a bundle and can't be separated 
+into pages. It can be separated into sub-sections if you want, but those 
+will necessarily trigger a page refresh.
+
+The application should be the equal of a desktop application using a 
+native toolkit, except that web technologies are used instead. 
+Contacting the server should be limited to what is necessary only 
+(fetching resources, exchange data, ...). In particular, the templates 
+should be on the client side.
+
+On the server side, you'd have just a classic Web API, and static 
+resources. The Web API should be designed with care and security in 
+mind. It should be easily shared with third parties that want to 
+integrate within your application.
+
+It is as simple as that:
+
+- Server = Web API + Resources
+- Client = UI (incl templates)
+
+I heard that SproutCore is a solution to work this way, but it was 
+horrible to use it as well.
+
+Perhaps, we need to get away from frameworks, there are many solutions 
+that can integrate well together and that don't need a framework. Read 
+this article for example: [Grab UI by the Handlebar][handlebarjs]
+
+An Example
+----------
+
+I have a very simple example to show you what I mean, the comment 
+mechanism on this website. Each page contain a JavaScript script (just 
+look at the sources) that will add the comment features. The page 
+delivered by the server contain no information about the comments, 
+except a `<noscript>` tag to tell the people without JavaScript that 
+they miss the comments.
+
+The script does an AJAX query on a third party server (with PHP and a 
+database). The arguments are the URL of the page and the answer is the 
+JSON formatted list of comments for the page. These comments are then 
+presented on the page. (The refresh link does this again)
+
+The script also creates a form to add a comment. When the form is 
+submitted, an AJAX query is made with the URL of the page and the 
+content of the comment as arguments.
+
+This is how all web applications should work.
+
+Going further: static databases on the server
+---------------------------------------------
+
+I already wrote an article on this, but I'll summarize the idea here.
+
+With this new idea for web applications, the application logic is moved 
+from the server to the client. Perhaps not all the way, but for simple 
+applications like the comments above, the server API is nothing much 
+than a fancy database API.
+
+Why not model a database on this model? But it already exists:
+[CouchDB][couch]. This is a database which API is a web API. I want to 
+take the principles of this database and mix them with the ideas of a 
+static page generator.
+
+The idea is that read only access when the resource URL is known, a 
+static page should correspond to the URL and a classic web server should 
+answer the query.
+
+Only update and search queries would be filtered by the web server to a 
+FastCGI application that is going to update the static files, or look at 
+them to answer the search.
+
+I find it difficult to find advantages of this compared to CouchDB. 
+There is one thing, your data will always be accessible read only. No 
+obscure database format that require a database server that might not 
+work on new hardware, might not be maintained any more...
+
+Conclusion
+----------
+
+With this approach, most web applications could be composed of static 
+assets that are accessing a database with a Web API. The static assets 
+and the database could be on the same server or on a different one. No 
+limit is posed here, except the same origin restriction of web browsers.
+
+Fortunately, a new standard (that I'm using for the comments of this 
+website) let you specify if the same origin policy should apply or not: 
+[Cross-Origin Resource Sharing](http://www.w3.org/TR/access-control/)
+
+What about Cookies Then?
+------------------------
+
+**They should not exist in their current form.**
+
+This was a late addition to the HTTP standard, because it was already 
+implemented. It was never really thought of, and is a breach of the 
+original HTTP model.
+
+**The cookies are what allows XSS vulnerabilities, NOT JavaScript**
+
+The current web community takes the things the wrong way. Instead of 
+damning cookies forever, they blame on JavaScript and try to build walls 
+all over the place to avoid XSS while there is a most simple solution.
+
+### What are XSS?
+
+> Cross-site scripting (XSS) is a type of computer security vulnerability typically found in Web applications, such as web browsers through breaches of browser security, that enables attackers to inject client-side script into Web pages viewed by other users. A cross-site scripting vulnerability may be used by attackers to bypass access controls such as the same origin policy. Cross-site scripting carried out on websites accounted for roughly 84% of all security vulnerabilities documented by Symantec as of 2007.[1] Their effect may range from a petty nuisance to a significant security risk, depending on the sensitivity of the data handled by the vulnerable site and the nature of any security mitigation implemented by the site's owner.
+
+(Source: [Wikipedia][xss])
+
+This is a wrong way to look at the problem. Inclusion of other items in 
+web pages dates from the very beginning. It is the foundation of the 
+web. What allows to have rich documents, with links between them. The 
+same origin policy is just one of these walls that I talked about, that 
+assumes that all pages on the current domain can be trusted. Is that true?
+
+The real story is that if the design of the web was correct, the script 
+injected by attackers in web pages would be completely harmless. The 
+same origin policy shouldn't exist and bypassing it should be by no mean 
+be a security risk.
+
+We have come to a situation where WebGL can be a security risk because 
+it can determine the colours of an image included in the web page. Just 
+because an image can, from the very beginning of the web, bypass the 
+same origin policy. Some people say that images should respect the same 
+origin policy, but what they don't imagine is that we could just forget 
+all of this mess.
+
+### The Real Problem.
+
+The *real* problem is that when loading foreign content, though AJAX, 
+the use of images or whatever, a page can load a foreign page where you 
+are logged in using cookies. And access your foreign account. For 
+example your bank account.
+
+The problem is that the page containing the XSS script was granted the 
+access to the cookie protecting your bank account.
+
+***Why the hell your bank account is just protected by a cookie than any 
+page can have access to???***
+
+### The solution
+
+Unless you have in your address bar the address of your bank, the cookie 
+protecting your bank account should be locked away. In fact, instead of 
+having everything in a page respect the same origin policy, **cookies 
+should be the single thing respecting the same origin policy;**
+
+This is just a change in the handling of the cookie by the browser. Not 
+a very big change at that. Only cookies for the domain in the address 
+bar should be exploitable. But it would break a number of assumption:
+
+Third party cookies would no longer exist, this would be a big shock for 
+advertisers and tracking programs. A loss for these companies, but a win 
+for personal privacy.
+
+#### Allow third party cookies nonetheless
+
+We could nonetheless allow third party cookies, but only in the context 
+of a specific page:
+
+- each tab/window of the browser share the same cookie jar for the requests
+- for each tab/window, a separate cookie jar would be assigned that will 
+be emptied when a link is followed to a different origin
+- the sub-elements of a page that are not of the same origin of the page 
+itself, should have their cookies in the sub cookie jar only
+- if there are sub-sub elements, they should be assigned to a sub-sub 
+cookie jar recursively.
+
+#### Allow third party cookies to access the main cookie jar on demand
+
+This would nonetheless break a number of things. Third party scripts 
+expect to see the same cookies they set a while ago, even if it was not 
+on the same page.
+
+A solution to this problem would be to add an option in the browser UI 
+to specifically allow a third party script in a page to access the 
+global cookie jar. There would be a button saying for example "Some 
+cookies have been blocked". When clicked it would open a menu with:
+
+- Allow access to ad.doubleclick.com
+- Allow access to facebook.com
+- Allow access to my-bank.com
+
+A sensible person would not allow a blog with an XSS script access his 
+bank website, but would allow facebook if he wants to use a facebook button.
+
+#### Browser plugins, anyone ?
+
+I'd love a browser plugin for that !
+
+Unfortunately, on Firefox, creating sub cookie jar would be difficult 
+due to the architecture of it. Webkit is better on that.
+
+### Conclusion
+
+Cookies aren't necessarily bad, they should just respect the same origin 
+policy they introduced instead of imposing it to all of the other 
+elements of a page. This can already be done now in web browsers, it 
+just needs a consensus. Or at least, an extension with the right UI to 
+bypass the same origin on demand when the scripts needs to.
+
+[handlebarjs]: http://blog.getify.com/grab-ui-by-the-handlebar/
+[couch]: https://en.wikipedia.org/wiki/CouchDB
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
