@@ -1,0 +1,205 @@
+--- 
+kind: article
+created_at: 2012-07-26T10:57:35+02:00
+author: Mildred Ki'Lya
+title: "WWWGen : Static Page Generator and Beyond"
+tags: 
+- en
+- idea
+- web
+- wwwgen
+- wwwsupport
+publish: true
+author_email: mildred@mildred.fr
+message_id: 5011067F.2060200@mildred.fr
+---
+
+I want to create a new static webpage generator. There are tons of them, 
+you'll tell me, why do I want to create a new one?
+
+Static Website Generator
+------------------------
+
+Let's see what we have:
+
+- webby: my first love
+- nanoc: the second one I used
+- webgen: the one I'm using currently (with tons of local modifications)
+- jekyll: powering GitHub pages
+- and many more most probably
+
+Most of these systems take the assumption that you are a developer and 
+you are comfortable to write code to have your website running. In all 
+of these systems, I was forced to code some Ruby here and there to get 
+it working how I wanted to.
+
+The case of nanoc3 is very special because the main configuration uses a 
+special Ruby DSL to manage the path locations. If you have non technical 
+users, they won't be willing to write code in this file anyway. And for 
+technical users, it might not be powerful enough.
+
+Jekyll is probably the simplest system and can probably be used by non 
+technical users, but it is far too simple and not powerful enough. 
+That's why I didn't used it.
+
+In the end, I modified Webgen a lot to include the following features:
+
+- ability to write ruby code in haml instead on having to rely on the 
+template engine included in webgen
+- special .index nodes that will generate a paginated index of articles 
+found dynamically. The index would contain the last articles in reverse 
+order while the pages will contain each N articles in the natural order. 
+This way, an article that end up on page 3 is always going to be on page 3.
+- special .tags nodes that will generate .index pages dynamically to 
+create an index or articles for each tag.
+
+If you look around, there are not many static web page generators that 
+permit that. First, I decided I would maintain my own version of webgen 
+with these modifications, but now, I have the idea that the code base is 
+so horrible that I prefer rewrite the same functions from scratch.
+
+Rewriting From Scratch
+----------------------
+
+As I said, I'm not satisfied with the current status of the webgen code. 
+There is a complex system of cache, and a blackboard object that is used 
+to dispatch method call to the correct objects around the system. The 
+problem is that this extra indirection level makes it difficult to know 
+the code path. It would be useful if the hooks in the blackboard would 
+be highly dynamic, but it's mostly static. it serves no purpose whatsoever.
+
+Moreover, I don't like big programs that do everything. And all of these 
+static website generators have a component that is used to determine 
+which pages are out of date, and only update them. This is traditionally 
+what make(1) should do. And recently, I found that
+[redo][redo] does the job very well. So, I want it to be an integral 
+part of my new system.
+
+WWWSupport
+----------
+
+Recently, I wrote a piece of code: [WWWSupport][wwwsupport]. It's a very 
+simple git repository that is supposed to be included as a submodule of 
+the git repository of a website. it contains a 
+[daemontools][daemontools] daemon that receives e-mail from a special 
+mailbox and convert them into blog posts on the fly (that's how I'm 
+currently writing this block post).
+
+I want my WWWGen project to integrate the same way into my website.
+
+WWWGen
+------
+
+WWWGen is the name of my website generator. The architecture is very simple:
+
+- A `src` directory containing the pages, in the same format as webgen
+- A `nodes` directory containing the files WWWGen is working on to 
+generate output
+- An output directory where the result files in `nodes` is copied to, 
+and where some static assets are copied as well (using rsync)
+- A redo script `all.do` that contains the configuration and invokes the 
+wwwgen script.
+
+The wwwgen script will create the `nodes` directory and the redo scripts 
+necessary to its working in it. Then, it will do three things:
+
+1. For each source file, the script will create:
+
+    - A .node file that contain a relative path to the source file, and 
+represents it.
+    - As many .outdep files as the source file will generate output 
+files. The .outdep file is not managed by redo (because redo doesn't 
+support multiple targets yet). It references the .node file using a 
+relative path.
+
+    Note that during this process, new sources can be generated to allow 
+to create new nodes. This step will be executed until no new sources are 
+generated.
+
+2. Once this is done, the main script will look for all of the .outdep 
+files and will build the corresponding .out file. The .out file will 
+contain the final processed result of the page
+
+3. Copy all .out files in the output directory (after removing the .out 
+extension) and all the static files in the static directory.
+
+Note that step 1 and 2 recursively call redo to generate the .node and 
+.out files. This two step design is necessary to account for multiple 
+pages generated from a single source.
+
+Beyond
+------
+
+In all my projects, I always want to focus on the usability of what I 
+create. I always think that non programmers should be able to do the 
+same that I did, to a certain limit. For example, my personal e-mail 
+server at home is scripted all the way. Reinstalling it should be a 
+matter of:
+
+- installing a debian system with a basic configuration
+- clone my git repositories
+- Set some basic configuration (hostname, ...)
+- run `redo install`
+
+I agree that even then, not anybody can install at home a mail server, 
+but with a process that simple, it's possible to create user interfaces 
+for it. So even if it's not there, it's a possibility.
+
+I want the same for WWWGen. It leaves a possibility for creating a user 
+interface. Nothing prevents from creating a web application or even a 
+native application, that will create markdown pages with a WYSIWYG 
+editor (à la WordPress). The page files thus created could be checked 
+out in a git repository and pushed to a server. There, a hook will run 
+WWWGen to update the website with the modifications.
+
+This could be seriously a very good alternative to WordPress, and I'd 
+preefer working with such a system than WordPress.
+
+What already exists
+-------------------
+
+I am not very good at creating desktop applications. So I thought I 
+would reuse the existing ones : my mailer. I's like a Content Management 
+System where everything must be configured by hand, and only articles 
+can be submitted using an e-mail.
+
+This post is being sent by e-mail to my personal web server. Currently, 
+I'm still using plain text with a markdown syntax, but we could reuse 
+the HTML markup in a mail. This e-mail is then processed by a special 
+alias in `/etc/aliases`:
+
+     http.www: "|/srv/http/www/wwwsupport/push.sh"
+
+This line was automatically generated by an install.do script. The 
+push.sh script will read the mail using a ruby script and will create a 
+file in my website git repository with the content of the mail. Then 
+webgen is run and the content of the repository is pushed to origin.
+
+As a consequence, the new article appears on the website. This is a very 
+simple form of user interface, but it permits anybody to write blog posts.
+
+What features I would like to see
+---------------------------------
+
+- Better parsing of HTML e-mail
+- Using wwwgen instead of webgen
+- Support for image galleries using git-annex in wwwgen
+- Support for taking the attached images in an e-mail to create a 
+gallery on my website?
+
+What features a customer would want
+-----------------------------------
+
+A web application that can :
+
+- modify the website configuration in the `all.do` file
+- modify any source files, using a WYSIWYG editor when applicable
+- add static assets (possibly using git-annex)
+- run the website compilation and preview it
+- push to a server to update the production website
+
+This is entirely possible.
+
+[redo]: https://github.com/apenwarr/redo/
+[wwwsupport]: http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=tree
+[daemontools]: http://cr.yp.to/daemontools.html
