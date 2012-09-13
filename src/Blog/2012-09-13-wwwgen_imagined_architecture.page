@@ -1,0 +1,139 @@
+--- 
+kind: article
+created_at: 2012-09-13T15:30:42+02:00
+author: Mildred Ki'Lya
+title: "wwwgen: imagined architecture"
+tags: 
+- en
+- comp
+- dev
+- idea
+- wwwgen
+publish: true
+author_email: mildred@mildred.fr
+message_id: 5051E002.3060702@mildred.fr
+---
+
+I started writing wwwgen: a website generator that uses redo for its 
+dependency tracking. Unfortunately, I might not have taken the correct 
+approach to the problem. I reuse the webgen concepts, and that might be 
+a bad idea.
+
+Specifically, webgen (and my first version of wwwgen) are bottom-up 
+systems (you take the sources and build everything they can generate). 
+The problem is that redo itself is top-down (you take the target and 
+build it, building sources as they are needed), and I tried to make the 
+two match. It's very difficult, and impossible to do with a clean design.
+
+What I'd like to have is a simple `wwwgen` binary that generates a HTML 
+file from a source file. Let's imagine how it could work:
+
+- If the source file is a simple page with no templates, just generate 
+the HTML and this is it
+
+- If the source file is a simple page with a template, redo-ifchange the 
+template source and build the HTML combining the two
+
+- If the source file is an index, we have a problem because multiple 
+outputs are generated. Redo doesn't support this case and we must find a 
+way to make it work.
+
+So, we have a problem here ...
+
+Now, we have another problem. Specifically, my source file is called 
+`title.page` and I want my output file to be `title/index.html`. In 
+webgen, this is implemented by a configuration in `title.page` telling 
+it to build in `title/index.html`.
+
+There is a solution to solve both problems at once. the wwwgen command 
+creates an archive (the formats needs to be defined, it could be tar, or 
+different yaml documents in the same file for example). Then, the build 
+process would be:
+
+**all.do**:
+
+     find src -name "*.src" \
+       | sed 's/src$/gen/' \
+       | xargs -d '\n' redo-ifchange
+     find src -name "*.gen" \
+       | xargs -d '\n' wwwgen unpack
+
+**default.gen.do**:
+
+     redo-ifchange "$2.src"
+     wwwgen --redo-dependencies -o "$3" generate "$2.src"
+
+`wwwgen generate` would parse the source file and generate an archive, 
+that will be unpacked later by `wwwgen unpack`. Let's see how it can work:
+
+- The source file can choose where it unpacks, relatively to the 
+directory where the source file is
+
+- If the source file is an index, it will redo-ifchange the other source 
+files for the index and redo-ifchange the template, generate multiple 
+pages packed together.
+
+- If the source file is a tag tree (a special source that doesn't output 
+anything on its own but create index files dynamically), then it parses 
+every child to find a canonical list of tags and the paths they refer 
+to. Then, it creates the index files. Unfortunately, those index files 
+will never be compiled until next build.
+
+How an we improve the design to be able to create source files dynamically.
+
+There are different views to the problem:
+
+- pages, index and tags should all generate all the output files they 
+are related to. It means that index files should be able to generate 
+pages, and tags should be able to generate indexes and pages.
+
+- pages should generate the output file, index should generate pages and 
+feeds and tags should generate index.
+
+- mixed solution (the one described): pages generate output file, index 
+should generate the output files as well and tags generates index.
+
+How can we generate source files on the fly:
+
+- have a predefined compilation order: first tags, then index and lastly 
+feeds and pages.
+
+- rebuild everything until no more source files are generated. We might 
+build unnecessary things.
+
+I prefer the second solution which is more flexible, but we need a way 
+to avoid building things twice. For example, it's not necessary to build 
+a page if on the next phase the page source is going to be regenerated.
+
+Very simply, the generated page can contain a link to the index source 
+file that generated it, and when generating the page, `redo-ifchange` is 
+run on the index file.
+
+Next question: what if a tag is deleted. The corresponding index page is 
+going to stay around until the next clean. The tag page should keep 
+around a list of index files it generated and delete them when a tag is 
+no longer detected. And deleting the index should not be done using `rm` 
+because the index will need to delete the pages it generated. The best 
+solution would be to integrate to redo to detect these files.
+
+The build scripts now are:
+
+**all.do**:
+
+     oldsrclist=
+     srclist="$(find src -name "*.src")"
+     while [ "$oldsrclist" != "$srclist" ]; do
+       echo "$srclist" \
+         | sed 's/src$/gen/' \
+         | xargs -d '\n' redo-ifchange
+       oldsrclist="$srclist"
+       srclist="$(find src -name "*.src")"
+     done
+
+     find src -name "*.gen" \
+       | xargs -d '\n' wwwgen unpack
+
+**default.gen.do**:
+
+     redo-ifchange "$2.src"
+     wwwgen --redo-dependencies -o "$3" generate "$2.src"
