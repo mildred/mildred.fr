@@ -67,43 +67,43 @@ Submodules will be improved a lot
 I wish it was already there. From the [wiki page][gsoc-submod-wiki], the 
 improvements will be:
 
-> As Dscho put it, submodules are the “neglected ugly duckling” of git. Time to change that …
+> As Dscho put it, submodules are the â€œneglected ugly ducklingâ€ of git. Time to change that â€¦
 >
 > Issues still to be tackled in this repo:
 >
 >  *  Let am, bisect, checkout, checkout-index, cherry-pick, merge, pull, read-tree, rebase, reset & stash work recursively on submodules (in progress)
 >  *  Teach grep the --recursive option
 >  *  Add means to specify which submodules shall be populated on clone
->  *  Showing that a submodule has a HEAD not on any branch in “git status”
+>  *  Showing that a submodule has a HEAD not on any branch in â€œgit statusâ€
 >  *  gitk: Add popup menu for submodules to see the detailed history of changes
->  *  Teach “git prune” the “--recurse-submodules” option (and maybe honour the same default and options “git fetch” uses)
+>  *  Teach â€œgit pruneâ€ the â€œ--recurse-submodulesâ€ option (and maybe honour the same default and options â€œgit fetchâ€ uses)
 >  *  Better support for displaying merge conflicts of submodules
 >  *  git gui: Add submodule menu for adding and fetching submodules
->  *  git status should call “git diff --submodule --ignore-submodules=dirty” instead of “git submodule summary” for providing a submodule summary when configured to do so.
->  *  **Add an “always-tip” mode**
->  *  Other commands that could benefit from a “--recurse-submodules” option: archive, branch, clean, commit, revert, tag.
+>  *  git status should call â€œgit diff --submodule --ignore-submodules=dirtyâ€ instead of â€œgit submodule summaryâ€ for providing a submodule summary when configured to do so.
+>  *  **Add an â€œalways-tipâ€ mode**
+>  *  Other commands that could benefit from a â€œ--recurse-submodulesâ€ option: archive, branch, clean, commit, revert, tag.
 >  *  In the long run git-submodule.sh should be converted to a rather simple wrapper script around core git functionality as more and more of that is implemented in the git core.
 >
 > Submodule related bugs to fix
 >
->  *  Cherry picking across submodule creation fails even if the cherry pick doesn’t touch any file in the submodules path
->  *  git submodule add doesn’t record the url in .git/config when the submodule path doesn’t exist.
->  *  git rebase --continue won’t work if the commit only contains submodule changes.
+>  *  Cherry picking across submodule creation fails even if the cherry pick doesnâ€™t touch any file in the submodules path
+>  *  git submodule add doesnâ€™t record the url in .git/config when the submodule path doesnâ€™t exist.
+>  *  git rebase --continue wonâ€™t work if the commit only contains submodule changes.
 >
-> Issues already solved and merged into Junio’s Repo:
+> Issues already solved and merged into Junioâ€™s Repo:
 >
 >  *  Since git 1.6.6:
->         New --submodule option to “git diff” (many thanks to Dscho for writing the core part!)
+>         New --submodule option to â€œgit diffâ€ (many thanks to Dscho for writing the core part!)
 >         Display of submodule summaries instead of plain hashes in git gui and gitk
 >  *  Since git 1.7.0:
->         “git status” and “git diff*” show submodules with untracked or modified files in their work tree as “dirty”
+>         â€œgit statusâ€ and â€œgit diff*â€ show submodules with untracked or modified files in their work tree as â€œdirtyâ€
 >         git gui: New popup menu for submodule diffs
 >  *  Since git 1.7.1:
 >         Show the reason why working directories of submodules are dirty (untracked content and/or modified content) in superproject
 >  *  Since git 1.7.2:
->         Add parameters to the “--ignore-submodules” option for “git diff” and “git status” to control when a submodule is considered dirty
+>         Add parameters to the â€œ--ignore-submodulesâ€ option for â€œgit diffâ€ and â€œgit statusâ€ to control when a submodule is considered dirty
 >  *  Since git 1.7.3:
->         Add the “ignore” config option for the default behaviour of “git diff” and “git status”. Both .git/config and .gitmodules are parsed for this option, the value set in .git/config. will override that from .gitmodules
+>         Add the â€œignoreâ€ config option for the default behaviour of â€œgit diffâ€ and â€œgit statusâ€. Both .git/config and .gitmodules are parsed for this option, the value set in .git/config. will override that from .gitmodules
 >         Add a global config option to control when a submodule is considered dirty (written by Dscho)
 >         Better support for merging of submodules (thanks to Heiko Voigt for writing that)
 >  *  Since git 1.7.4:
@@ -111,10 +111,10 @@ improvements will be:
 >  *  Since git 1.7.5:
 >         fetch runs recursively on submodules by default when new commits have been recorded for them in the superproject
 >  *  Since git 1.7.7:
->         git push learned the --recurse-submodules=check option which errors out when trying to push a superproject commit where the submodule changes are not pushed (part of Frederik Gustafsson’s 2011 GSoC project)
+>         git push learned the --recurse-submodules=check option which errors out when trying to push a superproject commit where the submodule changes are not pushed (part of Frederik Gustafssonâ€™s 2011 GSoC project)
 >  *  Since git 1.7.8:
->         The “update” option learned the value “none” which disables “submodule init” and “submodule update”
->         The git directory of a newly cloned submodule is stored in the .git directory of the superproject, the submodules work tree contains only a gitfile. This is the first step towards recursive checkout, as it enables us to remove a submodule directory (part of Frederik Gustafsson’s 2011 GSoC project)
+>         The â€œupdateâ€ option learned the value â€œnoneâ€ which disables â€œsubmodule initâ€ and â€œsubmodule updateâ€
+>         The git directory of a newly cloned submodule is stored in the .git directory of the superproject, the submodules work tree contains only a gitfile. This is the first step towards recursive checkout, as it enables us to remove a submodule directory (part of Frederik Gustafssonâ€™s 2011 GSoC project)
 
 And the [GSoC page][gsoc-submod]:
 
