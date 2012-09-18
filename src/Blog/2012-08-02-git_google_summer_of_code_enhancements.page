@@ -123,7 +123,7 @@ And the [GSoC page][gsoc-submod]:
 > Git repository: https://github.com/iveqy/git
 >
 > Midterm evaluation: passed
- >
+>
 > Progress report / status:
 >
 >  *  [GSoC 11] submodule improvements at git mailing list
@@ -132,12 +132,8 @@ And the [GSoC page][gsoc-submod]:
 
 
 
-[git-remote-helpers]: 
-https://www.kernel.org/pub/software/scm/git/docs/git-remote-helpers.html
+[git-remote-helpers]: https://www.kernel.org/pub/software/scm/git/docs/git-remote-helpers.html
 [git-remote-hg]: https://github.com/rfk/git-remote-hg
-[gsoc-svn]: 
-https://git.wiki.kernel.org/index.php/SoC2011Projects#Remote_helper_for_Subversion_and_git-svn
-[gsoc-submod-wiki]: 
-https://github.com/jlehmann/git-submod-enhancements/wiki/
-[gsoc-submod]: 
-https://git.wiki.kernel.org/index.php/SoC2011Projects#Git_submodule_improvements
+[gsoc-svn]: https://git.wiki.kernel.org/index.php/SoC2011Projects#Remote_helper_for_Subversion_and_git-svn
+[gsoc-submod-wiki]: https://github.com/jlehmann/git-submod-enhancements/wiki/
+[gsoc-submod]: https://git.wiki.kernel.org/index.php/SoC2011Projects#Git_submodule_improvements
