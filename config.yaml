@@ -22,13 +22,13 @@
 #####
 
 sources:
-  - [/, Webgen::Source::FileSystem, src]
+  - [/, "Webgen::Source::FileSystem", src]
 
 patterns:
   Page:
-    add: [**/*.sass]
+    add: ["**/*.sass"]
   Copy:
-    add: [**/*.css, **/*.js, **/*.jpeg, **/*.txt]
+    add: ["**/*.css", "**/*.js", "**/*.jpeg", "**/*.txt"]
 
 default_processing_pipeline:
   Page: rdiscount,fragments
