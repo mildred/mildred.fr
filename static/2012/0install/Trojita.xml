@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<interface uri="http://mildred.fr/2012/0install/Trojita.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+  <name>Trojita</name>
+  <summary>Trojitá IMAP E-Mail user Agent</summary>
+  <description>
+Trojita is a Qt IMAP e-mail client. Some highlights of Trojitá are:
+
+- A pure Qt4 application with no additional dependencies
+
+- Robust IMAP core implemented using Qt's Model-View framework
+
+- Standards compliance is a design goal
+
+- On-demand message list and body part loading
+
+- Offline IMAP support (you can access data you already have; there's no
+complete &quot;offline mail access&quot; yet, though)
+
+- Support for bandwidth-saving mode aimed at mobile users with expensive
+connection
+
+- IMAP over SSH -- in addition to usual SSL/TLS connections, the server could be
+accessed via SSH
+
+- Safe dealing with HTML mail (actually more robust than Thunderbird's)</description>
+
+  <homepage>http://trojita.flaska.net/</homepage>
+
+  <category>Network</category>
+  <implementation arch="*-src" id="." version="0.3-post"
+      compile:command="qmake-qt4 -makefile &amp;&amp; $MAKE &amp;&amp; $MAKE INSTALL_ROOT=&quot;$DISTDIR&quot; install"
+      compile:dup-src="true"
+      compile:binary-main="usr/local/bin/trojita">
+    <requires interface="http://gfxmonk.net/dist/0install/qmake-qt4.xml"/>
+    <requires interface="http://repo.roscidus.com/devel/make">
+      <executable-in-var name="MAKE"/>
+    </requires>
+  </implementation>
+</interface>

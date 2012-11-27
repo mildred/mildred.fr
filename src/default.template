@@ -40,17 +40,17 @@
         <link rel="pavatar" href="http://mildred.fr/Images/IMG_5669_square_80.jpeg" />
         <meta name="google-site-verification" content="gF0wqHzzrTjzNOh2j-plpWNNvqotWwMY3_1vDUJCQcI" />
         <!-- VeriSign PIP -->
-        <link rel="openid2.local_id" href="http://mildred.pip.verisignlabs.com" />
-        <link rel="openid2.provider" href="http://pip.verisignlabs.com/server" />
-        <link rel="openid.delegate"  href="http://mildred.pip.verisignlabs.com/" />
-        <link rel="openid.server"    href="http://pip.verisignlabs.com/server" />
-        <meta http-equiv="X-XRDS-Location" content="http://pip.verisignlabs.com/user/mildred/yadisxrds" />
+        <!-- link rel="openid2.local_id" href="http://mildred.pip.verisignlabs.com" /-->
+        <!-- link rel="openid2.provider" href="http://pip.verisignlabs.com/server" /-->
+        <!-- link rel="openid.delegate"  href="http://mildred.pip.verisignlabs.com/" /-->
+        <!-- link rel="openid.server"    href="http://pip.verisignlabs.com/server" /-->
+        <!-- meta http-equiv="X-XRDS-Location" content="http://pip.verisignlabs.com/user/mildred/yadisxrds" /-->
         <!-- MyOpenID -->
-        <!-- link rel="openid.server"    href="http://www.myopenid.com/server" /-->
-        <!-- link rel="openid.delegate"  href="http://mildred.myopenid.com/" /-->
-        <!-- link rel="openid2.local_id" href="http://mildred.myopenid.com" /-->
-        <!-- link rel="openid2.provider" href="http://www.myopenid.com/server" /-->
-        <!-- meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=mildred.myopenid.com" /-->
+        <link rel="openid.server"    href="http://www.myopenid.com/server" />
+        <link rel="openid.delegate"  href="http://mildred.myopenid.com/" />
+        <link rel="openid2.local_id" href="http://mildred.myopenid.com" />
+        <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+        <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=mildred.myopenid.com" />
         <!-- XMPP OpenID -->
         <!--link rel="openid.server"   href="http://openid.xmpp.za.net/server"-->
         <!--link rel="openid.delegate" href="http://openid.xmpp.za.net/base64/bWlsZHJlZEBqYWJiZXIuZnI="-->
