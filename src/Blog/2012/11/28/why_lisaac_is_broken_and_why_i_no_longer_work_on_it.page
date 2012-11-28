@@ -1,0 +1,152 @@
+---
+title: Why Lisaac is broken and why I no longer work on it
+created_at: 2012-11-28 14:49:19.000000000 +01:00
+kind: article
+publish: true
+message_id: 50B6165F.5030201@mildred.fr
+author: Mildred Ki'Lya
+author_email: mildred@mildred.fr
+tags:
+- lisaac
+- lysaac
+- comp
+- dev
+- en
+---
+
+The overlooked problem
+--------------------------------
+
+Let me explain the reason why I think Lisaac is broken and why I stopped 
+working on it. The fundamental concept behind it is completely broken, 
+and i never could solve the problem. First, let me explain a few things 
+about Lisaac:
+
+- It is statically typed (like Eiffel)
+- It is prototype based (like Self)
+
+It may not seem like it but those two things are mutually exclusive, 
+unless something is done to reconcile the two. Being statically typed 
+means you know the type (or a parent of the real type) at compile-time. 
+Being prototype based means that the type can change completely.
+
+Imagine you have a `CUCUMBER` that inherit `VEGETABLE`. If at some point 
+during run-time, the cucumber inherit `SOFTWARE` (yes, cucumber is the 
+name of a software as well) you have a problem. Yet, this is not the 
+problem I want to talk about.
+
+Lisaac solve this problem because you can only assign a child type as a 
+parent. In the following object:
+
+     Section Header
+       + name := CUCUMBER;
+     Section Inherit
+       + parent :VEGETABLE := ...;
+
+So, you're forbidden to assign a `SOFTWARE` in the `parent` slot because 
+`SOFTWARE` is not a child of `VEGETABLE`. But, you're allowed to assign 
+a `GREEN_VEGETABLE`. So not it becomes:
+
+     Section Header
+       + name := CUCUMBER;
+     Section Inherit
+       + parent :VEGETABLE := GREEN_VEGETABLE;
+
+Now, let's say you send a message to your cucumber, and through the 
+magic of inheritance, you end up in a slot of the parent. That is, you 
+are executing code that is located in `GREEN_VEGETABLE`. Then, you have 
+a problem.
+
+     Section Header
+       + name := GREEN_VEGETABLE;
+     Section Public
+       // inherited from VEGETABLE
+       - do_something <- paint_it_green;
+     Section Private
+       // specific to GREEN_VEGETABLE
+       - paint_it_green <- ( "green".println; );
+
+In the code above, if you are executing the `do_something` slot and have 
+`SELF = CUCUMBER`, you can't possibly call the `paint_it_green` slot 
+because it does not exist in `CUCUMBER`, and the Lisaac compiler will 
+refuse to compile your code. To explain it another way, the type of 
+`Self` is not compatible with `GREEN_VEGETABLE`, and this is a problem 
+for this is the code we are executing. You can't easily solve this problem.
+
+In the Self language, if you had a similar situation, it would work 
+because it is not statically typed. It would have failed to find 
+`paint_in_green` in the cucumber and called the parent, which would have 
+been a green vegetable. Somehow, the type of the cucumber would have 
+changed at runtime, which is incompatible with a type system that can 
+only compute types at compile time (and have them immutable at run time).
+
+So, I stopped working on Lisaac
+-----------------------------------------
+
+I tried to start up a new project, Lysaac, but got confronted to the 
+same problem once the compiler was mature enough to start getting into 
+inheritance. So I stopped again.
+[Life getting in the way][1] didn't help.
+
+A new hope
+----------------
+
+I tried to look into virtual machines, convincing myself that compiled 
+languages couldn't possibly answer such need to dynamic things in the 
+language. I looked at Self for the first time. I tried to build a 
+virtual machine that was fully concurrent. I looked at the Go language 
+because I know that it has nice concurrent primitives ... and I found 
+illumination.
+
+The Go language feels like a dynamic language, but it is compiled. I 
+always wondered how it could implement duck typing, and I [found 
+out][2]. I also realized that the difference between a virtual machine 
+with a JIT compiler, and a runtime for a compiled language that included 
+a compiler was very narrow. Basically, nothing prevents any language 
+from being compiled instead of being JIT compiled. You just have to 
+include a compiler in the standard library.
+
+Ironically, that what Common Lisp is doing.
+
+A new language
+---------------------
+
+I like how Go implements interfaces, and I want to do the same. In this 
+new language, an object is composed of :
+
+- an opaque work (pointer sized)
+- a pointer to an interface
+
+An interface is a collection of pointers to functions. There is always a 
+pointer for the fallback implementation and a pointer for the case 
+operation (to case an object to a new interface).
+
+I want to use a smalltalk/Io type syntax. So the following will 
+represent an object with one variable and one slot:
+
+     obj := {
+       var := obj slot;
+       slot <- { ... };
+     }
+
+The data word of obj would be a pointer to a struct containing the 
+variable "var"
+The interface of obj would be:
+
+- a function pointer for the fallback implementation that throws an error
+- a function pointer for the "cast" operation
+- a function pointer for the "slot" slot
+
+I haven't figured out yet how to pass parameters to functions and return 
+objects. This kind of things will require to comply to predefined 
+interfaces (we need a way to tell which object type is returned by a 
+slot for example). Interfaces would probably be defined at compile time 
+and available as constants in code at run time (to be given as parameter 
+to the cast slot).
+
+If I want to be able to compile on the fly the code, I need to include 
+the LLVM library. So I need to implement the language in a language that 
+is compiled using LLVM (so bootstraping will be easier).
+
+[1]: http://pesn.com/2012/09/02/9602175_Waking_Up_is_Hard_to_Do/
+[2]: http://research.swtch.com/interfaces
