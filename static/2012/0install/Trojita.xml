@@ -28,15 +28,21 @@ accessed via SSH
   <homepage>http://trojita.flaska.net/</homepage>
 
   <category>Network</category>
-  <implementation arch="*-src" compile:binary-main="usr/local/bin/trojita" compile:command="qmake-qt4 -makefile &amp;&amp; $MAKE &amp;&amp; $MAKE INSTALL_ROOT=&quot;$DISTDIR&quot; install" compile:dup-src="true" id="." version="0.3-post">
+  <implementation arch="*-src" compile:binary-main="usr/local/bin/trojita" compile:command="qmake-qt4 -makefile &amp;&amp; $MAKE &amp;&amp; $MAKE INSTALL_ROOT=&quot;$DISTDIR&quot; install" compile:dup-src="true" id="sha1new=c9af02561c6840b59e6efddbb05b73badb3b23f7" released="2013-01-09" version="0.3.91">
+    <archive extract="trojita" href="http://quickgit.kde.org/?p=trojita.git&amp;a=snapshot&amp;h=8891883f610a26b29d052839f7970571742ac257&amp;fmt=tbz2" size="2996242" type="application/x-bzip-compressed-tar"/>
     <requires interface="http://gfxmonk.net/dist/0install/qmake-qt4.xml"/>
     <requires interface="http://repo.roscidus.com/devel/make">
       <executable-in-var name="MAKE"/>
     </requires>
   </implementation>
+  <group doc-dir="usr/share/doc" license="OSI Approved :: GNU General Public License v2" main="usr/bin/trojita">
+    <implementation arch="Linux-x86_64" id="sha1new=112136d9db9a6ce98b1bb1906f4e6ef112013cc0" released="2013-02-14" stability="testing" version="0.3.91-11.2">
+    <archive href="http://download.opensuse.org/repositories/home:/jkt-gentoo:/trojita/CentOS_CentOS-6/x86_64/trojita-0.3.91-11.2.x86_64.rpm" size="742728" type="application/x-rpm"/>
+  </implementation>
+  </group>
 </interface>
 <!-- Base64 Signature
-iEYEABECAAYFAlEdBbEACgkQb52o1pp9LivoaACfXZ6RTRVnt8hjajRnbhVMUpKMoMgAn2wSm98x
-ryhZ0ftpjEYMLBOu9K6Q
+iEYEABECAAYFAlEdGy8ACgkQb52o1pp9LisJlwCfbqmrkGhWIXepNdwNQnBIEUaIpLsAn17K8Ti/
+IltXZXtREMBnJZu/ul2i
 
 -->
