@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
 <interface uri="http://mildred.fr/2012/0install/Trojita.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
   <name>Trojita</name>
   <summary>Trojitá IMAP E-Mail user Agent</summary>
@@ -27,13 +28,15 @@ accessed via SSH
   <homepage>http://trojita.flaska.net/</homepage>
 
   <category>Network</category>
-  <implementation arch="*-src" id="." version="0.3-post"
-      compile:command="qmake-qt4 -makefile &amp;&amp; $MAKE &amp;&amp; $MAKE INSTALL_ROOT=&quot;$DISTDIR&quot; install"
-      compile:dup-src="true"
-      compile:binary-main="usr/local/bin/trojita">
+  <implementation arch="*-src" compile:binary-main="usr/local/bin/trojita" compile:command="qmake-qt4 -makefile &amp;&amp; $MAKE &amp;&amp; $MAKE INSTALL_ROOT=&quot;$DISTDIR&quot; install" compile:dup-src="true" id="." version="0.3-post">
     <requires interface="http://gfxmonk.net/dist/0install/qmake-qt4.xml"/>
     <requires interface="http://repo.roscidus.com/devel/make">
       <executable-in-var name="MAKE"/>
     </requires>
   </implementation>
 </interface>
+<!-- Base64 Signature
+iEYEABECAAYFAlEdBbEACgkQb52o1pp9LivoaACfXZ6RTRVnt8hjajRnbhVMUpKMoMgAn2wSm98x
+ryhZ0ftpjEYMLBOu9K6Q
+
+-->
