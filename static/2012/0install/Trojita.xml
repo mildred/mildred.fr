@@ -39,10 +39,21 @@ accessed via SSH
     <implementation arch="Linux-x86_64" id="sha1new=112136d9db9a6ce98b1bb1906f4e6ef112013cc0" released="2013-02-14" stability="testing" version="0.3.91-11.2">
     <archive href="http://download.opensuse.org/repositories/home:/jkt-gentoo:/trojita/CentOS_CentOS-6/x86_64/trojita-0.3.91-11.2.x86_64.rpm" size="742728" type="application/x-rpm"/>
   </implementation>
+    <implementation id="sha1new=02aa86a6d2ef41bb0738d85c05cee81948741e4a" released="2013-02-27" version="0.3.92-10.1">
+      <archive href="http://download.opensuse.org/repositories/home:/jkt-gentoo:/trojita/CentOS_CentOS-6/x86_64/trojita-0.3.92-10.1.x86_64.rpm" size="806692" type="application/x-rpm"/>
+    </implementation>
   </group>
 </interface>
 <!-- Base64 Signature
-iEYEABECAAYFAlEdGy8ACgkQb52o1pp9LisJlwCfbqmrkGhWIXepNdwNQnBIEUaIpLsAn17K8Ti/
-IltXZXtREMBnJZu/ul2i
+iQIcBAABAgAGBQJROFlVAAoJEMbMN1EXMVnuBkcP/j1L+xcKfOEDoRg9TG8ukmqq9B8E8FhHN/o7
+9DzQiZvI9LqUAcqNxL3rXGjAJCNkU6RlXb8YaeJAznPIQ8HcPZWGAj9KCyMeSUJYizXAS7ocq73z
+kerBSZ/0SosvWAcgmjTXXk2maKec1H47bWT3sTC8onSxFyjSDLHXpkNW5AICIUgeFoL7Cclj52VW
+YgD71hoV0WFeD9mpdOk+T2tA5GZbDNvOjYlB+P8ULyH6FTK3dcQUODPjb7CV+Gs4MPvYnCYSSd1l
+ZHh8XaQhcI5hGhOP6zdiQ08gXyBqeOS5hFGyC+FoXjUTBVujBDeAlgZoo+C5A89zKG2Jn32pi9j3
+gGYOAg7BrgLzVuZ2gpb3QDD5wifvMwcr1H3RC81QJg/pOLGG39WKv8NuosFTGif6CT41ezH75Qtt
+3hQPmRRxCSddeaEDGyXJMLuJ7JSOXrE4IX4wt8J25wrNjv6LDrKVLeo0xeEWvjaohWVKEFSIvAb1
+xvP29gcCyygO6I4T73F5cAY8K9cy9B4Ug7Bkuu3c5H5ES/o5sOtAvzzgW3360+mg6417k6rpN0mE
+MaDQVJ2guwkypzx3R4BmsyBgB5+PqYBT4cOuDtAoE/Ug8qTOEQRFQQsYbJVTkvSeq+1n9Xw6x+ow
+q0OfJ+2cLQF26DBb8+hiiAYdx9RVh8vArjgR7Bur
 
 -->
