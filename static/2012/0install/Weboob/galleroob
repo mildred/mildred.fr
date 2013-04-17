@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface uri="http://mildred.fr/2012/0install/Weboob/galleroob" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <name>galleroob</name>
+  <summary>galleroob</summary>
+  <description/>
+  <homepage>http://weboob.org/</homepage>
+  <group>
+    <requires interface="http://mildred.fr/2012/0install/Weboob.xml">
+      <environment insert="." name="PYTHONPATH"/>
+      <environment insert="." mode="replace" name="WEBOOB_DIR"/>
+    </requires>
+    <implementation id="main" version="0">
+      <manifest-digest sha256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"/>
+      <recipe/>
+      <command name="run">
+        <runner interface="http://repo.roscidus.com/python/python">
+          <version before="3.0" not-before="2.7"/>
+          <arg>${WEBOOB_DIR}/scripts/galleroob</arg>
+        </runner>
+      </command>
+    </implementation>
+  </group>
+</interface>
+<!-- Base64 Signature
+iEYEABECAAYFAlFtqxgACgkQb52o1pp9LitRfQCfSg8PLGXX0Z5DnDxKmHDpWPikr6MAnieVut0s
+OIDyOvolTjP1oZgyqSIZ
+
+-->

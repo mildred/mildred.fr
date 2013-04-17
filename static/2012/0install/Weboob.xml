@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface uri="http://mildred.fr/2012/0install/Weboob.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+  <name>Weboob</name>
+  <summary>Web Outside of Browsers</summary>
+  <description>
+</description>
+  <homepage>http://weboob.org/</homepage>
+  <group doc-dir="docs" license="Affero General Public License">
+    <implementation arch="*-src" compile:command="make &amp;&amp; cp -R . &quot;${DISTDIR}&quot;" compile:dup-src="true" id="sha1new=e70b6acfeda6fb974ee43d97236098271fadf594" released="2013-03-26" version="0.6">
+      <archive extract="weboob-0.f" href="https://symlink.me/attachments/download/218/weboob-0.f.tar.gz" size="1285990" type="application/x-compressed-tar"/>
+    </implementation>
+  </group>
+</interface>
+<!-- Base64 Signature
+iEYEABECAAYFAlFugm0ACgkQb52o1pp9Lit8ggCgg8OAtUMTb6szoh6gRpmB1G0rHLkAn0FvcKlA
+oOB0CIienwqgciko+acc
+
+-->
