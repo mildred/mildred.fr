@@ -1,0 +1,176 @@
+- var site_name = "Mildred's Website"
+- var strftime_locale = { days: [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ], shortDays: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ], months: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ], shortMonths: [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ], AM: 'AM', PM: 'PM' }
+- var strftime  = require('strftime')
+
+mixin article_meta(file)
+  p.meta
+    - if(file.meta.created_at)
+      - created = Date.parse(file.meta.created_at)
+      span.date-time
+        span.date= strftime('%a %d %b %Y,', created)
+        span.time= strftime('%I:%M %p',     created)
+    - if(file.meta.author)
+      span.author
+        = "by "
+        span.author-name= file.meta.author
+    - if(file.meta.tags)
+      span.tags
+        - each tag in file.meta.tags.sort()
+          span.tag
+            a(href=link("tags/" + tag + "/"), class='tag')= tag
+
+mixin page_list(pagenum, pages, latestpage)
+  .page-list
+    strong= "Page: "
+    ul.page-list
+      - for(var i = 1; i <= pages.length; ++i)
+        li
+          - if(pagenum == i)
+            strong=i
+          - else
+            a(href=link(pages[i-1].srcpath))= i
+      li
+        - if(!pagenum)
+          strong= "latest"
+        - else
+          a(href=link(latestpage.srcpath))= "latest"
+        .clear
+
+doctype html
+html
+  head
+    title= file.meta.title + " - " + site_name
+
+    meta(charset='utf-8')
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    
+    meta(name='keywords',    content=(file.meta.tags || []).join(','))
+    meta(name='description', content=file.meta.excerpt || "")
+    meta(name='viewport',    content='initial-scale=1.0, width=device-width')
+    meta(name='x-kind',      content=file.meta.kind)
+
+    link(rel='canonical',     href="http://mildred.fr/" + link(file.srcpath, '.'))
+    link(rel='icon',          href=link('favicon.png'), type='image/png')
+    link(rel='shortcut icon', href=link('favicon.png'), type='image/png')
+    link(rel='stylesheet',    href=link('style.css'),   type='text/css', media='screen')
+
+    script(src=link('Scripts/json/json2.js'), type='text/javascript')
+    script(src=link('Scripts/jquery.min.js'), type='text/javascript')
+    script(src=link('Scripts/comments.js'),   type='text/javascript')
+    script(src=link('Scripts/local.js'),      type='text/javascript')
+    
+    // FIXME: openid
+    // FIXME: feeds
+  body
+    .header
+      p.access-links
+        a(href="#menu") Go to Menu
+        br
+        a(href="#content") Go to Content
+
+      .left
+        a(href=link("./"))
+          img(class="photo", src=link("Images/IMG_5669_square_128.jpeg"), alt="My photo")
+
+      .title
+        h1
+          a(href=link('./'))= site_name
+      .float-right
+      .clear-right
+
+      .right
+        strong Tags:
+        ul.tags
+          - for(var i = 0; i < template.all_tags.length; ++i)
+            li
+              - var tag = template.all_tags[i]
+              = " "
+              a(class='tag', href=link("tags/"+tag+"/"))= tag
+
+      .content
+        .links#menu
+          ul
+            li
+              a(href=link('.')) Home
+            li
+              a(href=link('Blog/')) Blog
+            li
+              a(href="//survie.mildred.fr") Survie
+
+      .clear
+    
+    
+    .leftcol
+      img(class="photo", src=link("Images/all128.jpeg"), alt="My avatar")
+      hr
+      | <p>GoogleTalk, Jabber, XMPP address:
+      | <br /><strong><a href="xmpp:mildred&#64;jabber.fr">mildred&#64;jabber.fr</a></strong><!--&nbsp;<img src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/image-dcraven.png" alt="" /><br /><em><script type="text/javascript" src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/message_js.js"></script></em>-->
+      | </p>
+      hr
+      p
+        a(href=link("gpg_key.txt")) GPG Public Key
+        br
+        span(style="font-size: 0.8em")
+        | (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+    
+    
+    .main#content
+      -if(file.meta.title)
+        h1
+          a(href=link(file.srcpath))= file.meta.title
+        - if(file.meta.kind == "article")
+          +article_meta(file)
+          - if(file.excerpt)
+            .excerpt!= file.excerpt
+          - if(file.html)
+            .body
+              != file.html
+          noscript
+            p
+              Scripts are disabled on your computer. In order to access existing
+              comments and post new comments, you need to enable Javascript.
+            p
+              Rationale: This server that hosts my website is a static server.
+              In order to implement comments, a XmlHttpRequest is made on an API
+              server to both retrieve the comments and post a new comment.
+          - if(!files)
+            .clear
+
+      - else
+        != file.html
+        - if(!files)
+          .clear
+
+      - if(files)
+        p= "Articles from " + (firstitem+1) + " to " + (lastitem+1)
+        +page_list(pagenum, pages, latestpage)
+        .article-list
+          - each subfile in files
+            .sub-article
+              - if(subfile.meta.title)
+                -if(file.meta.title)
+                  h2
+                    a(href=link(subfile.srcpath), class='permalink')= subfile.meta.title
+                -else
+                  h1
+                    a(href=link(subfile.srcpath), class='permalink')= subfile.meta.title
+              +article_meta(subfile)
+              .excerpt
+                - if(subfile.excerpt)
+                  != subfile.excerpt
+                  p
+                    a(href=link(subfile.srcpath))= subfile.meta.teaser_separator || "Continue Reading ..."
+                - else
+                  != subfile.html
+              .clear
+        +page_list(pagenum, pages, latestpage)
+
+    .clear
+    .footer
+      hr
+      p
+      | E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a>
+      p
+      | Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+      | I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.
+

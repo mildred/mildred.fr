@@ -1,7 +1,8 @@
 ---
 title:      Articles
-
---- name:config_index
+filter:     this.meta.kind == 'article'
+...
+# --- name:config_index
 # Configuration for index pages
 
 

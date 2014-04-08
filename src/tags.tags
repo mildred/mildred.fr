@@ -1,14 +1,3 @@
 ---
 name: Tags
-kind: tag
-
---- name:config_tags
-# Configuration for tag pages
-
---- name:meta_index
-# Metadata for index pages
-
---- name:config_index
-# Configuration for index pages
-page_basename: %s/index
 

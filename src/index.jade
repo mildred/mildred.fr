@@ -1,0 +1,6 @@
+doctype html
+html
+  body
+    - for(var i=0; i < files.length; ++i)
+      h1= "+" + files[i].meta.title
+      != files[i].html

@@ -1,0 +1,6 @@
+*.src
+*.meta.json
+*.dest
+*.htm
+*.out
+*.srclist
