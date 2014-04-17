@@ -1,11 +1,12 @@
 - var site_name = "Mildred's Website"
+- var http_base = "http://mildred.fr/"
 - var strftime_locale = { days: [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ], shortDays: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ], months: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ], shortMonths: [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ], AM: 'AM', PM: 'PM' }
 - var strftime  = require('strftime')
 
 mixin article_meta(file)
   p.meta
     - if(file.meta.created_at)
-      - created = Date.parse(file.meta.created_at)
+      - created = new Date(file.meta.created_at)
       span.date-time
         span.date= strftime('%a %d %b %Y,', created)
         span.time= strftime('%I:%M %p',     created)
@@ -49,18 +50,38 @@ html
     meta(name='viewport',    content='initial-scale=1.0, width=device-width')
     meta(name='x-kind',      content=file.meta.kind)
 
-    link(rel='canonical',     href="http://mildred.fr/" + link(file.srcpath, '.'))
+    link(rel='canonical',     href=http_base + link(file.srcpath, '.'))
     link(rel='icon',          href=link('favicon.png'), type='image/png')
     link(rel='shortcut icon', href=link('favicon.png'), type='image/png')
     link(rel='stylesheet',    href=link('style.css'),   type='text/css', media='screen')
+
+    - if(atompage)
+      link(rel="alternate", href=link(atompage.srcpath), type="application/atom+xml", title="ATOM Feed")
 
     script(src=link('Scripts/json/json2.js'), type='text/javascript')
     script(src=link('Scripts/jquery.min.js'), type='text/javascript')
     script(src=link('Scripts/comments.js'),   type='text/javascript')
     script(src=link('Scripts/local.js'),      type='text/javascript')
     
-    // FIXME: openid
-    // FIXME: feeds
+    - if(file.meta.home_page)
+       | <!-- Home Page Special Links -->
+       link(rel="pavatar", href=http_base + "Images/IMG_5669_square_80.jpeg")
+       | <!-- VeriSign PIP -->
+       | <link rel="openid2.local_id" href="http://mildred.pip.verisignlabs.com" />
+       | <link rel="openid2.provider" href="http://pip.verisignlabs.com/server" />
+       | <link rel="openid.delegate"  href="http://mildred.pip.verisignlabs.com/" />
+       | <link rel="openid.server"    href="http://pip.verisignlabs.com/server" />
+       | <meta http-equiv="X-XRDS-Location" content="http://pip.verisignlabs.com/user/mildred/yadisxrds" />
+       | <!-- MyOpenID -->
+       | <!--link rel="openid.server"    href="http://www.myopenid.com/server" /-->
+       | <!--link rel="openid.delegate"  href="http://mildred.myopenid.com/" /-->
+       | <!--link rel="openid2.local_id" href="http://mildred.myopenid.com" /-->
+       | <!--link rel="openid2.provider" href="http://www.myopenid.com/server" /-->
+       | <!--meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=mildred.myopenid.com" /-->
+       | <!-- XMPP OpenID -->
+       | <!--link rel="openid.server"   href="http://openid.xmpp.za.net/server"-->
+       | <!--link rel="openid.delegate" href="http://openid.xmpp.za.net/base64/bWlsZHJlZEBqYWJiZXIuZnI="-->
+    
   body
     .header
       p.access-links
@@ -91,7 +112,7 @@ html
         .links#menu
           ul
             li
-              a(href=link('.')) Home
+              a(href=link('./')) Home
             li
               a(href=link('Blog/')) Blog
             li
@@ -111,30 +132,31 @@ html
         a(href=link("gpg_key.txt")) GPG Public Key
         br
         span(style="font-size: 0.8em")
-        | (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+          | (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
     
     
     .main#content
       -if(file.meta.title)
         h1
-          a(href=link(file.srcpath))= file.meta.title
-        - if(file.meta.kind == "article")
-          +article_meta(file)
-          - if(file.excerpt)
-            .excerpt!= file.excerpt
-          - if(file.html)
-            .body
-              != file.html
-          noscript
-            p
-              Scripts are disabled on your computer. In order to access existing
-              comments and post new comments, you need to enable Javascript.
-            p
-              Rationale: This server that hosts my website is a static server.
-              In order to implement comments, a XmlHttpRequest is made on an API
-              server to both retrieve the comments and post a new comment.
-          - if(!files)
-            .clear
+          //- a(href=link(file.srcpath))
+          = file.meta.title
+      - if(file.meta.kind == "article")
+        +article_meta(file)
+        - if(file.excerpt)
+          .excerpt!= file.excerpt
+        - if(file.html)
+          .body
+            != file.html
+        noscript
+          p
+            | Scripts are disabled on your computer. In order to access existing
+            | comments and post new comments, you need to enable Javascript.
+          p
+            | Rationale: This server that hosts my website is a static server.
+            | In order to implement comments, a XmlHttpRequest is made on an API
+            | server to both retrieve the comments and post a new comment.
+        - if(!files)
+          .clear
 
       - else
         != file.html
@@ -169,8 +191,8 @@ html
     .footer
       hr
       p
-      | E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a>
+        | E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a>
       p
-      | Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
-      | I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.
+        | Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+        | I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.
 

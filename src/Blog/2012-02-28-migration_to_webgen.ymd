@@ -9,7 +9,7 @@ tags:
   - en
   - web
 
---- name:excerpt
+---
 
 I just moved the site to [webgen](https://github.com/mildred/webgen). For the
 occasion, forked the project on github and improved a lot of things. As webgen
@@ -21,7 +21,7 @@ as it is just a bunch of static pages.
 
 More to come ...
 
---- name:content
+<!-- break -->
 
 Webgen allows me to split a post in two, an excerpt and a content. Perhaps the
 name excerpt is ill chosen as currently it seems more like a teaser. Anyway.
