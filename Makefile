@@ -4,6 +4,9 @@ add-index-link-to-blog-posts:
 xref:
 	find html -name "*.html" | xargs -n 1 htmlxref
 
+autoimports:
+	find html -name "*.html" -type f | fgrep -v html/footer.html | xargs -n 1 htmlautoimports html/footer.html
+
 out:
 	find html -type f -print0 | sed -z 's/^html\//out\//' | xargs -0 -n 1 $(MAKE) -B --no-print-directory
 
