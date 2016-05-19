@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/configuration/" rel="alternate" />
+  <link href="http://mildred.fr/tags/configuration/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:18:14+01:00</updated>
+  <id>http://mildred.fr/tags/configuration/</id>
+
+  
+  <entry>
+    <title type="html">Home directory package manager</title>
+    
+    <link href="http://mildred.fr/Blog/2011/06/28/home_directory_package_manager/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/06/28/home_directory_package_manager/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-06-28T12:17:55+02:00</published>
+    
+    <content type="html">&lt;p&gt;I always wanted to manage the files in my home directory. Generally, it's a
+complete mess and I wanted to get things right and understand the files I had.&lt;/p&gt;
+
+&lt;p&gt;At first, I just created a simple shell script that maintained symbolic links of
+the dotfiles and dordirs of my homedirs to &lt;code&gt;.local/config&lt;/code&gt;, sort of early XDG
+configuration directory. I also changed my .bashrc and later .zshrc to point to
+files in &lt;code&gt;.local/etc/profile.d&lt;/code&gt;. The shell script was reading a database in
+&lt;code&gt;.local/config/database.sh&lt;/code&gt; that contained the link information in the form.&lt;/p&gt;
+
+&lt;p&gt;The script did the following for each file declared:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if the file existed in the homedir but not in the database directory, it was
+simply moved and a link was created in its place.&lt;/li&gt;
+&lt;li&gt;if the file existed at both places, tell there is a conflict.&lt;/li&gt;
+&lt;li&gt;if the file existed in the database directory but not in the homedir, create
+the link&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The database looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;link &quot;.bashrc&quot; &quot;bashrc&quot;
+link &quot;.zshrc&quot;  &quot;zshrc&quot;
+
+# First file in home directory
+# Second file in .local/config
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My script just defined a function &lt;code&gt;link&lt;/code&gt; and sourced the database. But links
+were not easy to construct in shell. So later, I decided to rewrite it in Tcl,
+simply because the syntax is compatible (I love the Tcl syntax for that) and
+because of the wonderful &lt;a href=&quot;http://www.tcl.tk/man/tcl8.5/TclCmd/file.htm&quot;&gt;file&lt;/a&gt; command.&lt;/p&gt;
+
+&lt;p&gt;Later, I improved the script that was then called &lt;code&gt;fixdir&lt;/code&gt; to list which files
+were not managed, and display them. So I could either delete those files
+(because I don't care about them) or integrate them in the database. The script
+gained a &lt;code&gt;clean&lt;/code&gt; command to automatically remove files declared as noisy.&lt;/p&gt;
+
+&lt;p&gt;Now, I have a slightly different problem. I have now different computers which
+do not have all the same configuration. At first, I synchronized everything and
+just used the hostname in the database to get different links depending on the
+machine. But now, with my computer at work, I will not synchronize all the
+personal configurations. i have to get to a modular approach.&lt;/p&gt;
+
+&lt;p&gt;And this script did not help me in tracking what programs I installed in
+&lt;code&gt;~/.local/{bin,share,lib}&lt;/code&gt;. For this, I wanted something like &lt;a href=&quot;http://www.gnu.org/software/stow/&quot;&gt;stow&lt;/a&gt;. I
+tried using stow, but it failed with a conflict. Then I tried using
+&lt;a href=&quot;https://github.com/docwhat/homedir&quot;&gt;homedir&lt;/a&gt;. I just didn't like it because it created an ugly &lt;code&gt;~/bin&lt;/code&gt;
+instead of &lt;code&gt;~/.local/bin&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then I realized my &lt;code&gt;fixdir&lt;/code&gt; script looks much like &lt;code&gt;homedir&lt;/code&gt; already, and I
+patched it up to make it better. And there it is.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/fixdir&quot;&gt;The current version of fixdir is on github.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Let me copy the README file:&lt;/p&gt;
+
+&lt;h2&gt;What is it?&lt;/h2&gt;
+
+&lt;p&gt;This is my homedir package manager. Written first in shell then translated in
+tcl. Originally, this was just to maintain a set of symbolic links from my home
+directory to a directory where all important comfig files were stored. Then I
+decided to make it a package manager.&lt;/p&gt;
+
+&lt;h2&gt;How to install it?&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone git://github.com/mildred/fixdir.git fixdir
+fixdir_dir=&quot;$(pwd)/fixdir&quot;
+cd
+&quot;$fixdir_dir/fixdir&quot; install &quot;$fixdir_dir/hpkg.tcl&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir&lt;/code&gt; is installed in &lt;code&gt;~/.local/bin&lt;/code&gt;. Make sure it is in your &lt;code&gt;$PATH&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2&gt;How does it work&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir&lt;/code&gt; works better when you are in your target directory (homedir)&lt;/p&gt;
+
+&lt;p&gt;Invoke one action with a database file. The database file is a tcl script that
+contain all files and directories that should be linked.&lt;/p&gt;
+
+&lt;h2&gt;What else can it do?&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir unknown&lt;/code&gt; list all files not manages by fixdir in the current directory&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir clean&lt;/code&gt; remove files declared as noisy&lt;/p&gt;
+
+&lt;h2&gt;Bugs&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;fixdir list doesn't work when pwd != target directory&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+</feed>

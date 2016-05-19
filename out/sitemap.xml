@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>http://mildred.fr/2012/</loc>
+    <lastmod>2013-01-04T09:59:26+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/2012/info/index.html</loc>
+    <lastmod>2013-01-04T09:59:26+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/</loc>
+    <lastmod>2012-10-28T14:55:23+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/1/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/2/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/3/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/4/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/5/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/6/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/Blog/7/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/index.html</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/robots.txt</loc>
+    <lastmod>2012-10-19T21:03:17+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+  <url>
+    <loc>http://mildred.fr/style.css</loc>
+    <lastmod>2012-04-10T16:57:20+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    
+    <priority>0.5</priority>
+    
+  </url>
+
+</urlset>

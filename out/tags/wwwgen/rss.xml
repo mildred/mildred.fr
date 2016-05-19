@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/wwwgen/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:19:54 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:19:54 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>wwwgen: imagined architecture</title>
+      <link>http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</link>
+      <description>&lt;p&gt;I started writing wwwgen: a website generator that uses redo for its
+dependency tracking. Unfortunately, I might not have taken the correct
+approach to the problem. I reuse the webgen concepts, and that might be
+a bad idea.&lt;/p&gt;
+
+&lt;p&gt;Specifically, webgen (and my first version of wwwgen) are bottom-up
+systems (you take the sources and build everything they can generate).
+The problem is that redo itself is top-down (you take the target and
+build it, building sources as they are needed), and I tried to make the
+two match. It's very difficult, and impossible to do with a clean design.&lt;/p&gt;
+
+&lt;p&gt;What I'd like to have is a simple &lt;code&gt;wwwgen&lt;/code&gt; binary that generates a HTML
+file from a source file. Let's imagine how it could work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with no templates, just generate
+the HTML and this is it&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with a template, redo-ifchange the
+template source and build the HTML combining the two&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, we have a problem because multiple
+outputs are generated. Redo doesn't support this case and we must find a
+way to make it work.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, we have a problem here ...&lt;/p&gt;
+
+&lt;p&gt;Now, we have another problem. Specifically, my source file is called
+&lt;code&gt;title.page&lt;/code&gt; and I want my output file to be &lt;code&gt;title/index.html&lt;/code&gt;. In
+webgen, this is implemented by a configuration in &lt;code&gt;title.page&lt;/code&gt; telling
+it to build in &lt;code&gt;title/index.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a solution to solve both problems at once. the wwwgen command
+creates an archive (the formats needs to be defined, it could be tar, or
+different yaml documents in the same file for example). Then, the build
+process would be:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; find src -name &quot;*.src&quot; \
+   | sed 's/src$/gen/' \
+   | xargs -d '\n' redo-ifchange
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;wwwgen generate&lt;/code&gt; would parse the source file and generate an archive,
+that will be unpacked later by &lt;code&gt;wwwgen unpack&lt;/code&gt;. Let's see how it can work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The source file can choose where it unpacks, relatively to the
+directory where the source file is&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, it will redo-ifchange the other source
+files for the index and redo-ifchange the template, generate multiple
+pages packed together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a tag tree (a special source that doesn't output
+anything on its own but create index files dynamically), then it parses
+every child to find a canonical list of tags and the paths they refer
+to. Then, it creates the index files. Unfortunately, those index files
+will never be compiled until next build.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How an we improve the design to be able to create source files dynamically.&lt;/p&gt;
+
+&lt;p&gt;There are different views to the problem:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;pages, index and tags should all generate all the output files they
+are related to. It means that index files should be able to generate
+pages, and tags should be able to generate indexes and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;pages should generate the output file, index should generate pages and
+feeds and tags should generate index.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mixed solution (the one described): pages generate output file, index
+should generate the output files as well and tags generates index.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How can we generate source files on the fly:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;have a predefined compilation order: first tags, then index and lastly
+feeds and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;rebuild everything until no more source files are generated. We might
+build unnecessary things.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I prefer the second solution which is more flexible, but we need a way
+to avoid building things twice. For example, it's not necessary to build
+a page if on the next phase the page source is going to be regenerated.&lt;/p&gt;
+
+&lt;p&gt;Very simply, the generated page can contain a link to the index source
+file that generated it, and when generating the page, &lt;code&gt;redo-ifchange&lt;/code&gt; is
+run on the index file.&lt;/p&gt;
+
+&lt;p&gt;Next question: what if a tag is deleted. The corresponding index page is
+going to stay around until the next clean. The tag page should keep
+around a list of index files it generated and delete them when a tag is
+no longer detected. And deleting the index should not be done using &lt;code&gt;rm&lt;/code&gt;
+because the index will need to delete the pages it generated. The best
+solution would be to integrate to redo to detect these files.&lt;/p&gt;
+
+&lt;p&gt;The build scripts now are:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; oldsrclist=
+ srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ while [ &quot;$oldsrclist&quot; != &quot;$srclist&quot; ]; do
+   echo &quot;$srclist&quot; \
+     | sed 's/src$/gen/' \
+     | xargs -d '\n' redo-ifchange
+   oldsrclist=&quot;$srclist&quot;
+   srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ done
+
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</guid>
+    </item>
+    
+    <item>
+      <title>WWWGen : Static Page Generator and Beyond</title>
+      <link>http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</link>
+      <description>&lt;p&gt;I want to create a new static webpage generator. There are tons of them,
+you'll tell me, why do I want to create a new one?&lt;/p&gt;
+
+&lt;h2&gt;Static Website Generator&lt;/h2&gt;
+
+&lt;p&gt;Let's see what we have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;webby: my first love&lt;/li&gt;
+&lt;li&gt;nanoc: the second one I used&lt;/li&gt;
+&lt;li&gt;webgen: the one I'm using currently (with tons of local modifications)&lt;/li&gt;
+&lt;li&gt;jekyll: powering GitHub pages&lt;/li&gt;
+&lt;li&gt;and many more most probably&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Most of these systems take the assumption that you are a developer and
+you are comfortable to write code to have your website running. In all
+of these systems, I was forced to code some Ruby here and there to get
+it working how I wanted to.&lt;/p&gt;
+
+&lt;p&gt;The case of nanoc3 is very special because the main configuration uses a
+special Ruby DSL to manage the path locations. If you have non technical
+users, they won't be willing to write code in this file anyway. And for
+technical users, it might not be powerful enough.&lt;/p&gt;
+
+&lt;p&gt;Jekyll is probably the simplest system and can probably be used by non
+technical users, but it is far too simple and not powerful enough.
+That's why I didn't used it.&lt;/p&gt;
+
+&lt;p&gt;In the end, I modified Webgen a lot to include the following features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ability to write ruby code in haml instead on having to rely on the
+template engine included in webgen&lt;/li&gt;
+&lt;li&gt;special .index nodes that will generate a paginated index of articles
+found dynamically. The index would contain the last articles in reverse
+order while the pages will contain each N articles in the natural order.
+This way, an article that end up on page 3 is always going to be on page 3.&lt;/li&gt;
+&lt;li&gt;special .tags nodes that will generate .index pages dynamically to
+create an index or articles for each tag.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you look around, there are not many static web page generators that
+permit that. First, I decided I would maintain my own version of webgen
+with these modifications, but now, I have the idea that the code base is
+so horrible that I prefer rewrite the same functions from scratch.&lt;/p&gt;
+
+&lt;h2&gt;Rewriting From Scratch&lt;/h2&gt;
+
+&lt;p&gt;As I said, I'm not satisfied with the current status of the webgen code.
+There is a complex system of cache, and a blackboard object that is used
+to dispatch method call to the correct objects around the system. The
+problem is that this extra indirection level makes it difficult to know
+the code path. It would be useful if the hooks in the blackboard would
+be highly dynamic, but it's mostly static. it serves no purpose whatsoever.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I don't like big programs that do everything. And all of these
+static website generators have a component that is used to determine
+which pages are out of date, and only update them. This is traditionally
+what make(1) should do. And recently, I found that
+&lt;a href=&quot;https://github.com/apenwarr/redo/&quot;&gt;redo&lt;/a&gt; does the job very well. So, I want it to be an integral
+part of my new system.&lt;/p&gt;
+
+&lt;h2&gt;WWWSupport&lt;/h2&gt;
+
+&lt;p&gt;Recently, I wrote a piece of code: &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=tree&quot;&gt;WWWSupport&lt;/a&gt;. It's a very
+simple git repository that is supposed to be included as a submodule of
+the git repository of a website. it contains a
+&lt;a href=&quot;http://cr.yp.to/daemontools.html&quot;&gt;daemontools&lt;/a&gt; daemon that receives e-mail from a special
+mailbox and convert them into blog posts on the fly (that's how I'm
+currently writing this block post).&lt;/p&gt;
+
+&lt;p&gt;I want my WWWGen project to integrate the same way into my website.&lt;/p&gt;
+
+&lt;h2&gt;WWWGen&lt;/h2&gt;
+
+&lt;p&gt;WWWGen is the name of my website generator. The architecture is very simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;code&gt;src&lt;/code&gt; directory containing the pages, in the same format as webgen&lt;/li&gt;
+&lt;li&gt;A &lt;code&gt;nodes&lt;/code&gt; directory containing the files WWWGen is working on to
+generate output&lt;/li&gt;
+&lt;li&gt;An output directory where the result files in &lt;code&gt;nodes&lt;/code&gt; is copied to,
+and where some static assets are copied as well (using rsync)&lt;/li&gt;
+&lt;li&gt;A redo script &lt;code&gt;all.do&lt;/code&gt; that contains the configuration and invokes the
+wwwgen script.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The wwwgen script will create the &lt;code&gt;nodes&lt;/code&gt; directory and the redo scripts
+necessary to its working in it. Then, it will do three things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;For each source file, the script will create:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A .node file that contain a relative path to the source file, and
+represents it.&lt;/li&gt;
+&lt;li&gt;As many .outdep files as the source file will generate output
+files. The .outdep file is not managed by redo (because redo doesn't
+support multiple targets yet). It references the .node file using a
+relative path.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;  Note that during this process, new sources can be generated to allow
+to create new nodes. This step will be executed until no new sources are
+generated.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once this is done, the main script will look for all of the .outdep
+files and will build the corresponding .out file. The .out file will
+contain the final processed result of the page&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Copy all .out files in the output directory (after removing the .out
+extension) and all the static files in the static directory.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Note that step 1 and 2 recursively call redo to generate the .node and
+.out files. This two step design is necessary to account for multiple
+pages generated from a single source.&lt;/p&gt;
+
+&lt;h2&gt;Beyond&lt;/h2&gt;
+
+&lt;p&gt;In all my projects, I always want to focus on the usability of what I
+create. I always think that non programmers should be able to do the
+same that I did, to a certain limit. For example, my personal e-mail
+server at home is scripted all the way. Reinstalling it should be a
+matter of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;installing a debian system with a basic configuration&lt;/li&gt;
+&lt;li&gt;clone my git repositories&lt;/li&gt;
+&lt;li&gt;Set some basic configuration (hostname, ...)&lt;/li&gt;
+&lt;li&gt;run &lt;code&gt;redo install&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I agree that even then, not anybody can install at home a mail server,
+but with a process that simple, it's possible to create user interfaces
+for it. So even if it's not there, it's a possibility.&lt;/p&gt;
+
+&lt;p&gt;I want the same for WWWGen. It leaves a possibility for creating a user
+interface. Nothing prevents from creating a web application or even a
+native application, that will create markdown pages with a WYSIWYG
+editor (à la WordPress). The page files thus created could be checked
+out in a git repository and pushed to a server. There, a hook will run
+WWWGen to update the website with the modifications.&lt;/p&gt;
+
+&lt;p&gt;This could be seriously a very good alternative to WordPress, and I'd
+preefer working with such a system than WordPress.&lt;/p&gt;
+
+&lt;h2&gt;What already exists&lt;/h2&gt;
+
+&lt;p&gt;I am not very good at creating desktop applications. So I thought I
+would reuse the existing ones : my mailer. I's like a Content Management
+System where everything must be configured by hand, and only articles
+can be submitted using an e-mail.&lt;/p&gt;
+
+&lt;p&gt;This post is being sent by e-mail to my personal web server. Currently,
+I'm still using plain text with a markdown syntax, but we could reuse
+the HTML markup in a mail. This e-mail is then processed by a special
+alias in &lt;code&gt;/etc/aliases&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; http.www: &quot;|/srv/http/www/wwwsupport/push.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This line was automatically generated by an install.do script. The
+push.sh script will read the mail using a ruby script and will create a
+file in my website git repository with the content of the mail. Then
+webgen is run and the content of the repository is pushed to origin.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, the new article appears on the website. This is a very
+simple form of user interface, but it permits anybody to write blog posts.&lt;/p&gt;
+
+&lt;h2&gt;What features I would like to see&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Better parsing of HTML e-mail&lt;/li&gt;
+&lt;li&gt;Using wwwgen instead of webgen&lt;/li&gt;
+&lt;li&gt;Support for image galleries using git-annex in wwwgen&lt;/li&gt;
+&lt;li&gt;Support for taking the attached images in an e-mail to create a
+gallery on my website?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What features a customer would want&lt;/h2&gt;
+
+&lt;p&gt;A web application that can :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;modify the website configuration in the &lt;code&gt;all.do&lt;/code&gt; file&lt;/li&gt;
+&lt;li&gt;modify any source files, using a WYSIWYG editor when applicable&lt;/li&gt;
+&lt;li&gt;add static assets (possibly using git-annex)&lt;/li&gt;
+&lt;li&gt;run the website compilation and preview it&lt;/li&gt;
+&lt;li&gt;push to a server to update the production website&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This is entirely possible.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

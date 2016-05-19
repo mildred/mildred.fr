@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/dev/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:18:23 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:18:23 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>wwwgen: imagined architecture</title>
+      <link>http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</link>
+      <description>&lt;p&gt;I started writing wwwgen: a website generator that uses redo for its
+dependency tracking. Unfortunately, I might not have taken the correct
+approach to the problem. I reuse the webgen concepts, and that might be
+a bad idea.&lt;/p&gt;
+
+&lt;p&gt;Specifically, webgen (and my first version of wwwgen) are bottom-up
+systems (you take the sources and build everything they can generate).
+The problem is that redo itself is top-down (you take the target and
+build it, building sources as they are needed), and I tried to make the
+two match. It's very difficult, and impossible to do with a clean design.&lt;/p&gt;
+
+&lt;p&gt;What I'd like to have is a simple &lt;code&gt;wwwgen&lt;/code&gt; binary that generates a HTML
+file from a source file. Let's imagine how it could work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with no templates, just generate
+the HTML and this is it&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with a template, redo-ifchange the
+template source and build the HTML combining the two&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, we have a problem because multiple
+outputs are generated. Redo doesn't support this case and we must find a
+way to make it work.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, we have a problem here ...&lt;/p&gt;
+
+&lt;p&gt;Now, we have another problem. Specifically, my source file is called
+&lt;code&gt;title.page&lt;/code&gt; and I want my output file to be &lt;code&gt;title/index.html&lt;/code&gt;. In
+webgen, this is implemented by a configuration in &lt;code&gt;title.page&lt;/code&gt; telling
+it to build in &lt;code&gt;title/index.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a solution to solve both problems at once. the wwwgen command
+creates an archive (the formats needs to be defined, it could be tar, or
+different yaml documents in the same file for example). Then, the build
+process would be:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; find src -name &quot;*.src&quot; \
+   | sed 's/src$/gen/' \
+   | xargs -d '\n' redo-ifchange
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;wwwgen generate&lt;/code&gt; would parse the source file and generate an archive,
+that will be unpacked later by &lt;code&gt;wwwgen unpack&lt;/code&gt;. Let's see how it can work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The source file can choose where it unpacks, relatively to the
+directory where the source file is&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, it will redo-ifchange the other source
+files for the index and redo-ifchange the template, generate multiple
+pages packed together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a tag tree (a special source that doesn't output
+anything on its own but create index files dynamically), then it parses
+every child to find a canonical list of tags and the paths they refer
+to. Then, it creates the index files. Unfortunately, those index files
+will never be compiled until next build.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How an we improve the design to be able to create source files dynamically.&lt;/p&gt;
+
+&lt;p&gt;There are different views to the problem:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;pages, index and tags should all generate all the output files they
+are related to. It means that index files should be able to generate
+pages, and tags should be able to generate indexes and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;pages should generate the output file, index should generate pages and
+feeds and tags should generate index.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mixed solution (the one described): pages generate output file, index
+should generate the output files as well and tags generates index.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How can we generate source files on the fly:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;have a predefined compilation order: first tags, then index and lastly
+feeds and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;rebuild everything until no more source files are generated. We might
+build unnecessary things.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I prefer the second solution which is more flexible, but we need a way
+to avoid building things twice. For example, it's not necessary to build
+a page if on the next phase the page source is going to be regenerated.&lt;/p&gt;
+
+&lt;p&gt;Very simply, the generated page can contain a link to the index source
+file that generated it, and when generating the page, &lt;code&gt;redo-ifchange&lt;/code&gt; is
+run on the index file.&lt;/p&gt;
+
+&lt;p&gt;Next question: what if a tag is deleted. The corresponding index page is
+going to stay around until the next clean. The tag page should keep
+around a list of index files it generated and delete them when a tag is
+no longer detected. And deleting the index should not be done using &lt;code&gt;rm&lt;/code&gt;
+because the index will need to delete the pages it generated. The best
+solution would be to integrate to redo to detect these files.&lt;/p&gt;
+
+&lt;p&gt;The build scripts now are:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; oldsrclist=
+ srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ while [ &quot;$oldsrclist&quot; != &quot;$srclist&quot; ]; do
+   echo &quot;$srclist&quot; \
+     | sed 's/src$/gen/' \
+     | xargs -d '\n' redo-ifchange
+   oldsrclist=&quot;$srclist&quot;
+   srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ done
+
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Git, Google Summer of Code enhancements</title>
+      <link>http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html</link>
+      <description>&lt;p&gt;I was looking at Git, and which features may land in the next few
+releases, and I found the following things:&lt;/p&gt;
+
+&lt;h2&gt;Git-SVN will be completely redesigned&lt;/h2&gt;
+
+&lt;p&gt;If you worked with git-svn, you probably know that the git-svn workflow
+has nothing to do with git. Basically, you just have the svn history and
+have to use git-svn to push the changes back to the subversion
+repository. You can't use git-push and that's really annoying.&lt;/p&gt;
+
+&lt;p&gt;Recently, the &lt;a href=&quot;https://www.kernel.org/pub/software/scm/git/docs/git-remote-helpers.html&quot;&gt;git-remote-helpers&lt;/a&gt; feature was
+added. It allows git to interact with any kind of remote url, using a
+specific &lt;code&gt;git-remote-*&lt;/code&gt; command. For example, you can already use
+mercurial this way (according to &lt;a href=&quot;https://github.com/rfk/git-remote-hg&quot;&gt;git-remote-hg&lt;/a&gt;):&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Git allows pluggable remote repository protocols via helper scripts. If you have a script named &quot;git-remote-XXX&quot; then git will use it to interact with remote repositories whose URLs are of the form XXX::some-url-here. So you can imagine what a script named git-remote-hg will do.&lt;/p&gt;
+
+&lt;p&gt;Yes, this script provides a remote repository implementation that communicates with mercurial. Install it and you can do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone hg::https://hg.example.com/some-mercurial-repo
+$ cd some-mercurial-repo
+$ # hackety hackety hack
+$ git commit -a
+$ git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;The plan is to do the same with subversion. You could just do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; $ git clone svn::http://svn.host.org/repo/trunk/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Branches might be tricky to implement, they might not be there. But you
+will get what's already in git-svn but with a way better UI. And far
+more possibilities for the future.&lt;/p&gt;
+
+&lt;p&gt;Here is the summary from the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Remote_helper_for_Subversion_and_git-svn&quot;&gt;GSoc&lt;/a&gt; page:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Submodules will be improved a lot&lt;/h2&gt;
+
+&lt;p&gt;I wish it was already there. From the &lt;a href=&quot;https://github.com/jlehmann/git-submod-enhancements/wiki/&quot;&gt;wiki page&lt;/a&gt;, the
+improvements will be:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;As Dscho put it, submodules are the “neglected ugly duckling” of git. Time to change that …&lt;/p&gt;
+
+&lt;p&gt;Issues still to be tackled in this repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let am, bisect, checkout, checkout-index, cherry-pick, merge, pull, read-tree, rebase, reset &amp;amp; stash work recursively on submodules (in progress)&lt;/li&gt;
+&lt;li&gt;Teach grep the --recursive option&lt;/li&gt;
+&lt;li&gt;Add means to specify which submodules shall be populated on clone&lt;/li&gt;
+&lt;li&gt;Showing that a submodule has a HEAD not on any branch in “git status”&lt;/li&gt;
+&lt;li&gt;gitk: Add popup menu for submodules to see the detailed history of changes&lt;/li&gt;
+&lt;li&gt;Teach “git prune” the “--recurse-submodules” option (and maybe honour the same default and options “git fetch” uses)&lt;/li&gt;
+&lt;li&gt;Better support for displaying merge conflicts of submodules&lt;/li&gt;
+&lt;li&gt;git gui: Add submodule menu for adding and fetching submodules&lt;/li&gt;
+&lt;li&gt;git status should call “git diff --submodule --ignore-submodules=dirty” instead of “git submodule summary” for providing a submodule summary when configured to do so.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Add an “always-tip” mode&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Other commands that could benefit from a “--recurse-submodules” option: archive, branch, clean, commit, revert, tag.&lt;/li&gt;
+&lt;li&gt;In the long run git-submodule.sh should be converted to a rather simple wrapper script around core git functionality as more and more of that is implemented in the git core.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Submodule related bugs to fix&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cherry picking across submodule creation fails even if the cherry pick doesn’t touch any file in the submodules path&lt;/li&gt;
+&lt;li&gt;git submodule add doesn’t record the url in .git/config when the submodule path doesn’t exist.&lt;/li&gt;
+&lt;li&gt;git rebase --continue won’t work if the commit only contains submodule changes.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Issues already solved and merged into Junio’s Repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Since git 1.6.6:
+
+&lt;pre&gt;&lt;code&gt;New --submodule option to “git diff” (many thanks to Dscho for writing the core part!)
+Display of submodule summaries instead of plain hashes in git gui and gitk
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.0:
+
+&lt;pre&gt;&lt;code&gt;“git status” and “git diff*” show submodules with untracked or modified files in their work tree as “dirty”
+git gui: New popup menu for submodule diffs
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.1:
+
+&lt;pre&gt;&lt;code&gt;Show the reason why working directories of submodules are dirty (untracked content and/or modified content) in superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.2:
+
+&lt;pre&gt;&lt;code&gt;Add parameters to the “--ignore-submodules” option for “git diff” and “git status” to control when a submodule is considered dirty
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.3:
+
+&lt;pre&gt;&lt;code&gt;Add the “ignore” config option for the default behaviour of “git diff” and “git status”. Both .git/config and .gitmodules are parsed for this option, the value set in .git/config. will override that from .gitmodules
+Add a global config option to control when a submodule is considered dirty (written by Dscho)
+Better support for merging of submodules (thanks to Heiko Voigt for writing that)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.4:
+
+&lt;pre&gt;&lt;code&gt;Recursive fetching of submodules can be enabled via command line option or configuration.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.5:
+
+&lt;pre&gt;&lt;code&gt;fetch runs recursively on submodules by default when new commits have been recorded for them in the superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.7:
+
+&lt;pre&gt;&lt;code&gt;git push learned the --recurse-submodules=check option which errors out when trying to push a superproject commit where the submodule changes are not pushed (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.8:
+
+&lt;pre&gt;&lt;code&gt;The “update” option learned the value “none” which disables “submodule init” and “submodule update”
+The git directory of a newly cloned submodule is stored in the .git directory of the superproject, the submodules work tree contains only a gitfile. This is the first step towards recursive checkout, as it enables us to remove a submodule directory (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Git_submodule_improvements&quot;&gt;GSoC page&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html</guid>
+    </item>
+    
+    <item>
+      <title>A new way to update my blog</title>
+      <link>http://mildred.fr/Blog/2012/06/21/a_new_way_to_update_my_blog/index.html</link>
+      <description>&lt;p&gt;Hi everyone, I just developed a new way to update my blog. I am just
+using my mailer (which is currently Thunderbird for a lack of a better
+alternative). As you may know, I already manage my own server. I have a
+nginx web server and my website is just plain old static pages generated
+from markdown using my own version of webgen.&lt;/p&gt;
+
+&lt;p&gt;My code is available at two locations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://git.mildred.fr&quot;&gt;my personal git server&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/mildred/&quot;&gt;github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I just developed a few scripts which does the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;hooked in /etc/aliases, receive e-mail from a special e-mail address.
+Put this mail in an inbox directory on the server&lt;/li&gt;
+&lt;li&gt;another daemon (a shell script run by daemontools actually) run as the
+www-data user is monitoring the inbox using inotifywait. When a mail
+comes, or every 60 seconds, it process the mail using a ruby script that
+convert the mail to a markdown page, and run webgen on the website. It
+also commit and push the changes.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;And that's all.&lt;/p&gt;
+
+&lt;p&gt;The one thing I couldn't automate is the creation of the private key to
+push the changes back to the git server.&lt;/p&gt;
+
+&lt;p&gt;All the code &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=summary&quot;&gt;is
+there&lt;/a&gt;. I
+just don't know if I have a public URl for these repos :)&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/06/21/a_new_way_to_update_my_blog/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Union types and null</title>
+      <link>http://mildred.fr/Blog/2011/04/29/union_types_and_null/index.html</link>
+      <description>&lt;p&gt;Look at this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;object.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Singleton NULL;
+
+Section Public
+
+  - is_null :BOOLEAN &amp;lt;- FALSE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;null.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Singleton NULL;
+
+Section Inherit
+
+  - parent :OBJECT := OBJECT;
+
+Section Public
+
+  - is_null :BOOLEAN &amp;lt;- TRUE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := UNION;
+
+Section Inherit
+
+  - parent :OBJECT := OBJECT;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.1.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Expanded UNION(E);
+
+  - import := E;
+
+Section Inherit
+
+  - parent :UNION := UNION;
+
+Section Public
+
+  + element:E;
+  - set_element e:E &amp;lt;- (element := e;);
+
+  - when o:T do blc:{o:T;} &amp;lt;-
+  (
+    (o = E).if {
+      blc.value element;
+    };
+  );
+
+  - from_e e:E :SELF &amp;lt;-
+  ( + res :SELF;
+    res := clone;
+    res.set_element e;
+    res
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.2.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Expanded UNION(E, F...);
+
+Section Inherit
+
+  + parent_e :UNION(E);
+  + parent_next :UNION(F...);
+
+Section Public
+
+  - when o:T do blc:{o:T;} &amp;lt;-
+  (
+    (o = E).if {
+      parent_e.when o do blc;
+    } else {
+      parent_next.when o do blc;
+    };
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;use.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := USE;
+
+Section Public
+
+  - accept_object_or_null obj:UNION(USE,NULL) &amp;lt;-
+  (
+    obj
+    .when NULL do { o:NULL;
+      ? { o.is_null };
+    }
+    .when USE do { o:USE;
+      ? { o.is_null.not };
+    };
+  );
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/29/union_types_and_null/index.html</guid>
+    </item>
+    
+    <item>
+      <title>HMP: HTTP Message Protocol (0.1)</title>
+      <link>http://mildred.fr/Blog/2011/05/09/hmp_http_message_protocol/index.html</link>
+      <description>&lt;h2&gt;FAQ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;What is HMP:&lt;/strong&gt; It is a messaging protocol destined to replace e-mails.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why replace e-mails:&lt;/strong&gt; Because it is full of spam and unmaintainable. This
+alternative is lighter and easier to implement than a full SMTP server with
+SPAM management.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why use HTTP:&lt;/strong&gt; I'm not fan of putting everything over HTTP but it has its
+advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It has a security layer (HTTPS)&lt;/li&gt;
+&lt;li&gt;It is (relatively) simple and implemented everywhere&lt;/li&gt;
+&lt;li&gt;It manages content-types and different types of requests&lt;/li&gt;
+&lt;li&gt;It is extensible&lt;/li&gt;
+&lt;li&gt;It goes easily through proxys and NATs&lt;/li&gt;
+&lt;li&gt;It allows multiplexing many different resources on the same server&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;In the long run, perhaps we should move away from HTTP as:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It is too associated with the web&lt;/li&gt;
+&lt;li&gt;It doesn't allow initiative from the server.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;WebSockets could be a good alternative one day.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;How do I get my messages:&lt;/strong&gt; Not specified, although you could possibly
+authenticate using a standard HTTP method to the same resource as your
+address and issue a GET command.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Does this allows a web implementation:&lt;/strong&gt; Yes, it will need to be further
+specified but if the server detects a browser request (without the HMP
+headers) on the resource, it could issue a web-page with a form.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Is the message format specified&lt;/strong&gt;: no, it needs to be. I plan on using
+JSON.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Do you plan an implementation:&lt;/strong&gt; Yes, using probably node.js or Lua.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;What prompted this:&lt;/strong&gt; The Tor network doesn't have any standard messaging
+system. I don't believe SMTP is suited for that.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why write this spec, you have no code to back this up:&lt;/strong&gt; because I like
+writing specs, and it's a way for me to remind me to write the code, and to
+tell me how I should write it. I might not get the time to write this as
+soon as I want.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What is a hmp address&lt;/h2&gt;
+
+&lt;p&gt;Scheme:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[hmp:]server[:port][/path]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hmp:gmail.com:80/user
+gmail.com:80/user
+gmail.com/user
+
+domain.org/u/alicia
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Translation to HTTPS resources&lt;/h2&gt;
+
+&lt;p&gt;A HMP address can directly be translated to an HTTPS resource. The standard
+scheme translates to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;https://server:port/path
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Message sending overview&lt;/h2&gt;
+
+&lt;p&gt;To send a message from &lt;code&gt;domain.org/alicia&lt;/code&gt; to &lt;code&gt;users.net/~bob&lt;/code&gt;, the sequence is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Connection to users.net:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[1] POST https://users.net/~bob
+[1] HMP-Pingback: 235
+[1] HMP-From: domain.org/alicia
+[1] Content: message-content
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;users.net opens a connection to domain.org&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[2] GET https://domain.org/alicia
+[2] HMP-Pingback: 235
+[2] HMP-Method: MD5
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain.org responds to users.net&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[2] HMP-Hash: ef0167eca19bb2d4c8dfe4c3803cc204
+[2] Status: 200
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;users.net responds to the original sender&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[1] Status: 200
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Headers to the POST request&lt;/h2&gt;
+
+&lt;p&gt;The POST request is the request used to post a message. It contains two specific
+headers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;HMP-From: The address the message is sent from&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;HMP-Pingback: A sequence number that uniquely identifies the message for the
+sender. it needs not be unique, as long as at ont point in time, there are
+only one message corresponding to this ID.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Particular status codes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;200 in case of success&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;403 in case the From address could not be authenticated&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;From address authentication, pingpack&lt;/h2&gt;
+
+&lt;p&gt;In order to avoid SPAM, the sender must be authenticated when the message is
+sent. For this reason, before accepting or rejecting the request, the server
+must initiate a pingback procedure to the sender.&lt;/p&gt;
+
+&lt;p&gt;First, the From address is converted to an HTTPS resource and a GET connection
+is initiated. The specific request-headers are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;HMP-Pingback: the pingback sequence number from the previous request&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;HMP-Method: method for verifying the originating message. The only specified
+method is &quot;MD5&quot;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;MD5 Method&lt;/h3&gt;
+
+&lt;p&gt;In case the message is recognized, the from server responds with the following
+header:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HMP-Hash: MD5 hash of the content of the message identified by the pingback
+identifier&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The status code can be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;200 in case the message was recognized&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;404 in case the message was not found&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If the MD5 sum corresponds to the message received and a success code was given,
+the from is verified and the message can be sent.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/05/09/hmp_http_message_protocol/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac now compiles Hello World!</title>
+      <link>http://mildred.fr/Blog/2011/05/02/lysaac_now_compiles_hello_world/index.html</link>
+      <description>&lt;p&gt;This is great: Here is the source files:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;c/cstring.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Reference CSTRING;
+
+  - role := String; // const char*
+  - type := Integer 8;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;c/main.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := MAIN;
+
+Section Public
+
+  - puts str:CSTRING &amp;lt;- External `puts`;
+
+  - main &amp;lt;-
+  (
+    puts &quot;Hello World&quot;;
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You type &lt;code&gt;lysaac compile c &amp;gt;c.bc&lt;/code&gt; and you get the following LLVM assembly code:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;c.bc&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@0 = private constant [12 x i8] c&quot;Hello World\00&quot;
+
+
+declare void @puts (i8*)
+
+define void @main () {
+  %1 = getelementptr [12 x i8]* @0, i32 0, i32 0
+  tail call void @puts(i8* %1)
+  ret void
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And you can execute it using the standard LLVM tools:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ llvm-as &amp;lt; c.bc | lli
+Hello World
+$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Isn't that great ?&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/05/02/lysaac_now_compiles_hello_world/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Blueprints for a Privacy Respecting Browser</title>
+      <link>http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html</link>
+      <description>&lt;p&gt;What is this all about: web privacy. We are tracked everywhere, and i'd like to
+help if possible. So, let's design a web browser that for once respects your
+privacy.&lt;/p&gt;
+
+&lt;p&gt;Main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each website has its own cookie jar, its own cache and its own HTML5 local
+storage&lt;/li&gt;
+&lt;li&gt;History related css attributes are disabled&lt;/li&gt;
+&lt;li&gt;External plugins are only enabled on demand&lt;/li&gt;
+&lt;li&gt;Support for Tor/I2P is enabled by default&lt;/li&gt;
+&lt;li&gt;You have complete control over who receives what information&lt;/li&gt;
+&lt;li&gt;Let's you control in the settings if you want to allow referrers or not.&lt;/li&gt;
+&lt;li&gt;The contextual menu let's you open links anonymously (no referrer, anonymous
+session)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The browser is bundled with a particular UI that let you control everything
+during your browsing session. it is non intrusive and makes the best choice by
+default. I am thinking of a notification bar that shows at the bottom. I noticed
+that this place is not intrusive when I realized that the search bar in Firefox
+was most of the time open, even if most of the time I didn't use it.&lt;/p&gt;
+
+&lt;p&gt;First, let's define a session:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A session can be used my more than one domain at the same time.&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cache storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific HTML5 storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cookie jar&lt;/li&gt;
+&lt;li&gt;A session acn be closed. When it is closed, session cookies are deleted from
+the session&lt;/li&gt;
+&lt;li&gt;A session can be reopened. All long lasting cookies, cache, HTML5 storage
+and such is then used again.&lt;/li&gt;
+&lt;li&gt;A session can be anonymous. In such a case, the session is deleted
+completely when it is closed.&lt;/li&gt;
+&lt;li&gt;A session is associated to none, one or more domains. These domains are the
+domains the end user can see in the address bar, not the sub items in the
+page.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Sessions are like Firefox profiles. If you iopen a new session, it's like you
+opened a new Firefox profile you just created. Because people will never create
+a different Firefox profile for each site.&lt;/p&gt;
+
+&lt;p&gt;If we want to protect privacy, when a link is opened, a new session should be
+created each time. To make it usable to browse web sites, it is made possible to
+share sessions in specific cases. Let's define the cases where it might be
+intelligent to share a profile:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You click a link or submit a form and expect to still be logged-in in the
+site you are viewing. You don't care if you follow a link to an external
+page.&lt;/p&gt;
+
+&lt;p&gt;User Interface: If the link matches one of the domains of the session, then
+keep the session. No UI. If the user wanted a new session, the &quot;Open
+anonymously&quot; entry in the context menu exists. A button on the toolbar might
+be available to enter a state where we always want to open links
+anonymously.&lt;/p&gt;
+
+&lt;p&gt;If the link points to another domain, then open the link in a new session
+unless &quot;Open in the same session&quot; was specified in the context menu. The UI
+contains:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We Protected your privacy by separating &amp;lt;domain of the new site&amp;gt; from
+the site you were visiting previously (&amp;lt;domain of the previous site&amp;gt;).
+
+Choices: [ (1) Create a new anonymous session          | ▼ ]
+         | (2) Continue session from &amp;lt;previous domain&amp;gt; |
+         | (3) Use a previous session for &amp;lt;new domain&amp;gt; |
+         | (4) Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;      |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first choice is considered the default and the page is loaded with it.
+If the user chooses a new option, then the page is reloaded.&lt;/p&gt;
+
+&lt;p&gt;If the user chooses (2), the page is reloaded with the previous session and
+the user will be asked if &quot;Do you want &lt;old domain&gt; and &lt;new domain&gt; to have
+access to the same private information about you?&quot;. Answers are Yes, No and
+Always. If the answer is Always, then in the configuration, the two domains
+are considered one and the same.&lt;/p&gt;
+
+&lt;p&gt;The choice (3) will use the most recent session for the new domain. It might
+be a session currently in use or a session in the history.&lt;/p&gt;
+
+&lt;p&gt;There are as many (4) options as there are bookmarks for the new domain. If
+different bookmarks share a single session, only one bookmark is shown. This
+choice will load the session from the bookmark.&lt;/p&gt;
+
+&lt;p&gt;If (3) and (4) are the same sessions, and there is only one bookmark (4),
+then the (4) option is left out.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You use a bookmark and expect to continue the session you had for this
+bookmark (webmails)&lt;/p&gt;
+
+&lt;p&gt;The session is simpely stored in the bookmark. When saving a bookmark, there
+is an option to store the session with it or not.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[X] Do not save any personal information with this bookmark
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You open a new URL and you might want reuse a session that was opened for
+this URL.&lt;/p&gt;
+
+&lt;p&gt;The User Interface allows you to restore the session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We protected your privacy by not sending any personal information to
+&amp;lt;domain&amp;gt;. If you want &amp;lt;domain&amp;gt; to receive private information, please
+select:
+
+Choices: [ Do not send private information     | ▼ ]
+         | Use a previous session for &amp;lt;domain&amp;gt; |
+         | Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;  |
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you can see other use cases, please comment on that.&lt;/p&gt;
+
+&lt;p&gt;From these use cases, I can infer three kind of sessions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Live sessions, currently in use&lt;/li&gt;
+&lt;li&gt;Saved sessions, associated to a bookmark&lt;/li&gt;
+&lt;li&gt;Closed sessions in the past, accessible using history. Collected after a too
+long time.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, how to implement that? I was thinking of QtWebKit as I already worked with
+Qt and it's easy to work with.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We have a main widget: &lt;code&gt;QWebView&lt;/code&gt;. We want to change the session when a new
+page is loaded. So we hook up with the signal &lt;code&gt;loadStarted&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;We prevent history related CSS rules by implementing &lt;code&gt;QWebHistoryInterface&lt;/code&gt;,
+more specifically, we store the history necessary to implement
+&lt;code&gt;QWebHistoryInterface&lt;/code&gt; in the session.&lt;/li&gt;
+&lt;li&gt;We change the cache by implementing &lt;code&gt;QAbstractNetworkCache&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCache(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;We change the cookie jar by implementing &lt;code&gt;QNetworkCookieJar&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCookieJar(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Change the local storage path using a directory dedicated for the session
+and using &lt;code&gt;view-&amp;gt;page()-&amp;gt;settings()-&amp;gt;setLocalStoragePath(QString)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;After all that, we'll have to inspect the resulting browser to determine if
+there are still areas where we fail at protecting privacy.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Stack environments</title>
+      <link>http://mildred.fr/Blog/2011/04/29/stack_environments/index.html</link>
+      <description>&lt;p&gt;Stack environment would be an argument passed implicitely to every function in
+the code. It would contain global policy. In particular the &lt;code&gt;MEMORY&lt;/code&gt; object that
+lets you allocate memory. If you want to change the allocation policy, you just
+have to change the current environment, and all functions you call will use the
+new policy.&lt;/p&gt;
+
+&lt;p&gt;We could allow user defined objects like that, not just system objects.&lt;/p&gt;
+
+&lt;p&gt;We could also manage errors that way. An error flag could be stored in the
+environment. Set by the calee and tested by the caller.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/29/stack_environments/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac annotations</title>
+      <link>http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html</link>
+      <description>&lt;p&gt;Because I'm using an open world assumption, I need the compiler to generate
+annotations on units it compiles, so when it sees them again, it knows what it
+does (or does not) internally.&lt;/p&gt;
+
+&lt;p&gt;I was looking at &lt;a href=&quot;http://www.youtube.com/watch?v=ryfw9_-Hnb0&quot;&gt;a LLVM video&lt;/a&gt; this morning (VMKit precisely) and the
+person talked about an interesting optimization. What if we could allocate
+objects in stack instead of the heap. This would save time when creating the
+object. Then we wouldn't be tempted to avoid creating new objects for fear of
+memory leaks (there is not garbage collector in lisaac currently) and
+performance penalty.&lt;/p&gt;
+
+&lt;p&gt;This is the same thing as aliased variables in Ada.&lt;/p&gt;
+
+&lt;p&gt;An object can be allocated on the stack if:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is not returned by the function.&lt;/li&gt;
+&lt;li&gt;it is not stored on the heap by the function.&lt;/li&gt;
+&lt;li&gt;it is not used in a called function that would store a pointer to this
+object on the heap.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, when the compiler compiles a cluster, it has to generate an annotation file
+containing for each argument in each code slot whether the argument is
+guaranteed to remain on the stack or if it might be stored on the heap. If an
+argument is guaranteed to stay on the stack, we can allocate it on the stack.
+When the function will return, the only instances would be located in the
+current stack frame.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac compilation model and inline prototypes</title>
+      <link>http://mildred.fr/Blog/2011/04/29/lysaac_compilation_model_and_inline_prototypes/index.html</link>
+      <description>&lt;p&gt;In Lysaac, I choose to follow the open world assumption, like the majority of
+programming languages out there, instead of the closed world assumption. There
+are two main reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;First, I don't strive at creating an optimizing compiler, not yet at least.
+Closed world is useful for that, but I don't need it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Second, open world assumption increases the complexity a lot. The Lisaac
+compiler uses an exponential algorithm, and will always hit a limit with
+big projects. With an open world, you can partition the complexity.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Because I still believe in global compilation, I decided that my compilation
+unit would be the cluster instead of the prototype. That is, I'll compile a
+cluster completely in one object file. That makes it possible to optimize things
+like private prototypes.&lt;/p&gt;
+
+&lt;p&gt;This leaves a big performance problem for &lt;code&gt;BOOLEAN&lt;/code&gt;s in particular. &lt;code&gt;BOOLEAN&lt;/code&gt;,
+&lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; are prototypes in the standard library, and having an open
+world assumption would require pasing to the &lt;code&gt;if then&lt;/code&gt; slot function pointers.
+I can't realisticly do that.&lt;/p&gt;
+
+&lt;p&gt;So, These prototypes could be marked as &lt;code&gt;Inline&lt;/code&gt;. They are separated from their
+cluster and gets compiled in every cluster that uses them. The syntax could be
+quite simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline TRUE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But, because each cluster is then free to compile it as it wants, there is a
+problem of interoperability. How can you be sure that the &lt;code&gt;TRUE&lt;/code&gt; in your cluster
+is compiled the same way as in the neighbooring cluster you are using. As it is,
+you can't pass &lt;code&gt;TRUE&lt;/code&gt; object around clusters. Very annoying.&lt;/p&gt;
+
+&lt;p&gt;The solution would be to encode them and decode them manually. You could have:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline TRUE;
+
+Section Feature
+
+  - inline_size :INTEGER := 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Take a more interesting example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline Expanded BIT;
+
+  - size := 1;
+
+Section Feature
+
+  - inline_size :INTEGER := 1;
+  - encode p:POINTER &amp;lt;-
+  (
+    p.to_native_array_of BIT.put bit to 0;
+  );
+  - decode p:POINTER &amp;lt;-
+  (
+    data := p.to_native_array_of BIT.item 0;
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This needs to be refined.&lt;/p&gt;
+
+&lt;p&gt;Additionally, &lt;code&gt;.cli&lt;/code&gt; files could also contain the &lt;code&gt;Inline&lt;/code&gt; keyword. In that
+case, the cluster it reference will be compiled with the current cluster. That
+could be useful for private clusters.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/29/lysaac_compilation_model_and_inline_prototypes/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

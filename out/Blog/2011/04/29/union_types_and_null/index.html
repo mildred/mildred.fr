@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Union types and null - Mildred's Website</title>
+    <meta charset='utf-8'>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content='comp, dev, lisaac, lysaac' name='keywords'>
+    <meta content='' name='description'>
+    <meta content='initial-scale=1.0, width=device-width' name='viewport'>
+    <meta content='article' name='x-kind'>
+    <link href='http://mildred.fr/Blog/2011/04/29/union_types_and_null/' rel='canonical'>
+    <link href='../../../../../favicon.png' rel='icon' type='image/png'>
+    <link href='../../../../../favicon.png' rel='shortcut icon' type='image/png'>
+    <link href='../../../../../style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script src='../../../../../Scripts/json/json2.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/jquery.min.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/comments.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/local.js' type='text/javascript'></script>
+    <link rel="index" href="../../../../index.html" />
+  </head>
+  <body>
+    <div class='header'>
+      <p class='access-links'>
+        <a href='#menu'>Go to Menu</a>
+        <br>
+        <a href='#content'>Go to Content</a>
+      </p>
+      <div class='left'>
+        <a href='../../../../../'>
+          <img alt='My photo' class='photo' src='../../../../../Images/IMG_5669_square_128.jpeg'>
+        </a>
+      </div>
+      <div class='title'>
+        <h1>
+          <a href='../../../../../'>Mildred's Website</a>
+        </h1>
+      </div>
+      <div class='float-right'></div>
+      <div class='clear-right'></div>
+      <div class='right'>
+        <strong>Tags:</strong>
+        <ul class='tags'>
+          <li>
+            <a class='tag' href='../../../../../tags/cobra/'>cobra</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/comp/'>comp</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/configuration/'>configuration</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dev/'>dev</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dream/'>dream</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/en/'>en</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fedora/'>fedora</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fr/'>fr</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/freedombox/'>freedombox</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/git/'>git</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/html/'>html</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/idea/'>idea</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/liens/'>liens</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lysaac/'>lysaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/misc/'>misc</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/photos/'>photos</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/physics/'>physics</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/politique/'>politique</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/privacy/'>privacy</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/srs/'>srs</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/test/'>test</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/web/'>web</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/website/'>website</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwgen/'>wwwgen</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwsupport/'>wwwsupport</a>
+          </li>
+        </ul>
+      </div>
+      <div class='content'>
+        <div class='links' id='menu'>
+          <ul>
+            <li>
+              <a href='../../../../../'>Home</a>
+            </li>
+            <li>
+              <a href='../../../../'>Blog</a>
+            </li>
+            <li>
+              <a href='//survie.mildred.fr'>Survie</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class='clear'></div>
+    </div>
+    <div class='leftcol'>
+      <img alt='My avatar' class='photo' src='../../../../../Images/all128.jpeg'>
+      <hr>
+      <p>GoogleTalk, Jabber, XMPP address:
+      <br /><strong><a href="xmpp:mildred&#64;jabber.fr">mildred&#64;jabber.fr</a></strong><!--&nbsp;<img src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/image-dcraven.png" alt="" /><br /><em><script type="text/javascript" src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/message_js.js"></script></em>-->
+      </p>
+      <hr>
+      <p>
+        <a href='../../../../../gpg_key.txt'>GPG Public Key</a>
+        <br>
+        <span style='font-size: 0.8em'>
+          (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+        </span>
+      </p>
+    </div>
+    <div class='main' id='content'>
+      <h1>Union types and null</h1>
+<p class='meta'>
+  <span class='date-time'>
+    <span class='date'>Fri 29 Apr 2011,</span>
+    <span class='time'>09:56 AM</span>
+  </span>
+  <span class='tags'>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/comp/'>comp</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/dev/'>dev</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/lysaac/'>lysaac</a>
+    </span>
+  </span>
+</p>
+<div class='body'><p>Look at this:</p>
+
+<p><code>object.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := Singleton NULL;&#x000A;&#x000A;Section Public&#x000A;&#x000A;  - is_null :BOOLEAN &lt;- FALSE;&#x000A;</code></pre>
+
+<p><code>null.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := Singleton NULL;&#x000A;&#x000A;Section Inherit&#x000A;&#x000A;  - parent :OBJECT := OBJECT;&#x000A;&#x000A;Section Public&#x000A;&#x000A;  - is_null :BOOLEAN &lt;- TRUE;&#x000A;</code></pre>
+
+<p><code>union.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := UNION;&#x000A;&#x000A;Section Inherit&#x000A;&#x000A;  - parent :OBJECT := OBJECT;&#x000A;</code></pre>
+
+<p><code>union.1.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := Expanded UNION(E);&#x000A;&#x000A;  - import := E;&#x000A;&#x000A;Section Inherit&#x000A;&#x000A;  - parent :UNION := UNION;&#x000A;&#x000A;Section Public&#x000A;&#x000A;  + element:E;&#x000A;  - set_element e:E &lt;- (element := e;);&#x000A;&#x000A;  - when o:T do blc:{o:T;} &lt;-&#x000A;  (&#x000A;    (o = E).if {&#x000A;      blc.value element;&#x000A;    };&#x000A;  );&#x000A;&#x000A;  - from_e e:E :SELF &lt;-&#x000A;  ( + res :SELF;&#x000A;    res := clone;&#x000A;    res.set_element e;&#x000A;    res&#x000A;  );&#x000A;</code></pre>
+
+<p><code>union.2.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := Expanded UNION(E, F...);&#x000A;&#x000A;Section Inherit&#x000A;&#x000A;  + parent_e :UNION(E);&#x000A;  + parent_next :UNION(F...);&#x000A;&#x000A;Section Public&#x000A;&#x000A;  - when o:T do blc:{o:T;} &lt;-&#x000A;  (&#x000A;    (o = E).if {&#x000A;      parent_e.when o do blc;&#x000A;    } else {&#x000A;      parent_next.when o do blc;&#x000A;    };&#x000A;  );&#x000A;</code></pre>
+
+<p><code>use.li</code></p>
+
+<pre><code>Section Header&#x000A;&#x000A;  + name := USE;&#x000A;&#x000A;Section Public&#x000A;&#x000A;  - accept_object_or_null obj:UNION(USE,NULL) &lt;-&#x000A;  (&#x000A;    obj&#x000A;    .when NULL do { o:NULL;&#x000A;      ? { o.is_null };&#x000A;    }&#x000A;    .when USE do { o:USE;&#x000A;      ? { o.is_null.not };&#x000A;    };&#x000A;  );&#x000A;</code></pre></div>
+      <noscript>
+        <p>
+          Scripts are disabled on your computer. In order to access existing
+          comments and post new comments, you need to enable Javascript.
+        </p>
+        <p>
+          Rationale: This server that hosts my website is a static server.
+          In order to implement comments, a XmlHttpRequest is made on an API
+          server to both retrieve the comments and post a new comment.
+        </p>
+      </noscript>
+      <div class='clear'></div>
+    </div>
+    <div class='clear'></div>
+    <div class='footer'>
+      <hr>
+      <p>E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a></p>
+      <p>Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+      I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.</p>
+    </div>
+  </body>
+</html>

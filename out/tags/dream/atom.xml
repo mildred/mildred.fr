@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/dream/" rel="alternate" />
+  <link href="http://mildred.fr/tags/dream/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:18:24+01:00</updated>
+  <id>http://mildred.fr/tags/dream/</id>
+
+  
+  <entry>
+    <title type="html">Dream</title>
+    
+    <link href="http://mildred.fr/Blog/2010/12/03/dream/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2010/12/03/dream/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2010-12-03T08:28:34+01:00</published>
+    
+    <content type="html">&lt;p&gt;I made a strange dream ... of another dream. When I woke up in the first dream I wanted to create a Scratchpad to write the second dream on. Here is it:&lt;/p&gt;
+
+&lt;p&gt;Three characters: Anna from the White Ajah, Jessica from the Red and Patrul R. who was also a musician of some sort. The day before, I (Anna) said goodbye to Patrul R. He felt somethng would be happening as he gave his blessing with a long kiss. Rightly so, the next morning, Anna had a bus accident and her conciousness transferred to Jessica.&lt;/p&gt;
+</content>
+  </entry>
+  
+</feed>

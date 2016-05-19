@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/lisaac/" rel="alternate" />
+  <link href="http://mildred.fr/tags/lisaac/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:19:09+01:00</updated>
+  <id>http://mildred.fr/tags/lisaac/</id>
+
+  
+  <entry>
+    <title type="html">Lysaac: on en parle pas mais ça avance</title>
+    
+    <link href="http://mildred.fr/Blog/2011/06/28/lysaac_on_en_parle_pas_mais_ca_avance/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/06/28/lysaac_on_en_parle_pas_mais_ca_avance/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-06-28T12:51:44+02:00</published>
+    
+    <content type="html">&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/Lysaac&quot;&gt;Lysaac&lt;/a&gt; c'est ma réimplémentation du compilateur
+&lt;a href=&quot;http://lisaac-users.org&quot;&gt;lisaac&lt;/a&gt;. Jusqu'a présent, il n'y avait pas grand
+chose, mais dernièrement, il y a eu des commits intéressants:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;les variables fonctionnent
+
+&lt;ul&gt;
+&lt;li&gt;avec des valeurs par défaut&lt;/li&gt;
+&lt;li&gt;on peut les lire&lt;/li&gt;
+&lt;li&gt;et y écrire&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;on a aussi des BLOCKs, mais sans upvalues&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Ça ne paye peut être pas de mine, mais en fait, l'infrastructure du compilo est
+presque complète.&lt;/p&gt;
+
+&lt;p&gt;Prochaines avancées: héritage et affichage des erreurs&lt;/p&gt;
+
+&lt;p&gt;Et peut être après: des améliorations de syntaxe (appels de slot à paramètres et
+bien plus tard: opérateurs). Pour le moment, je me concentre sur les choses
+basiques.&lt;/p&gt;
+
+&lt;p&gt;Si vous voulez jouer, vous pouvez. Si vous avez une erreur inattendue, créez un
+scénario d'utilisation et donnez le moi (préférablement sous forme de
+&lt;a href=&quot;https://github.com/mildred/Lysaac/blob/master/features/type/struct.feature&quot;&gt;fichier &lt;code&gt;.feature&lt;/code&gt;&lt;/a&gt;).&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Lysaac: not talking about it but it goes forward</title>
+    
+    <link href="http://mildred.fr/Blog/2011/06/28/lysaac_not_talking_about_it_but_goes_forward/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/06/28/lysaac_not_talking_about_it_but_goes_forward/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-06-28T12:51:44+02:00</published>
+    
+    <content type="html">&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/Lysaac&quot;&gt;Lysaac&lt;/a&gt; is my reimplementation of the &lt;a href=&quot;http://lisaac-users.org&quot;&gt;lisaac&lt;/a&gt;
+compiler. Until now, it wasn't very interesting to look at, but recently, I
+pushed a few interesting commits:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;you now have variables
+
+&lt;ul&gt;
+&lt;li&gt;the default value is initialized correctly&lt;/li&gt;
+&lt;li&gt;the read works&lt;/li&gt;
+&lt;li&gt;the write works&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;you also have BLOCKs (sorry, no upvalues for now)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This may looks like nothing, but under the hood, the infrastructure is almost
+completely there.&lt;/p&gt;
+
+&lt;p&gt;Next thing to come: inheritance and error reporting.&lt;/p&gt;
+
+&lt;p&gt;Then perhaps, syntax improvements like keyword messages and later: operators.
+For now, I want the basic functionnality working well.&lt;/p&gt;
+
+&lt;p&gt;If you want to play with it, you can. If you get an error, create a use-case and
+propose it as a new feature. Please use as a model &lt;a href=&quot;https://github.com/mildred/Lysaac/blob/master/features/type/struct.feature&quot;&gt;the &lt;code&gt;.feature&lt;/code&gt; files&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Lysaac now compiles Hello World!</title>
+    
+    <link href="http://mildred.fr/Blog/2011/05/02/lysaac_now_compiles_hello_world/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/05/02/lysaac_now_compiles_hello_world/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-05-02T12:04:17+02:00</published>
+    
+    <content type="html">&lt;p&gt;This is great: Here is the source files:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;c/cstring.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Reference CSTRING;
+
+  - role := String; // const char*
+  - type := Integer 8;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;c/main.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := MAIN;
+
+Section Public
+
+  - puts str:CSTRING &amp;lt;- External `puts`;
+
+  - main &amp;lt;-
+  (
+    puts &quot;Hello World&quot;;
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You type &lt;code&gt;lysaac compile c &amp;gt;c.bc&lt;/code&gt; and you get the following LLVM assembly code:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;c.bc&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@0 = private constant [12 x i8] c&quot;Hello World\00&quot;
+
+
+declare void @puts (i8*)
+
+define void @main () {
+  %1 = getelementptr [12 x i8]* @0, i32 0, i32 0
+  tail call void @puts(i8* %1)
+  ret void
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And you can execute it using the standard LLVM tools:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ llvm-as &amp;lt; c.bc | lli
+Hello World
+$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Isn't that great ?&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Union types and null</title>
+    
+    <link href="http://mildred.fr/Blog/2011/04/29/union_types_and_null/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/04/29/union_types_and_null/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-04-29T09:56:47+02:00</published>
+    
+    <content type="html">&lt;p&gt;Look at this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;object.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Singleton NULL;
+
+Section Public
+
+  - is_null :BOOLEAN &amp;lt;- FALSE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;null.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Singleton NULL;
+
+Section Inherit
+
+  - parent :OBJECT := OBJECT;
+
+Section Public
+
+  - is_null :BOOLEAN &amp;lt;- TRUE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := UNION;
+
+Section Inherit
+
+  - parent :OBJECT := OBJECT;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.1.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Expanded UNION(E);
+
+  - import := E;
+
+Section Inherit
+
+  - parent :UNION := UNION;
+
+Section Public
+
+  + element:E;
+  - set_element e:E &amp;lt;- (element := e;);
+
+  - when o:T do blc:{o:T;} &amp;lt;-
+  (
+    (o = E).if {
+      blc.value element;
+    };
+  );
+
+  - from_e e:E :SELF &amp;lt;-
+  ( + res :SELF;
+    res := clone;
+    res.set_element e;
+    res
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;union.2.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Expanded UNION(E, F...);
+
+Section Inherit
+
+  + parent_e :UNION(E);
+  + parent_next :UNION(F...);
+
+Section Public
+
+  - when o:T do blc:{o:T;} &amp;lt;-
+  (
+    (o = E).if {
+      parent_e.when o do blc;
+    } else {
+      parent_next.when o do blc;
+    };
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;use.li&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := USE;
+
+Section Public
+
+  - accept_object_or_null obj:UNION(USE,NULL) &amp;lt;-
+  (
+    obj
+    .when NULL do { o:NULL;
+      ? { o.is_null };
+    }
+    .when USE do { o:USE;
+      ? { o.is_null.not };
+    };
+  );
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Stack environments</title>
+    
+    <link href="http://mildred.fr/Blog/2011/04/29/stack_environments/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/04/29/stack_environments/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-04-29T09:52:05+02:00</published>
+    
+    <content type="html">&lt;p&gt;Stack environment would be an argument passed implicitely to every function in
+the code. It would contain global policy. In particular the &lt;code&gt;MEMORY&lt;/code&gt; object that
+lets you allocate memory. If you want to change the allocation policy, you just
+have to change the current environment, and all functions you call will use the
+new policy.&lt;/p&gt;
+
+&lt;p&gt;We could allow user defined objects like that, not just system objects.&lt;/p&gt;
+
+&lt;p&gt;We could also manage errors that way. An error flag could be stored in the
+environment. Set by the calee and tested by the caller.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Lysaac annotations</title>
+    
+    <link href="http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-04-29T09:40:10+02:00</published>
+    
+    <content type="html">&lt;p&gt;Because I'm using an open world assumption, I need the compiler to generate
+annotations on units it compiles, so when it sees them again, it knows what it
+does (or does not) internally.&lt;/p&gt;
+
+&lt;p&gt;I was looking at &lt;a href=&quot;http://www.youtube.com/watch?v=ryfw9_-Hnb0&quot;&gt;a LLVM video&lt;/a&gt; this morning (VMKit precisely) and the
+person talked about an interesting optimization. What if we could allocate
+objects in stack instead of the heap. This would save time when creating the
+object. Then we wouldn't be tempted to avoid creating new objects for fear of
+memory leaks (there is not garbage collector in lisaac currently) and
+performance penalty.&lt;/p&gt;
+
+&lt;p&gt;This is the same thing as aliased variables in Ada.&lt;/p&gt;
+
+&lt;p&gt;An object can be allocated on the stack if:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is not returned by the function.&lt;/li&gt;
+&lt;li&gt;it is not stored on the heap by the function.&lt;/li&gt;
+&lt;li&gt;it is not used in a called function that would store a pointer to this
+object on the heap.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, when the compiler compiles a cluster, it has to generate an annotation file
+containing for each argument in each code slot whether the argument is
+guaranteed to remain on the stack or if it might be stored on the heap. If an
+argument is guaranteed to stay on the stack, we can allocate it on the stack.
+When the function will return, the only instances would be located in the
+current stack frame.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Lysaac compilation model and inline prototypes</title>
+    
+    <link href="http://mildred.fr/Blog/2011/04/29/lysaac_compilation_model_and_inline_prototypes/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/04/29/lysaac_compilation_model_and_inline_prototypes/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-04-29T09:19:04+02:00</published>
+    
+    <content type="html">&lt;p&gt;In Lysaac, I choose to follow the open world assumption, like the majority of
+programming languages out there, instead of the closed world assumption. There
+are two main reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;First, I don't strive at creating an optimizing compiler, not yet at least.
+Closed world is useful for that, but I don't need it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Second, open world assumption increases the complexity a lot. The Lisaac
+compiler uses an exponential algorithm, and will always hit a limit with
+big projects. With an open world, you can partition the complexity.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Because I still believe in global compilation, I decided that my compilation
+unit would be the cluster instead of the prototype. That is, I'll compile a
+cluster completely in one object file. That makes it possible to optimize things
+like private prototypes.&lt;/p&gt;
+
+&lt;p&gt;This leaves a big performance problem for &lt;code&gt;BOOLEAN&lt;/code&gt;s in particular. &lt;code&gt;BOOLEAN&lt;/code&gt;,
+&lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; are prototypes in the standard library, and having an open
+world assumption would require pasing to the &lt;code&gt;if then&lt;/code&gt; slot function pointers.
+I can't realisticly do that.&lt;/p&gt;
+
+&lt;p&gt;So, These prototypes could be marked as &lt;code&gt;Inline&lt;/code&gt;. They are separated from their
+cluster and gets compiled in every cluster that uses them. The syntax could be
+quite simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline TRUE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But, because each cluster is then free to compile it as it wants, there is a
+problem of interoperability. How can you be sure that the &lt;code&gt;TRUE&lt;/code&gt; in your cluster
+is compiled the same way as in the neighbooring cluster you are using. As it is,
+you can't pass &lt;code&gt;TRUE&lt;/code&gt; object around clusters. Very annoying.&lt;/p&gt;
+
+&lt;p&gt;The solution would be to encode them and decode them manually. You could have:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline TRUE;
+
+Section Feature
+
+  - inline_size :INTEGER := 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Take a more interesting example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Inline Expanded BIT;
+
+  - size := 1;
+
+Section Feature
+
+  - inline_size :INTEGER := 1;
+  - encode p:POINTER &amp;lt;-
+  (
+    p.to_native_array_of BIT.put bit to 0;
+  );
+  - decode p:POINTER &amp;lt;-
+  (
+    data := p.to_native_array_of BIT.item 0;
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This needs to be refined.&lt;/p&gt;
+
+&lt;p&gt;Additionally, &lt;code&gt;.cli&lt;/code&gt; files could also contain the &lt;code&gt;Inline&lt;/code&gt; keyword. In that
+case, the cluster it reference will be compiled with the current cluster. That
+could be useful for private clusters.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Lysaac and clusters</title>
+    
+    <link href="http://mildred.fr/Blog/2011/04/12/lysaac_and_clusters/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/04/12/lysaac_and_clusters/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-04-12T16:35:44+02:00</published>
+    
+    <content type="html">&lt;p&gt;If you noticed, I started my own Lisaac compiler, called &lt;a href=&quot;http://github.com/mildred/lysaac&quot;&gt;Lysaac&lt;/a&gt; and I want
+to make it a little bit different from Lisaac. I'll try to keep compatibility,
+but for few things, I might take a different direction.&lt;/p&gt;
+
+&lt;p&gt;One of these things is the way prototypes are found.&lt;/p&gt;
+
+&lt;p&gt;In Lisaac, you have a complete set of prototypes and when you look for a
+prototype, it is looked everywhere. This is not desirable. Imagine you are
+writing a library that requires the prototype &lt;code&gt;FOO&lt;/code&gt;. Currently, if &lt;code&gt;FOO&lt;/code&gt; is not
+present in the library, instead of issuing an error, the compiler would take the
+&lt;code&gt;FOO&lt;/code&gt; prototype in the application that use the library. Meaning that the
+library is effectvely using a pieve of the application code.&lt;/p&gt;
+
+&lt;p&gt;I want to take the SmartEiffel approach and separate the source code in few
+clusters. A cluster is a collection of prototypes. And the prototypes in a
+cluster can only use the prototype of the same cluster or the prototypes of
+imported clusters. This solve the above dependancy problem.&lt;/p&gt;
+
+&lt;p&gt;A cluster is a directory that contain prototypes in &lt;code&gt;.li&lt;/code&gt; files and
+subdirectories. If a subdirectory do not contain &lt;code&gt;.li&lt;/code&gt; files, the
+sub-subdirectories are not recursively searched. A cluster can import another
+cluster using a cluster file ending with &lt;code&gt;.cli&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;An example of &lt;code&gt;.cli&lt;/code&gt; file is as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  - name := Cluster LIBFOO;
+
+  - path := (&quot;libfoo-3.14&quot;, &quot;../libfoo&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The search paths can be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;relative to the &lt;code&gt;.cli&lt;/code&gt; file if it starts with &lt;code&gt;.&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;relative to &lt;code&gt;LYSAAC_PATH&lt;/code&gt; directories otherwise&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;code&gt;LISAAC_PATH&lt;/code&gt; defaults to &lt;code&gt;$XDG_DATA_HOME/lysaac/lib:/usr/local/share/lysaac/lib:/usr/share/lysaac/lib&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The search paths would then be for this example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$XDG_DATA_HOME/lysaac/lib/libfoo-3.14&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/share/lysaac/lib/libfoo-3.14&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/share/lysaac/lib/libfoo-3.14&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;../libfoo&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The parser for these files is being written. Then you can see the complete
+hierarchy of the project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ lysaac src
+◆ Root Cluster
+│ Cluster in: src
+├─◆ LIB (src/lib.cli)
+│ │ Cluster in: lib
+│ ├─◆ STDLIB (lib/stdlib.cli)
+│ │ │ Cluster in: /home/mildred/.local/share/lysaac/lib/stdlib
+│ │ ├─◇ STRING (...)
+│ │ ├─◇ ABSTRACT_STRING (...)
+│ │ ╰─◇ ...
+│ ├─◇ LIBC (lib/libc.li)
+│ ╰─◇ CSTRING (lib/cstring.li)
+├─◇ PARSER (src/parser.li)
+├─◇ CLUSTER_ITEM (src/cluster_item.li)
+├─◇ ITM_STYLE (src/itm_style.li)
+├─◇ LYSAAC (src/lysaac.li)
+├─◇ ITM_AFFECT (src/itm_affect.li)
+├─◇ ANY (src/any.li)
+├─◇ PARSER_CLI (src/parser_cli.li)
+╰─◇ CLUSTER (src/cluster.li)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, each item in a cluster can be public or private. Public items are available
+to the users of the clusters whereas private items are restricted to members of
+the same cluster. To declare a private item, just say:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Private PROTOTYPE;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  - name := Private Cluster LIBTOTO;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to declare a whole bunch of prototypes private to your cluster, just
+include them in a private cluster. To do so, you'll need the following files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;cluster/my_private_prototypes.cli:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  - name := Private Cluster MY_PRIVATE_PROTOTYPES;
+
+  - path := &quot;./deps/my_private_prototypes&quot;;
+  // makes the cluster relative to the .cli file
+  // use a deps additional directory to avoid the current cluster to
+  // look into deps/my_private_prototypes. deps should not contain any
+  // files, just subdirectories.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;cluster/deps/my_private_prototypes/private_proto.li:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := Public Prototype PRIVATE_PROTO;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">PIPE(E)</title>
+    
+    <link href="http://mildred.fr/Blog/2011/03/29/pipe-e/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/03/29/pipe-e/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-03-29T14:34:17+02:00</published>
+    
+    <content type="html">&lt;p&gt;Inspired from ruby #Array:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := PIPE(E);
+
+Section Private
+
+  + blc :{;BOOLEAN,E};
+
+Section Public
+
+  - create blc_:{;BOOLEAN,E} :SELF &amp;lt;-
+  (
+    blc := blc_;
+    Self
+  );
+
+  - read :(BOOLEAN,E) &amp;lt;- blc.value
+
+  - map blc:{E;X} :PIPE(X) &amp;lt;-
+  ( // Upvalue Self
+    PIPE(X).clone.make {
+      + have_e :BOOLEAN;
+      + e :E;
+      (have_e, e) := Self.read;
+      have_e.if {
+        e := blc.value e;
+      };
+      have_e, e
+    }
+  );
+
+  - select blc:{E;BOOLEAN} :PIPE(E) &amp;lt;-
+  ( // Upvalue Self
+    PIPE(E).clone.make {
+      + have_e :BOOLEAN;
+      + e :E;
+      (have_e, e) := Self.read;
+      have_e.if {
+        blc.value e.if_false {
+          have_e := FALSE;
+        };
+      };
+      have_e, e
+    }
+  );
+
+  - flatten_1 :PIPE(X) &amp;lt;-
+  ( // Upvalue Self, buffer
+    + buffer :PIPE(X);
+    PIPE(X).clone.make {
+      + have_e, have_x :BOOLEAN;
+      + e :E;
+      + x :X;
+      buffer.is_null.if_false {
+        (have_e, e) := buffer.read;
+        have_e.if_false {
+          buffer := NULL;
+        };
+      };
+      buffer.is_null.if {
+        (have_e, e) := Self.read;
+        have_e.if {
+          (buffer ?= e).is_null.if_false {
+            (have_x, x) := buffer.read
+            // TODO: cas où have_e = FALSE (buffer est vide)
+          };
+        };
+      };
+      have_x, x
+    }
+  );
+
+  - to_array_of_e :ARRAY(E) &amp;lt;-
+  ( + result :ARRAY(E);
+    + have_e :BOOLEAN;
+    + e :E;
+    {(have_e, e) := read;
+    have_e
+    }.while_do {
+      result.add_last e;
+    };
+    result
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;TODO:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Upvalue&lt;/li&gt;
+&lt;li&gt;Syntax improvement (block input variables is too verbose)&lt;/li&gt;
+&lt;li&gt;More typing of parameter types, particurlarly as return values (map return unknown type X)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;var := bool.if {val1} else {val2}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;NULL.is_null -&gt; TRUE&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Section Interface</title>
+    
+    <link href="http://mildred.fr/Blog/2011/02/11/section-interface/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/02/11/section-interface/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-02-11T18:54:11+01:00</published>
+    
+    <content type="html">&lt;p&gt;I had an idea about inheritance, comming from Eiffel and my today's work in Ada
+Object Oriented Programming in embedded software. I am working on a software
+that is going to be embedded in an ADIRU (Air Data Inertial Reference Unit) in
+the final assembly line (not on air). This software is about implementing a
+protocol to let the test operator test the connections in the aircraft.&lt;/p&gt;
+
+&lt;p&gt;Embedded software means memory constraints. Basically, that means I can only
+allocate new objects when the application is starting up. When the application
+is running (with a scheduler), it is no longer possible to create new objects.
+This is bad for me because I just want to create different objects at runtime
+that have a different behaviour. The objects all have the same size in byte, the
+same data. There is just a function that is inherited.&lt;/p&gt;
+
+&lt;p&gt;Next, I thought of Eiffel ...&lt;/p&gt;
+
+&lt;p&gt;And then about what is inheritance. I can think of two aspects of inheritance:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Behaviour inheritance: you just want the same behaviour as your parent. This
+is the &lt;code&gt;Section Insert&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Interface inheritance: you just want the polymorphism&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;When you think about it, the two aspects complements each other. The traditional
+inheritance is just the combinaison of the two. So I thought that could be a
+great idea to separate them. Bundeling them together would just help programmers
+mistakenly inherit for an object, even if they obly want polymorphism or
+behavior inheritance alone.&lt;/p&gt;
+
+&lt;p&gt;There is another trap: extend an object that you already inherited. You might
+add some features/methods/slots that you don't necessarily want in herited
+prototypes. You end up cluttering the inherited objects a lot. So I thought that
+a good rule would be to forbid the inheritance from an implementation and force
+inheritance from interfaces.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;And, how to do that nicely in Lisaac?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;With the new &lt;code&gt;Section Interface&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The Section Interface would define an interface for the current prototype. It
+would contain slots and their contracts that are going to be inherited. Slots
+not defined here will not be available for inheritance. And if there is no
+Section Interface, no inheritance will be possible.&lt;/p&gt;
+
+&lt;p&gt;In short terms, it means that if you use the Strict version of the prototype (or
+if the compiler can infer you are doing so), you can use the slots in the
+Section Public. Else, you are limited to the Section Interface.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Cool things with interfaces&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Just as in eiffel, if you have two slots that conflicts when inherited like in
+the following code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := BAG(T);
+
+Section Interface
+
+  - count :INTEGER;
+  - lower :INTEGER;
+  - upper :INTEGER;
+
+  - owner :PERSON;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!--  --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;Section Header
+
+  + name := SHOP;
+
+Section Inherit
+
+  - tomatos :BAG(TOMATOS);
+  - eggs    :BAG(EGGS);
+
+Section Interface
+
+  //
+  // You can rename the slots:
+  //
+
+  - tomatos_count &amp;lt;- tomatos.count;
+  - tomatos_lower &amp;lt;- tomatos.lower;
+  - tomatos_upper &amp;lt;- tomatos.upper;
+
+  - eggs_count &amp;lt;- eggs.count;
+  - eggs_lower &amp;lt;- eggs.lower;
+  - eggs_upper &amp;lt;- eggs.upper;
+
+  //
+  // Or reimplement them:
+  // (if there is a conflict, it should be present in the interface tell the
+  //  compiler that you thought of reimplementing it.)
+  //
+
+  - owner :PERSON;
+
+Section Public
+
+  - owner :PERSON &amp;lt;-
+  (
+    ? { eggs.person = tomatos.person };
+    tomatos.owner
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will tell the compiler that when the SHOP transforms into a BAG(TOMATOS)
+through polymorphism, it should use the &lt;code&gt;tomatos_count&lt;/code&gt; instead of &lt;code&gt;count&lt;/code&gt;. This
+will also tell that the owner of both the tomatos and eggs is the same and
+implemented in SHOP.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;How to inherit?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For behaviour inheritance:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Insert
+
+  - parent1 :Expanded P1;
+  - parent2 :P2 := P2;
+  + parent3 :Expanded P3;
+  + parent4 :P4 := P4;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For interface inheritance (the two forms are equivalent)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Inherit
+
+  - parent1 :Interface P1;
+  + parent2 :Interface P2;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For both (if there is no default values for forms 2 and 4 the compiler should
+issue a warning):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Section Inherit
+
+  - parent1 :Expanded P1;
+  - parent2 :P2 := P2;
+  + parent3 :Expanded P3;
+  + parent4 :P4 := P4;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  
+</feed>

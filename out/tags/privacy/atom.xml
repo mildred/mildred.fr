@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/privacy/" rel="alternate" />
+  <link href="http://mildred.fr/tags/privacy/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:19:32+01:00</updated>
+  <id>http://mildred.fr/tags/privacy/</id>
+
+  
+  <entry>
+    <title type="html">Blueprints for a Privacy Respecting Browser</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-10-19T10:21:14+02:00</published>
+    
+    <content type="html">&lt;p&gt;What is this all about: web privacy. We are tracked everywhere, and i'd like to
+help if possible. So, let's design a web browser that for once respects your
+privacy.&lt;/p&gt;
+
+&lt;p&gt;Main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each website has its own cookie jar, its own cache and its own HTML5 local
+storage&lt;/li&gt;
+&lt;li&gt;History related css attributes are disabled&lt;/li&gt;
+&lt;li&gt;External plugins are only enabled on demand&lt;/li&gt;
+&lt;li&gt;Support for Tor/I2P is enabled by default&lt;/li&gt;
+&lt;li&gt;You have complete control over who receives what information&lt;/li&gt;
+&lt;li&gt;Let's you control in the settings if you want to allow referrers or not.&lt;/li&gt;
+&lt;li&gt;The contextual menu let's you open links anonymously (no referrer, anonymous
+session)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The browser is bundled with a particular UI that let you control everything
+during your browsing session. it is non intrusive and makes the best choice by
+default. I am thinking of a notification bar that shows at the bottom. I noticed
+that this place is not intrusive when I realized that the search bar in Firefox
+was most of the time open, even if most of the time I didn't use it.&lt;/p&gt;
+
+&lt;p&gt;First, let's define a session:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A session can be used my more than one domain at the same time.&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cache storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific HTML5 storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cookie jar&lt;/li&gt;
+&lt;li&gt;A session acn be closed. When it is closed, session cookies are deleted from
+the session&lt;/li&gt;
+&lt;li&gt;A session can be reopened. All long lasting cookies, cache, HTML5 storage
+and such is then used again.&lt;/li&gt;
+&lt;li&gt;A session can be anonymous. In such a case, the session is deleted
+completely when it is closed.&lt;/li&gt;
+&lt;li&gt;A session is associated to none, one or more domains. These domains are the
+domains the end user can see in the address bar, not the sub items in the
+page.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Sessions are like Firefox profiles. If you iopen a new session, it's like you
+opened a new Firefox profile you just created. Because people will never create
+a different Firefox profile for each site.&lt;/p&gt;
+
+&lt;p&gt;If we want to protect privacy, when a link is opened, a new session should be
+created each time. To make it usable to browse web sites, it is made possible to
+share sessions in specific cases. Let's define the cases where it might be
+intelligent to share a profile:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You click a link or submit a form and expect to still be logged-in in the
+site you are viewing. You don't care if you follow a link to an external
+page.&lt;/p&gt;
+
+&lt;p&gt;User Interface: If the link matches one of the domains of the session, then
+keep the session. No UI. If the user wanted a new session, the &quot;Open
+anonymously&quot; entry in the context menu exists. A button on the toolbar might
+be available to enter a state where we always want to open links
+anonymously.&lt;/p&gt;
+
+&lt;p&gt;If the link points to another domain, then open the link in a new session
+unless &quot;Open in the same session&quot; was specified in the context menu. The UI
+contains:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We Protected your privacy by separating &amp;lt;domain of the new site&amp;gt; from
+the site you were visiting previously (&amp;lt;domain of the previous site&amp;gt;).
+
+Choices: [ (1) Create a new anonymous session          | ▼ ]
+         | (2) Continue session from &amp;lt;previous domain&amp;gt; |
+         | (3) Use a previous session for &amp;lt;new domain&amp;gt; |
+         | (4) Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;      |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first choice is considered the default and the page is loaded with it.
+If the user chooses a new option, then the page is reloaded.&lt;/p&gt;
+
+&lt;p&gt;If the user chooses (2), the page is reloaded with the previous session and
+the user will be asked if &quot;Do you want &lt;old domain&gt; and &lt;new domain&gt; to have
+access to the same private information about you?&quot;. Answers are Yes, No and
+Always. If the answer is Always, then in the configuration, the two domains
+are considered one and the same.&lt;/p&gt;
+
+&lt;p&gt;The choice (3) will use the most recent session for the new domain. It might
+be a session currently in use or a session in the history.&lt;/p&gt;
+
+&lt;p&gt;There are as many (4) options as there are bookmarks for the new domain. If
+different bookmarks share a single session, only one bookmark is shown. This
+choice will load the session from the bookmark.&lt;/p&gt;
+
+&lt;p&gt;If (3) and (4) are the same sessions, and there is only one bookmark (4),
+then the (4) option is left out.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You use a bookmark and expect to continue the session you had for this
+bookmark (webmails)&lt;/p&gt;
+
+&lt;p&gt;The session is simpely stored in the bookmark. When saving a bookmark, there
+is an option to store the session with it or not.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[X] Do not save any personal information with this bookmark
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You open a new URL and you might want reuse a session that was opened for
+this URL.&lt;/p&gt;
+
+&lt;p&gt;The User Interface allows you to restore the session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We protected your privacy by not sending any personal information to
+&amp;lt;domain&amp;gt;. If you want &amp;lt;domain&amp;gt; to receive private information, please
+select:
+
+Choices: [ Do not send private information     | ▼ ]
+         | Use a previous session for &amp;lt;domain&amp;gt; |
+         | Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;  |
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you can see other use cases, please comment on that.&lt;/p&gt;
+
+&lt;p&gt;From these use cases, I can infer three kind of sessions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Live sessions, currently in use&lt;/li&gt;
+&lt;li&gt;Saved sessions, associated to a bookmark&lt;/li&gt;
+&lt;li&gt;Closed sessions in the past, accessible using history. Collected after a too
+long time.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, how to implement that? I was thinking of QtWebKit as I already worked with
+Qt and it's easy to work with.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We have a main widget: &lt;code&gt;QWebView&lt;/code&gt;. We want to change the session when a new
+page is loaded. So we hook up with the signal &lt;code&gt;loadStarted&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;We prevent history related CSS rules by implementing &lt;code&gt;QWebHistoryInterface&lt;/code&gt;,
+more specifically, we store the history necessary to implement
+&lt;code&gt;QWebHistoryInterface&lt;/code&gt; in the session.&lt;/li&gt;
+&lt;li&gt;We change the cache by implementing &lt;code&gt;QAbstractNetworkCache&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCache(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;We change the cookie jar by implementing &lt;code&gt;QNetworkCookieJar&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCookieJar(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Change the local storage path using a directory dedicated for the session
+and using &lt;code&gt;view-&amp;gt;page()-&amp;gt;settings()-&amp;gt;setLocalStoragePath(QString)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;After all that, we'll have to inspect the resulting browser to determine if
+there are still areas where we fail at protecting privacy.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Bug 660340 - Due to constant threats on privacy, epiphany should allow the user to have multiple separate session running</title>
+    
+    <author>
+      <name>Mildred</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2011/09/28/bug_660340_-_due_to_constant_threats_on_privacy_epiphany_should_allow_the_user_to_have_multiple_separate_session_running/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/09/28/bug_660340_-_due_to_constant_threats_on_privacy_epiphany_should_allow_the_user_to_have_multiple_separate_session_running/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-09-28T10:42:04+02:00</published>
+    
+    <content type="html">&lt;p&gt;Here is my &lt;a href=&quot;https://bugzilla.gnome.org/show_bug.cgi?id=660340&quot;&gt;Bug 660340&lt;/a&gt;. I
+created it after looking at the recent facebook 'enhancements' that makes
+privacy even more precious (&lt;a href=&quot;http://linuxfr.org/news/facebook-f8-timeline-musiquevid%C3%A9o-ticker-boutons-et-les-cons%C3%A9quences-pour-le-web&quot;&gt;article in French&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;We need to quickly find a way to preserve our privacy on the Internet.&lt;/p&gt;
+
+&lt;p&gt;Hi,&lt;/p&gt;
+
+&lt;p&gt;With the recent threats of the various big internet companies on our privacy,
+it would be a great enhancement if epiphany allowed to have separate navigation
+contexts (cookies, HTML5 storage, cache) at will, and easily.&lt;/p&gt;
+
+&lt;p&gt;Some companies, especially facebook, and I suppose Google could do that as
+well, can use all kind of methods to track a user usiquely. using cache, HTML5
+storage or cookies. I wonder if they can use the cache as well, but I heard it
+could be prevented. Firefox does.&lt;/p&gt;
+
+&lt;p&gt;One solution to counter these privacy threats is to have a different browser,
+or different browser profile, for each of the web sites we load. This is
+however very inconvenient, and it should made easily possible.&lt;/p&gt;
+
+&lt;p&gt;First let define the concept of session. A session is almost like a separate
+instance of the browser. It share bookmark and preferences with other session,
+but have separate cache, separate set of cookies and separate HTML5 DOM
+storage.&lt;/p&gt;
+
+&lt;p&gt;I imagine the following behaviour, based on the document.domain of the toplevel
+document:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded without referrer, and the domain is not associated with
+an existing session, start a new session for that domain&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded without referrer, and the domain is a domain that is
+already associated with an existing session, then prompt non intrusively:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot;You already opened a session on example.com.&quot;
+Choices: [  Start a new session    ▼ ] [Use this session]
+         [[ New anonymous session   ]]
+         [  Replace existing session ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the session is started anonymously, it would not be considered for reuse&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded using a link from an existing window/tab, and the
+domain
+is the same, then share the session&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded using a link from an existing window/tab, and the
+domain
+is NOT the same and, then a non intrusive message is displayed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot;You are now visiting example2.com. Do you want to continue your session
+from example1.com?&quot;
+Choices: [  Start a new session    ▼ ] [Share previous session]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &quot;Start a new session&quot; dropdown menu changes if the example2.com is
+already associated with a session or not. If example2.com is associated
+with a session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; [[ New anonymous session            ]]
+ [  Replace example2.com session      ]
+ [  Use existing example2.com session ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If example2.com is not associated with a session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; [[ New anonymous session    ]]
+ [  New example2.com session  ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The choices in [[xxx]] (as opposed to [xxx]) is the most privacy enhancing one,
+and would be the default if the user choose in the preferences&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[x] allow me not to be tracked
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The messages are non intrusive, they can be displayed as a banner on top of the
+page. The page is first loaded with the default choice, and if the user decides
+to use the other choice, the page will be reloaded accordingly (or the session
+will be reassigned).&lt;/p&gt;
+
+&lt;p&gt;This setting can traditionally be used to set the do not track header&lt;/p&gt;
+
+&lt;p&gt;Every settings should have a setting &quot;do not prompt me again&quot; that could be
+reset at some point.&lt;/p&gt;
+
+&lt;p&gt;About embedded content: Because toplevel pages do not share the same session
+(toplevel page opened at example.com have a different session than toplevel
+page opened at blowmyprivacy.org), if a page from example.com have embedded
+content from blowmyprivacy.org, the embedded content would not be able to track
+the user, except within the example.com website.&lt;/p&gt;
+
+&lt;p&gt;It is possible to imagine global settings that would hide some complexity:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[ ] When I load a page, always associate it with its existing session.
+[ ] When I switch website, always reuse the existing session of the new
+    website.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This user interface might seem complex at first, but it is far less complex
+than letting the user deal with different browser profiles by hand.
+Unfortunately, I don't think we can abstract privacy that easily. Keep in mind
+that all of these settings would be enabled only if the user choose to enable
+privacy settings.&lt;/p&gt;
+
+&lt;p&gt;I am ready to contribute to the implementation of this highly important feature
+(important for our future and our privacy). Do you think an extension might be
+able to do all of that, or do you think the browser code should be modified?&lt;/p&gt;
+
+&lt;p&gt;Further possible enhancements:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Add another choice for anonymous sessions using Tor (or I2P)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Add the possibility to have multiple session registered with the same
+domain. This would enable the user to have different profiles for the same
+website.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,961 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/comp/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:18:12 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:18:12 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>wwwgen: imagined architecture</title>
+      <link>http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</link>
+      <description>&lt;p&gt;I started writing wwwgen: a website generator that uses redo for its
+dependency tracking. Unfortunately, I might not have taken the correct
+approach to the problem. I reuse the webgen concepts, and that might be
+a bad idea.&lt;/p&gt;
+
+&lt;p&gt;Specifically, webgen (and my first version of wwwgen) are bottom-up
+systems (you take the sources and build everything they can generate).
+The problem is that redo itself is top-down (you take the target and
+build it, building sources as they are needed), and I tried to make the
+two match. It's very difficult, and impossible to do with a clean design.&lt;/p&gt;
+
+&lt;p&gt;What I'd like to have is a simple &lt;code&gt;wwwgen&lt;/code&gt; binary that generates a HTML
+file from a source file. Let's imagine how it could work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with no templates, just generate
+the HTML and this is it&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with a template, redo-ifchange the
+template source and build the HTML combining the two&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, we have a problem because multiple
+outputs are generated. Redo doesn't support this case and we must find a
+way to make it work.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, we have a problem here ...&lt;/p&gt;
+
+&lt;p&gt;Now, we have another problem. Specifically, my source file is called
+&lt;code&gt;title.page&lt;/code&gt; and I want my output file to be &lt;code&gt;title/index.html&lt;/code&gt;. In
+webgen, this is implemented by a configuration in &lt;code&gt;title.page&lt;/code&gt; telling
+it to build in &lt;code&gt;title/index.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a solution to solve both problems at once. the wwwgen command
+creates an archive (the formats needs to be defined, it could be tar, or
+different yaml documents in the same file for example). Then, the build
+process would be:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; find src -name &quot;*.src&quot; \
+   | sed 's/src$/gen/' \
+   | xargs -d '\n' redo-ifchange
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;wwwgen generate&lt;/code&gt; would parse the source file and generate an archive,
+that will be unpacked later by &lt;code&gt;wwwgen unpack&lt;/code&gt;. Let's see how it can work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The source file can choose where it unpacks, relatively to the
+directory where the source file is&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, it will redo-ifchange the other source
+files for the index and redo-ifchange the template, generate multiple
+pages packed together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a tag tree (a special source that doesn't output
+anything on its own but create index files dynamically), then it parses
+every child to find a canonical list of tags and the paths they refer
+to. Then, it creates the index files. Unfortunately, those index files
+will never be compiled until next build.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How an we improve the design to be able to create source files dynamically.&lt;/p&gt;
+
+&lt;p&gt;There are different views to the problem:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;pages, index and tags should all generate all the output files they
+are related to. It means that index files should be able to generate
+pages, and tags should be able to generate indexes and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;pages should generate the output file, index should generate pages and
+feeds and tags should generate index.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mixed solution (the one described): pages generate output file, index
+should generate the output files as well and tags generates index.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How can we generate source files on the fly:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;have a predefined compilation order: first tags, then index and lastly
+feeds and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;rebuild everything until no more source files are generated. We might
+build unnecessary things.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I prefer the second solution which is more flexible, but we need a way
+to avoid building things twice. For example, it's not necessary to build
+a page if on the next phase the page source is going to be regenerated.&lt;/p&gt;
+
+&lt;p&gt;Very simply, the generated page can contain a link to the index source
+file that generated it, and when generating the page, &lt;code&gt;redo-ifchange&lt;/code&gt; is
+run on the index file.&lt;/p&gt;
+
+&lt;p&gt;Next question: what if a tag is deleted. The corresponding index page is
+going to stay around until the next clean. The tag page should keep
+around a list of index files it generated and delete them when a tag is
+no longer detected. And deleting the index should not be done using &lt;code&gt;rm&lt;/code&gt;
+because the index will need to delete the pages it generated. The best
+solution would be to integrate to redo to detect these files.&lt;/p&gt;
+
+&lt;p&gt;The build scripts now are:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; oldsrclist=
+ srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ while [ &quot;$oldsrclist&quot; != &quot;$srclist&quot; ]; do
+   echo &quot;$srclist&quot; \
+     | sed 's/src$/gen/' \
+     | xargs -d '\n' redo-ifchange
+   oldsrclist=&quot;$srclist&quot;
+   srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ done
+
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Git, Google Summer of Code enhancements</title>
+      <link>http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html</link>
+      <description>&lt;p&gt;I was looking at Git, and which features may land in the next few
+releases, and I found the following things:&lt;/p&gt;
+
+&lt;h2&gt;Git-SVN will be completely redesigned&lt;/h2&gt;
+
+&lt;p&gt;If you worked with git-svn, you probably know that the git-svn workflow
+has nothing to do with git. Basically, you just have the svn history and
+have to use git-svn to push the changes back to the subversion
+repository. You can't use git-push and that's really annoying.&lt;/p&gt;
+
+&lt;p&gt;Recently, the &lt;a href=&quot;https://www.kernel.org/pub/software/scm/git/docs/git-remote-helpers.html&quot;&gt;git-remote-helpers&lt;/a&gt; feature was
+added. It allows git to interact with any kind of remote url, using a
+specific &lt;code&gt;git-remote-*&lt;/code&gt; command. For example, you can already use
+mercurial this way (according to &lt;a href=&quot;https://github.com/rfk/git-remote-hg&quot;&gt;git-remote-hg&lt;/a&gt;):&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Git allows pluggable remote repository protocols via helper scripts. If you have a script named &quot;git-remote-XXX&quot; then git will use it to interact with remote repositories whose URLs are of the form XXX::some-url-here. So you can imagine what a script named git-remote-hg will do.&lt;/p&gt;
+
+&lt;p&gt;Yes, this script provides a remote repository implementation that communicates with mercurial. Install it and you can do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone hg::https://hg.example.com/some-mercurial-repo
+$ cd some-mercurial-repo
+$ # hackety hackety hack
+$ git commit -a
+$ git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;The plan is to do the same with subversion. You could just do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; $ git clone svn::http://svn.host.org/repo/trunk/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Branches might be tricky to implement, they might not be there. But you
+will get what's already in git-svn but with a way better UI. And far
+more possibilities for the future.&lt;/p&gt;
+
+&lt;p&gt;Here is the summary from the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Remote_helper_for_Subversion_and_git-svn&quot;&gt;GSoc&lt;/a&gt; page:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Submodules will be improved a lot&lt;/h2&gt;
+
+&lt;p&gt;I wish it was already there. From the &lt;a href=&quot;https://github.com/jlehmann/git-submod-enhancements/wiki/&quot;&gt;wiki page&lt;/a&gt;, the
+improvements will be:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;As Dscho put it, submodules are the “neglected ugly duckling” of git. Time to change that …&lt;/p&gt;
+
+&lt;p&gt;Issues still to be tackled in this repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let am, bisect, checkout, checkout-index, cherry-pick, merge, pull, read-tree, rebase, reset &amp;amp; stash work recursively on submodules (in progress)&lt;/li&gt;
+&lt;li&gt;Teach grep the --recursive option&lt;/li&gt;
+&lt;li&gt;Add means to specify which submodules shall be populated on clone&lt;/li&gt;
+&lt;li&gt;Showing that a submodule has a HEAD not on any branch in “git status”&lt;/li&gt;
+&lt;li&gt;gitk: Add popup menu for submodules to see the detailed history of changes&lt;/li&gt;
+&lt;li&gt;Teach “git prune” the “--recurse-submodules” option (and maybe honour the same default and options “git fetch” uses)&lt;/li&gt;
+&lt;li&gt;Better support for displaying merge conflicts of submodules&lt;/li&gt;
+&lt;li&gt;git gui: Add submodule menu for adding and fetching submodules&lt;/li&gt;
+&lt;li&gt;git status should call “git diff --submodule --ignore-submodules=dirty” instead of “git submodule summary” for providing a submodule summary when configured to do so.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Add an “always-tip” mode&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Other commands that could benefit from a “--recurse-submodules” option: archive, branch, clean, commit, revert, tag.&lt;/li&gt;
+&lt;li&gt;In the long run git-submodule.sh should be converted to a rather simple wrapper script around core git functionality as more and more of that is implemented in the git core.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Submodule related bugs to fix&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cherry picking across submodule creation fails even if the cherry pick doesn’t touch any file in the submodules path&lt;/li&gt;
+&lt;li&gt;git submodule add doesn’t record the url in .git/config when the submodule path doesn’t exist.&lt;/li&gt;
+&lt;li&gt;git rebase --continue won’t work if the commit only contains submodule changes.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Issues already solved and merged into Junio’s Repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Since git 1.6.6:
+
+&lt;pre&gt;&lt;code&gt;New --submodule option to “git diff” (many thanks to Dscho for writing the core part!)
+Display of submodule summaries instead of plain hashes in git gui and gitk
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.0:
+
+&lt;pre&gt;&lt;code&gt;“git status” and “git diff*” show submodules with untracked or modified files in their work tree as “dirty”
+git gui: New popup menu for submodule diffs
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.1:
+
+&lt;pre&gt;&lt;code&gt;Show the reason why working directories of submodules are dirty (untracked content and/or modified content) in superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.2:
+
+&lt;pre&gt;&lt;code&gt;Add parameters to the “--ignore-submodules” option for “git diff” and “git status” to control when a submodule is considered dirty
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.3:
+
+&lt;pre&gt;&lt;code&gt;Add the “ignore” config option for the default behaviour of “git diff” and “git status”. Both .git/config and .gitmodules are parsed for this option, the value set in .git/config. will override that from .gitmodules
+Add a global config option to control when a submodule is considered dirty (written by Dscho)
+Better support for merging of submodules (thanks to Heiko Voigt for writing that)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.4:
+
+&lt;pre&gt;&lt;code&gt;Recursive fetching of submodules can be enabled via command line option or configuration.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.5:
+
+&lt;pre&gt;&lt;code&gt;fetch runs recursively on submodules by default when new commits have been recorded for them in the superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.7:
+
+&lt;pre&gt;&lt;code&gt;git push learned the --recurse-submodules=check option which errors out when trying to push a superproject commit where the submodule changes are not pushed (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.8:
+
+&lt;pre&gt;&lt;code&gt;The “update” option learned the value “none” which disables “submodule init” and “submodule update”
+The git directory of a newly cloned submodule is stored in the .git directory of the superproject, the submodules work tree contains only a gitfile. This is the first step towards recursive checkout, as it enables us to remove a submodule directory (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Git_submodule_improvements&quot;&gt;GSoC page&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Migration to Webgen</title>
+      <link>http://mildred.fr/Blog/2012/02/28/migration_to_webgen/index.html</link>
+      <description>&lt;p&gt;Webgen allows me to split a post in two, an excerpt and a content. Perhaps the
+name excerpt is ill chosen as currently it seems more like a teaser. Anyway.&lt;/p&gt;
+
+&lt;p&gt;I already improved or added the following features in webgen:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;an index content handler type which job is to list other pages' content and
+provide pagination. It also create atom and rss feeds.&lt;/li&gt;
+&lt;li&gt;a tag content handler that creates index pages, thus creating pagination and
+feeds for each and every tag.&lt;/li&gt;
+&lt;li&gt;ability to include other pages' content directly from within haml or erb.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Next, I'll want to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Have a cron job that updates the website automatically, or a git hook doing
+just that.&lt;/li&gt;
+&lt;li&gt;Look at what I can do in terms of a gallery.&lt;/li&gt;
+&lt;li&gt;Parse e-mails sent to a special mailbox to create blog post from them
+automatically&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All of this is released open source.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/02/28/migration_to_webgen/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac annotations</title>
+      <link>http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html</link>
+      <description>&lt;p&gt;Because I'm using an open world assumption, I need the compiler to generate
+annotations on units it compiles, so when it sees them again, it knows what it
+does (or does not) internally.&lt;/p&gt;
+
+&lt;p&gt;I was looking at &lt;a href=&quot;http://www.youtube.com/watch?v=ryfw9_-Hnb0&quot;&gt;a LLVM video&lt;/a&gt; this morning (VMKit precisely) and the
+person talked about an interesting optimization. What if we could allocate
+objects in stack instead of the heap. This would save time when creating the
+object. Then we wouldn't be tempted to avoid creating new objects for fear of
+memory leaks (there is not garbage collector in lisaac currently) and
+performance penalty.&lt;/p&gt;
+
+&lt;p&gt;This is the same thing as aliased variables in Ada.&lt;/p&gt;
+
+&lt;p&gt;An object can be allocated on the stack if:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is not returned by the function.&lt;/li&gt;
+&lt;li&gt;it is not stored on the heap by the function.&lt;/li&gt;
+&lt;li&gt;it is not used in a called function that would store a pointer to this
+object on the heap.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, when the compiler compiles a cluster, it has to generate an annotation file
+containing for each argument in each code slot whether the argument is
+guaranteed to remain on the stack or if it might be stored on the heap. If an
+argument is guaranteed to stay on the stack, we can allocate it on the stack.
+When the function will return, the only instances would be located in the
+current stack frame.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/29/lysaac_annotations/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Bug 660340 - Due to constant threats on privacy, epiphany should allow the user to have multiple separate session running</title>
+      <link>http://mildred.fr/Blog/2011/09/28/bug_660340_-_due_to_constant_threats_on_privacy_epiphany_should_allow_the_user_to_have_multiple_separate_session_running/index.html</link>
+      <description>&lt;p&gt;Here is my &lt;a href=&quot;https://bugzilla.gnome.org/show_bug.cgi?id=660340&quot;&gt;Bug 660340&lt;/a&gt;. I
+created it after looking at the recent facebook 'enhancements' that makes
+privacy even more precious (&lt;a href=&quot;http://linuxfr.org/news/facebook-f8-timeline-musiquevid%C3%A9o-ticker-boutons-et-les-cons%C3%A9quences-pour-le-web&quot;&gt;article in French&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;We need to quickly find a way to preserve our privacy on the Internet.&lt;/p&gt;
+
+&lt;p&gt;Hi,&lt;/p&gt;
+
+&lt;p&gt;With the recent threats of the various big internet companies on our privacy,
+it would be a great enhancement if epiphany allowed to have separate navigation
+contexts (cookies, HTML5 storage, cache) at will, and easily.&lt;/p&gt;
+
+&lt;p&gt;Some companies, especially facebook, and I suppose Google could do that as
+well, can use all kind of methods to track a user usiquely. using cache, HTML5
+storage or cookies. I wonder if they can use the cache as well, but I heard it
+could be prevented. Firefox does.&lt;/p&gt;
+
+&lt;p&gt;One solution to counter these privacy threats is to have a different browser,
+or different browser profile, for each of the web sites we load. This is
+however very inconvenient, and it should made easily possible.&lt;/p&gt;
+
+&lt;p&gt;First let define the concept of session. A session is almost like a separate
+instance of the browser. It share bookmark and preferences with other session,
+but have separate cache, separate set of cookies and separate HTML5 DOM
+storage.&lt;/p&gt;
+
+&lt;p&gt;I imagine the following behaviour, based on the document.domain of the toplevel
+document:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded without referrer, and the domain is not associated with
+an existing session, start a new session for that domain&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded without referrer, and the domain is a domain that is
+already associated with an existing session, then prompt non intrusively:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot;You already opened a session on example.com.&quot;
+Choices: [  Start a new session    ▼ ] [Use this session]
+         [[ New anonymous session   ]]
+         [  Replace existing session ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the session is started anonymously, it would not be considered for reuse&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded using a link from an existing window/tab, and the
+domain
+is the same, then share the session&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a page is loaded using a link from an existing window/tab, and the
+domain
+is NOT the same and, then a non intrusive message is displayed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot;You are now visiting example2.com. Do you want to continue your session
+from example1.com?&quot;
+Choices: [  Start a new session    ▼ ] [Share previous session]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &quot;Start a new session&quot; dropdown menu changes if the example2.com is
+already associated with a session or not. If example2.com is associated
+with a session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; [[ New anonymous session            ]]
+ [  Replace example2.com session      ]
+ [  Use existing example2.com session ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If example2.com is not associated with a session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; [[ New anonymous session    ]]
+ [  New example2.com session  ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The choices in [[xxx]] (as opposed to [xxx]) is the most privacy enhancing one,
+and would be the default if the user choose in the preferences&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[x] allow me not to be tracked
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The messages are non intrusive, they can be displayed as a banner on top of the
+page. The page is first loaded with the default choice, and if the user decides
+to use the other choice, the page will be reloaded accordingly (or the session
+will be reassigned).&lt;/p&gt;
+
+&lt;p&gt;This setting can traditionally be used to set the do not track header&lt;/p&gt;
+
+&lt;p&gt;Every settings should have a setting &quot;do not prompt me again&quot; that could be
+reset at some point.&lt;/p&gt;
+
+&lt;p&gt;About embedded content: Because toplevel pages do not share the same session
+(toplevel page opened at example.com have a different session than toplevel
+page opened at blowmyprivacy.org), if a page from example.com have embedded
+content from blowmyprivacy.org, the embedded content would not be able to track
+the user, except within the example.com website.&lt;/p&gt;
+
+&lt;p&gt;It is possible to imagine global settings that would hide some complexity:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[ ] When I load a page, always associate it with its existing session.
+[ ] When I switch website, always reuse the existing session of the new
+    website.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This user interface might seem complex at first, but it is far less complex
+than letting the user deal with different browser profiles by hand.
+Unfortunately, I don't think we can abstract privacy that easily. Keep in mind
+that all of these settings would be enabled only if the user choose to enable
+privacy settings.&lt;/p&gt;
+
+&lt;p&gt;I am ready to contribute to the implementation of this highly important feature
+(important for our future and our privacy). Do you think an extension might be
+able to do all of that, or do you think the browser code should be modified?&lt;/p&gt;
+
+&lt;p&gt;Further possible enhancements:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Add another choice for anonymous sessions using Tor (or I2P)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Add the possibility to have multiple session registered with the same
+domain. This would enable the user to have different profiles for the same
+website.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/09/28/bug_660340_-_due_to_constant_threats_on_privacy_epiphany_should_allow_the_user_to_have_multiple_separate_session_running/index.html</guid>
+    </item>
+    
+    <item>
+      <title>HTML 2.0: Why I think HTML is broken</title>
+      <link>http://mildred.fr/Blog/2011/08/05/html_2_0/index.html</link>
+      <description>&lt;p&gt;First postulate: HTML was designed as a stateless protocol&lt;/p&gt;
+
+&lt;p&gt;Context: web sites need to maintain a context (or state) to track the client.
+This is required by the log-in procedures the various websites have. It is also
+useful to track the user in a web store, to know which items the user wants to
+buy. In fact, it is requires almost everywhere.&lt;/p&gt;
+
+&lt;p&gt;The first solution to be thrown out for this problem are the cookies. People
+didn't like cookies but now, everyone accepts them. Nothing works without
+cookies. Why did people dislike cookies back then? They liked their provacy and
+cookies makes it possible to track the user. Through advertisement networks, the
+advertiser known exactly which website the user visited. And it is still the
+case now. What changed is that the users got tried to fight cookies and have
+every website break, and they got used to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;People got used to being tracked&lt;/strong&gt; just as people are used to be watched by
+video cameras in the street and people are used to get tracked by the government
+and big companies and banks.&lt;/p&gt;
+
+&lt;p&gt;Cookies are a great way to track prople, all because HTTP didn't include session
+management. The way Google track you is very simple. Google Analytics puts a
+cookie on your computer and each time you access the Google Server, they know
+it's the same person. Google is everywhere:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Many web sites are using Google APIs, or the jQuery library at Google.&lt;/li&gt;
+&lt;li&gt;Many web sites ask Google to track their users to know how many prople visit
+their page.&lt;/li&gt;
+&lt;li&gt;Google makes advertisement.&lt;/li&gt;
+&lt;li&gt;Youtube, Blogger, Picasa and others are owned by Google&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;With this alone, Google is found on almost every page. If you have an account at
+Google (YouTube, Picase, Gmail, Blogger, Android or other), they can even give a
+name or an e-mail address to all of these information.&lt;/p&gt;
+
+&lt;p&gt;Google motto is &lt;em&gt;Don't be Evil&lt;/em&gt;, they are perhaps not evil but can they become
+evil? Yes.&lt;/p&gt;
+
+&lt;p&gt;Whatever, my dream HTTP 2.0 protocol would include of course push support like
+WebSockets, but more importantly: session management. How should this be done?&lt;/p&gt;
+
+&lt;h3&gt;HTTP and Session Management&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;When the server needs a session, it initiates the session by giving a session
+token to the client.&lt;/strong&gt; The client needs to protect this token from being stolen
+and should display that a session is in pogress for this website. It could
+appear on the URL bar for example. The client could close the session at any
+moment.&lt;/p&gt;
+
+&lt;p&gt;With the token, the server provides its validity scope. Domains, subdomains,
+path. Only the resources in the session scope will receive the tocken back. If
+for example &lt;code&gt;http://example.com&lt;/code&gt; starts a session at &lt;code&gt;example.com&lt;/code&gt; but have an
+&lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt; that includes facebook. Facebook won't receive the session token. If
+Facebook wants to start a session (because the user wants to log-in) it will
+start a second session.&lt;/p&gt;
+
+&lt;p&gt;Session cannot escape the page. If you have two tabs open with facebook in each
+tab (either full page or embedded), the two facebook instances don't share the
+same session, unless the user explicitely allowed this. For instance, when
+Facebook starts a session, the browser could tell the user that Facebook already
+have an existing session and the user would be free to choose between the new
+session and the existing one.&lt;/p&gt;
+
+&lt;h3&gt;How does this solve XSS&lt;/h3&gt;
+
+&lt;p&gt;XSS is when a website you don't trust access the session of a website you trust,
+and steal it. At least I think so.&lt;/p&gt;
+
+&lt;p&gt;With this kind of session management, the session couldn't possibly be stolen.
+Suppose that the non-trusted site makes an XmlHttpRequest to gmail.com. If
+cross-domain wasn't forbidden, any web-site could read your mails.&lt;/p&gt;
+
+&lt;p&gt;With the new session management, if the untrusted site makes a request to
+gmail.com, gmail.com session wouldn't be available and the login page would be
+returned instead of the list of e-mails. If the non trusted website tries to
+log-in, you would be prompted to associate the Gmail session with the site you
+don't trust. If you aren't completely idion, you wouldn't allow the online
+pharmacy to connect to Gmail.&lt;/p&gt;
+
+&lt;h3&gt;Extra&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;What is known about you?&lt;/strong&gt; Let's take an average person that uses her credit
+card, have and Android phone with Gmail, uses Facebook:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;All your relationships are known by Google (Gmail, Google+) and Facebook&lt;/li&gt;
+&lt;li&gt;All your interests are known by Google and Facebook (Ad Sense track which
+website you visit and Facebook have a huge profile on you)&lt;/li&gt;
+&lt;li&gt;All your posessions are known to your bank&lt;/li&gt;
+&lt;li&gt;Your photograph is known by Google and Facebook (people probably took a
+photo of you and placed it on their Android phone synchronized with Google)&lt;/li&gt;
+&lt;li&gt;Your location is known (using your Android phone, your credit card, or your
+RFID card you use for public transportation)&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you ever want to keep private, it is becoming very difficult.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/08/05/html_2_0/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac: on en parle pas mais ça avance</title>
+      <link>http://mildred.fr/Blog/2011/06/28/lysaac_on_en_parle_pas_mais_ca_avance/index.html</link>
+      <description>&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/Lysaac&quot;&gt;Lysaac&lt;/a&gt; c'est ma réimplémentation du compilateur
+&lt;a href=&quot;http://lisaac-users.org&quot;&gt;lisaac&lt;/a&gt;. Jusqu'a présent, il n'y avait pas grand
+chose, mais dernièrement, il y a eu des commits intéressants:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;les variables fonctionnent
+
+&lt;ul&gt;
+&lt;li&gt;avec des valeurs par défaut&lt;/li&gt;
+&lt;li&gt;on peut les lire&lt;/li&gt;
+&lt;li&gt;et y écrire&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;on a aussi des BLOCKs, mais sans upvalues&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Ça ne paye peut être pas de mine, mais en fait, l'infrastructure du compilo est
+presque complète.&lt;/p&gt;
+
+&lt;p&gt;Prochaines avancées: héritage et affichage des erreurs&lt;/p&gt;
+
+&lt;p&gt;Et peut être après: des améliorations de syntaxe (appels de slot à paramètres et
+bien plus tard: opérateurs). Pour le moment, je me concentre sur les choses
+basiques.&lt;/p&gt;
+
+&lt;p&gt;Si vous voulez jouer, vous pouvez. Si vous avez une erreur inattendue, créez un
+scénario d'utilisation et donnez le moi (préférablement sous forme de
+&lt;a href=&quot;https://github.com/mildred/Lysaac/blob/master/features/type/struct.feature&quot;&gt;fichier &lt;code&gt;.feature&lt;/code&gt;&lt;/a&gt;).&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/06/28/lysaac_on_en_parle_pas_mais_ca_avance/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Lysaac: not talking about it but it goes forward</title>
+      <link>http://mildred.fr/Blog/2011/06/28/lysaac_not_talking_about_it_but_goes_forward/index.html</link>
+      <description>&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/Lysaac&quot;&gt;Lysaac&lt;/a&gt; is my reimplementation of the &lt;a href=&quot;http://lisaac-users.org&quot;&gt;lisaac&lt;/a&gt;
+compiler. Until now, it wasn't very interesting to look at, but recently, I
+pushed a few interesting commits:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;you now have variables
+
+&lt;ul&gt;
+&lt;li&gt;the default value is initialized correctly&lt;/li&gt;
+&lt;li&gt;the read works&lt;/li&gt;
+&lt;li&gt;the write works&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;you also have BLOCKs (sorry, no upvalues for now)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This may looks like nothing, but under the hood, the infrastructure is almost
+completely there.&lt;/p&gt;
+
+&lt;p&gt;Next thing to come: inheritance and error reporting.&lt;/p&gt;
+
+&lt;p&gt;Then perhaps, syntax improvements like keyword messages and later: operators.
+For now, I want the basic functionnality working well.&lt;/p&gt;
+
+&lt;p&gt;If you want to play with it, you can. If you get an error, create a use-case and
+propose it as a new feature. Please use as a model &lt;a href=&quot;https://github.com/mildred/Lysaac/blob/master/features/type/struct.feature&quot;&gt;the &lt;code&gt;.feature&lt;/code&gt; files&lt;/a&gt;.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/06/28/lysaac_not_talking_about_it_but_goes_forward/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Home directory package manager</title>
+      <link>http://mildred.fr/Blog/2011/06/28/home_directory_package_manager/index.html</link>
+      <description>&lt;p&gt;I always wanted to manage the files in my home directory. Generally, it's a
+complete mess and I wanted to get things right and understand the files I had.&lt;/p&gt;
+
+&lt;p&gt;At first, I just created a simple shell script that maintained symbolic links of
+the dotfiles and dordirs of my homedirs to &lt;code&gt;.local/config&lt;/code&gt;, sort of early XDG
+configuration directory. I also changed my .bashrc and later .zshrc to point to
+files in &lt;code&gt;.local/etc/profile.d&lt;/code&gt;. The shell script was reading a database in
+&lt;code&gt;.local/config/database.sh&lt;/code&gt; that contained the link information in the form.&lt;/p&gt;
+
+&lt;p&gt;The script did the following for each file declared:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if the file existed in the homedir but not in the database directory, it was
+simply moved and a link was created in its place.&lt;/li&gt;
+&lt;li&gt;if the file existed at both places, tell there is a conflict.&lt;/li&gt;
+&lt;li&gt;if the file existed in the database directory but not in the homedir, create
+the link&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The database looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;link &quot;.bashrc&quot; &quot;bashrc&quot;
+link &quot;.zshrc&quot;  &quot;zshrc&quot;
+
+# First file in home directory
+# Second file in .local/config
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My script just defined a function &lt;code&gt;link&lt;/code&gt; and sourced the database. But links
+were not easy to construct in shell. So later, I decided to rewrite it in Tcl,
+simply because the syntax is compatible (I love the Tcl syntax for that) and
+because of the wonderful &lt;a href=&quot;http://www.tcl.tk/man/tcl8.5/TclCmd/file.htm&quot;&gt;file&lt;/a&gt; command.&lt;/p&gt;
+
+&lt;p&gt;Later, I improved the script that was then called &lt;code&gt;fixdir&lt;/code&gt; to list which files
+were not managed, and display them. So I could either delete those files
+(because I don't care about them) or integrate them in the database. The script
+gained a &lt;code&gt;clean&lt;/code&gt; command to automatically remove files declared as noisy.&lt;/p&gt;
+
+&lt;p&gt;Now, I have a slightly different problem. I have now different computers which
+do not have all the same configuration. At first, I synchronized everything and
+just used the hostname in the database to get different links depending on the
+machine. But now, with my computer at work, I will not synchronize all the
+personal configurations. i have to get to a modular approach.&lt;/p&gt;
+
+&lt;p&gt;And this script did not help me in tracking what programs I installed in
+&lt;code&gt;~/.local/{bin,share,lib}&lt;/code&gt;. For this, I wanted something like &lt;a href=&quot;http://www.gnu.org/software/stow/&quot;&gt;stow&lt;/a&gt;. I
+tried using stow, but it failed with a conflict. Then I tried using
+&lt;a href=&quot;https://github.com/docwhat/homedir&quot;&gt;homedir&lt;/a&gt;. I just didn't like it because it created an ugly &lt;code&gt;~/bin&lt;/code&gt;
+instead of &lt;code&gt;~/.local/bin&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then I realized my &lt;code&gt;fixdir&lt;/code&gt; script looks much like &lt;code&gt;homedir&lt;/code&gt; already, and I
+patched it up to make it better. And there it is.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/mildred/fixdir&quot;&gt;The current version of fixdir is on github.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Let me copy the README file:&lt;/p&gt;
+
+&lt;h2&gt;What is it?&lt;/h2&gt;
+
+&lt;p&gt;This is my homedir package manager. Written first in shell then translated in
+tcl. Originally, this was just to maintain a set of symbolic links from my home
+directory to a directory where all important comfig files were stored. Then I
+decided to make it a package manager.&lt;/p&gt;
+
+&lt;h2&gt;How to install it?&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone git://github.com/mildred/fixdir.git fixdir
+fixdir_dir=&quot;$(pwd)/fixdir&quot;
+cd
+&quot;$fixdir_dir/fixdir&quot; install &quot;$fixdir_dir/hpkg.tcl&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir&lt;/code&gt; is installed in &lt;code&gt;~/.local/bin&lt;/code&gt;. Make sure it is in your &lt;code&gt;$PATH&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2&gt;How does it work&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir&lt;/code&gt; works better when you are in your target directory (homedir)&lt;/p&gt;
+
+&lt;p&gt;Invoke one action with a database file. The database file is a tcl script that
+contain all files and directories that should be linked.&lt;/p&gt;
+
+&lt;h2&gt;What else can it do?&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir unknown&lt;/code&gt; list all files not manages by fixdir in the current directory&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;fixdir clean&lt;/code&gt; remove files declared as noisy&lt;/p&gt;
+
+&lt;h2&gt;Bugs&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;fixdir list doesn't work when pwd != target directory&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/06/28/home_directory_package_manager/index.html</guid>
+    </item>
+    
+    <item>
+      <title>HMP: HTTP Message Protocol (0.1)</title>
+      <link>http://mildred.fr/Blog/2011/05/09/hmp_http_message_protocol/index.html</link>
+      <description>&lt;h2&gt;FAQ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;What is HMP:&lt;/strong&gt; It is a messaging protocol destined to replace e-mails.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why replace e-mails:&lt;/strong&gt; Because it is full of spam and unmaintainable. This
+alternative is lighter and easier to implement than a full SMTP server with
+SPAM management.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why use HTTP:&lt;/strong&gt; I'm not fan of putting everything over HTTP but it has its
+advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It has a security layer (HTTPS)&lt;/li&gt;
+&lt;li&gt;It is (relatively) simple and implemented everywhere&lt;/li&gt;
+&lt;li&gt;It manages content-types and different types of requests&lt;/li&gt;
+&lt;li&gt;It is extensible&lt;/li&gt;
+&lt;li&gt;It goes easily through proxys and NATs&lt;/li&gt;
+&lt;li&gt;It allows multiplexing many different resources on the same server&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;In the long run, perhaps we should move away from HTTP as:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It is too associated with the web&lt;/li&gt;
+&lt;li&gt;It doesn't allow initiative from the server.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;WebSockets could be a good alternative one day.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;How do I get my messages:&lt;/strong&gt; Not specified, although you could possibly
+authenticate using a standard HTTP method to the same resource as your
+address and issue a GET command.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Does this allows a web implementation:&lt;/strong&gt; Yes, it will need to be further
+specified but if the server detects a browser request (without the HMP
+headers) on the resource, it could issue a web-page with a form.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Is the message format specified&lt;/strong&gt;: no, it needs to be. I plan on using
+JSON.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Do you plan an implementation:&lt;/strong&gt; Yes, using probably node.js or Lua.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;What prompted this:&lt;/strong&gt; The Tor network doesn't have any standard messaging
+system. I don't believe SMTP is suited for that.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Why write this spec, you have no code to back this up:&lt;/strong&gt; because I like
+writing specs, and it's a way for me to remind me to write the code, and to
+tell me how I should write it. I might not get the time to write this as
+soon as I want.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What is a hmp address&lt;/h2&gt;
+
+&lt;p&gt;Scheme:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[hmp:]server[:port][/path]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hmp:gmail.com:80/user
+gmail.com:80/user
+gmail.com/user
+
+domain.org/u/alicia
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Translation to HTTPS resources&lt;/h2&gt;
+
+&lt;p&gt;A HMP address can directly be translated to an HTTPS resource. The standard
+scheme translates to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;https://server:port/path
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Message sending overview&lt;/h2&gt;
+
+&lt;p&gt;To send a message from &lt;code&gt;domain.org/alicia&lt;/code&gt; to &lt;code&gt;users.net/~bob&lt;/code&gt;, the sequence is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Connection to users.net:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[1] POST https://users.net/~bob
+[1] HMP-Pingback: 235
+[1] HMP-From: domain.org/alicia
+[1] Content: message-content
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;users.net opens a connection to domain.org&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[2] GET https://domain.org/alicia
+[2] HMP-Pingback: 235
+[2] HMP-Method: MD5
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;domain.org responds to users.net&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[2] HMP-Hash: ef0167eca19bb2d4c8dfe4c3803cc204
+[2] Status: 200
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;users.net responds to the original sender&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[1] Status: 200
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Headers to the POST request&lt;/h2&gt;
+
+&lt;p&gt;The POST request is the request used to post a message. It contains two specific
+headers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;HMP-From: The address the message is sent from&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;HMP-Pingback: A sequence number that uniquely identifies the message for the
+sender. it needs not be unique, as long as at ont point in time, there are
+only one message corresponding to this ID.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Particular status codes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;200 in case of success&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;403 in case the From address could not be authenticated&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;From address authentication, pingpack&lt;/h2&gt;
+
+&lt;p&gt;In order to avoid SPAM, the sender must be authenticated when the message is
+sent. For this reason, before accepting or rejecting the request, the server
+must initiate a pingback procedure to the sender.&lt;/p&gt;
+
+&lt;p&gt;First, the From address is converted to an HTTPS resource and a GET connection
+is initiated. The specific request-headers are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;HMP-Pingback: the pingback sequence number from the previous request&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;HMP-Method: method for verifying the originating message. The only specified
+method is &quot;MD5&quot;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;MD5 Method&lt;/h3&gt;
+
+&lt;p&gt;In case the message is recognized, the from server responds with the following
+header:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HMP-Hash: MD5 hash of the content of the message identified by the pingback
+identifier&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The status code can be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;200 in case the message was recognized&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;404 in case the message was not found&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If the MD5 sum corresponds to the message received and a success code was given,
+the from is verified and the message can be sent.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/05/09/hmp_http_message_protocol/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/fedora/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:18:44 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:18:44 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>Mise à jour périlleuse avec Fedora 14</title>
+      <link>http://mildred.fr/Blog/2010/09/28/probleme-fedora-14/index.html</link>
+      <description>&lt;p&gt;Tout commence à mon avis avec une simple mise à jour de mon installation
+principale de Fedora: &lt;code&gt;sudo yum upgrade --skip-broken&lt;/code&gt;. Tout semble bien se
+passer et je continue à travailler.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Sep 28 09:37:34 Updated: glibc-common-2.12.90-13.x86_64
+Sep 28 09:42:00 Updated: glibc-2.12.90-13.x86_64
+Sep 28 09:42:55 Updated: glibc-headers-2.12.90-13.x86_64
+Sep 28 09:51:07 Updated: selinux-policy-3.9.5-7.fc14.noarch
+Sep 28 09:53:27 Updated: nscd-2.12.90-13.x86_64
+Sep 28 09:55:02 Updated: gdb-7.2-15.fc14.x86_64
+Sep 28 09:58:00 Updated: planner-0.14.4-26.fc14.x86_64
+Sep 28 10:01:25 Updated: gnome-user-share-2.30.1-1.fc14.x86_64
+Sep 28 10:10:48 Updated: selinux-policy-targeted-3.9.5-7.fc14.noarch
+Sep 28 10:11:04 Updated: glibc-devel-2.12.90-13.x86_64
+Sep 28 10:11:16 Updated: rpmdevtools-7.10-1.fc14.noarch
+Sep 28 10:12:34 Updated: glibc-debuginfo-2.12.90-13.x86_64
+Sep 28 10:12:58 Updated: glibc-2.12.90-13.i686
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Soudain, plus rien ne marche. N'importe quelle commande me retourne un segfault,
+j'essaie d'ouvrir un nouvel onglet dans mon émulateur de terminal, il se ferme
+aussitôt. Je tente de me déconnecter pour me reconnecter, pensant que cela
+résoudrait le problème, mais en me déconnectant, l'interface graphique tombe en
+rade et sur la console, j'ai un message qui tourne en boucle concernant le
+daemon abrt chargé d'enregistrer tous les crash pour en faire des rapports de
+bugs. Je tente de redémarrer l'ordinateur, mais ça ne marche pas, alors je
+l'arrête de force.&lt;/p&gt;
+
+&lt;p&gt;Je le redémarre, et ...&lt;/p&gt;
+
+&lt;p&gt;J'ai une erreur dans &lt;code&gt;/sbin/init&lt;/code&gt;, un segfault qui à été localisé dans &lt;code&gt;ld.so&lt;/code&gt;.
+Je tente avec &lt;code&gt;init=/bin/sh&lt;/code&gt; ou encore &lt;code&gt;selinux=0&lt;/code&gt; sans résultat.&lt;/p&gt;
+
+&lt;p&gt;Je panique.&lt;/p&gt;
+
+&lt;p&gt;Comment faire ? Démarrer sur un système de secours bien sûr. Je resors une clef
+USB que je pensait cassée, mais elle marche et j'arrive à booter sur une
+Fedora 13 i686. Génial.&lt;/p&gt;
+
+&lt;p&gt;Je tente un &lt;code&gt;chroot /mnt/fedora /bin/init&lt;/code&gt; ... bien sûr le format du binaire
+n'est pas reconnu, c'est un binaire 64bits et le kernel de la clef USB est
+32 bits uniquement.&lt;/p&gt;
+
+&lt;p&gt;Je tente un &lt;code&gt;yum --installroot=/mnt/fedora info glibc&lt;/code&gt; et j'ai un problème de
+versions de base de donnée qui ne correspond pas.&lt;/p&gt;
+
+&lt;p&gt;Conclusion, il me faut une clef USB avec Fedora 14 x86_64. Je commence à
+télécharger l'image ISO et je passe en BitTorrent qui est bien plus rapide. Bien
+sûr, je l'enregistre dans le dossier /home virtuel, donc au bout d'un moment, le
+système est trop rempli et freeze. Je recommence en l'enregistrant sur un disque
+dur externe et c'est bon.&lt;/p&gt;
+
+&lt;p&gt;Et là, il faut que je change le système qui se trouve sur ma clkef USB que je
+suis en train d'utiliser. Chaud !&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dd if=F14.iso of=/dev/sdb bs=16M
+sync
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bien sûr, la commande sync ne marche plus. J’attend donc patiemment que la LED
+de la clef USB s'arrête pour éteindre sauvagement l'ordinateur. Je le relance
+avec le nouveau système et je peux enfin taper la commande qui va me sauver la
+vie:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum --installroot=/mnt/fedora reinstall glibc
+
+Sep 28 11:42:43 Installed: glibc-2.12.90-13.x86_64
+Sep 28 11:42:57 Installed: glibc-2.12.90-13.i686
+(je dois préciser que l'ordinateur avait 2h de retard cart l'orloge système
+ est réglée UTC, il était donc réellement 13:42)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;J'avais essayé un &lt;code&gt;yum downgrade&lt;/code&gt; mais ça prenait trop de temps et impactait
+trop de packages. Je peux alors enfin faire un chroot sans segfault:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chroot /mnt/fedora /bin/sh
+sh#
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Miracle!&lt;/p&gt;
+
+&lt;p&gt;Je redémarre et tout rentre dans l'ordre.&lt;/p&gt;
+
+&lt;p&gt;Note: il s'agit du
+&lt;a href=&quot;https://bugzilla.redhat.com/show_bug.cgi?id=638091&quot;&gt;bug 638091&lt;/a&gt;&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2010/09/28/probleme-fedora-14/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+
