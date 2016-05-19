@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>How to update your Bind DNS Server from Avahi - Mildred's Website</title>
+    <meta charset='utf-8'>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content='en, freedombox, comp' name='keywords'>
+    <meta content='' name='description'>
+    <meta content='initial-scale=1.0, width=device-width' name='viewport'>
+    <meta content='article' name='x-kind'>
+    <link href='http://mildred.fr/Blog/2011/03/22/update-bind-dns-from-avahi/' rel='canonical'>
+    <link href='../../../../../favicon.png' rel='icon' type='image/png'>
+    <link href='../../../../../favicon.png' rel='shortcut icon' type='image/png'>
+    <link href='../../../../../style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script src='../../../../../Scripts/json/json2.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/jquery.min.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/comments.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/local.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='header'>
+      <p class='access-links'>
+        <a href='#menu'>Go to Menu</a>
+        <br>
+        <a href='#content'>Go to Content</a>
+      </p>
+      <div class='left'>
+        <a href='../../../../../'>
+          <img alt='My photo' class='photo' src='../../../../../Images/IMG_5669_square_128.jpeg'>
+        </a>
+      </div>
+      <div class='title'>
+        <h1>
+          <a href='../../../../../'>Mildred's Website</a>
+        </h1>
+      </div>
+      <div class='float-right'></div>
+      <div class='clear-right'></div>
+      <div class='right'>
+        <strong>Tags:</strong>
+        <ul class='tags'>
+          <li>
+            <a class='tag' href='../../../../../tags/cobra/'>cobra</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/comp/'>comp</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/configuration/'>configuration</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dev/'>dev</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dream/'>dream</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/en/'>en</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fedora/'>fedora</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fr/'>fr</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/freedombox/'>freedombox</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/git/'>git</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/html/'>html</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/idea/'>idea</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/liens/'>liens</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lysaac/'>lysaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/misc/'>misc</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/photos/'>photos</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/physics/'>physics</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/politique/'>politique</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/privacy/'>privacy</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/srs/'>srs</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/test/'>test</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/web/'>web</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/website/'>website</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwgen/'>wwwgen</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwsupport/'>wwwsupport</a>
+          </li>
+        </ul>
+      </div>
+      <div class='content'>
+        <div class='links' id='menu'>
+          <ul>
+            <li>
+              <a href='../../../../../'>Home</a>
+            </li>
+            <li>
+              <a href='../../../../'>Blog</a>
+            </li>
+            <li>
+              <a href='//survie.mildred.fr'>Survie</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class='clear'></div>
+    </div>
+    <div class='leftcol'>
+      <img alt='My avatar' class='photo' src='../../../../../Images/all128.jpeg'>
+      <hr>
+      <p>GoogleTalk, Jabber, XMPP address:
+      <br /><strong><a href="xmpp:mildred&#64;jabber.fr">mildred&#64;jabber.fr</a></strong><!--&nbsp;<img src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/image-dcraven.png" alt="" /><br /><em><script type="text/javascript" src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/message_js.js"></script></em>-->
+      </p>
+      <hr>
+      <p>
+        <a href='../../../../../gpg_key.txt'>GPG Public Key</a>
+        <br>
+        <span style='font-size: 0.8em'>
+          (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+        </span>
+      </p>
+    </div>
+    <div class='main' id='content'>
+      <h1>How to update your Bind DNS Server from Avahi</h1>
+<p class='meta'>
+  <span class='date-time'>
+    <span class='date'>Tue 22 Mar 2011,</span>
+    <span class='time'>10:10 AM</span>
+  </span>
+  <span class='tags'>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/comp/'>comp</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/en/'>en</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/freedombox/'>freedombox</a>
+    </span>
+  </span>
+</p>
+<div class='body'><p>Attention: this post contains wrong information. What I discovered wasn't a way
+tu publish services to a DNS server but publish local workstations to the DNS.</p>
+
+<p>Following my previous post, I wondered how to update the DNS server from Avahi.
+<a href="http://www.gamers-forum.com/showthread.php?t=17882">I was not alone</a>. I found a script that could be run as a cron job that
+does the job. The next step is to use Avahi notifications instead of pooling
+every minute.</p>
+
+<!--
+
+Now, the script (in PHP, better to rewrite in something sensible):
+
+    #!/usr/bin/php
+
+    <?php
+    $avahidata = explode("\n",`avahi-browse -ptr _workstation._tcp`);
+
+    $hosts="server localhost\nzone local\n";
+    $pointers="server localhost\nzone 0.168.192.in-addr.arpa\n";
+
+    $oldhosts="server localhost\nzone local\n";
+    $oldpointers="server localhost\nzone 0.168.192.in-addr.arpa\n";
+
+    for($i=0;$i<count($avahidata)-1;$i++){
+        $hostInformation=explode(";",$avahidata[$i]);
+        if($hostInformation[0] != "=") continue;
+
+        $hostname=$hostInformation[6];
+        $hostaddr=$hostInformation[7];
+        $ptraddr=implode(".",array_reverse(explode(".",$hostaddr)));
+
+        $hosts.="update add $hostname 2400 A $hostaddr\n";
+        $pointers.="update add $ptraddr.in-addr.arpa 2400 PTR $hostname\n";
+
+        $oldhosts.="update delete $hostname A\n";
+        $oldpointers.="update delete $ptraddr.in-addr.arpa PTR\n";
+    }
+
+    $hosts.="send\n";
+    $pointers.="send\n";
+
+    $oldhosts.="send\n";
+    $oldpointers.="send\n";
+
+    echo `cat .dns_purge_hosts | nsupdate`;
+    echo `cat .dns_purge_pointers | nsupdate`;
+
+    echo `echo "$hosts" | nsupdate`;
+    echo `echo "$pointers" | nsupdate`;
+
+    file_put_contents(".dns_purge_hosts",$oldhosts);
+    file_put_contents(".dns_purge_pointers",$oldpointers);
+
+    ?>
+
+And configure Bind to allow updates from localhost:
+
+    acl lan { 192.168.0/24; 127.0.0.1; };
+
+    options {
+        directory "/var/named";
+        pid-file "/var/run/named/named.pid";
+        auth-nxdomain yes;
+        datasize default;
+        listen-on { any; };
+        forward first;
+        forwarders {
+            8.8.8.8;
+            8.8.4.4;
+        };
+    };
+
+    zone "local" {
+        type master;
+        file "local.zone";
+        check-names ignore;
+        allow-transfer { lan; };
+        allow-update { lan; };
+    };
+
+    zone "0.168.192.in-addr.arpa" {
+        type master;
+        file "0.168.192.in-addr.arpa.zone";
+        check-names ignore;
+        allow-transfer { lan; };
+        allow-update { lan; };
+    };
+
+-->
+
+
+<p>Thanks to <a href="http://gamers-forum.com/member.php?u=35088">leica</a></p>
+
+<p>edit: probably a better solution would to still use mDNS over unicast DNS (wide
+area). See a post from <a href="http://0pointer.de/blog/projects/avahi-wide-area.html">Lennart Poettering</a>.</p></div>
+      <noscript>
+        <p>
+          Scripts are disabled on your computer. In order to access existing
+          comments and post new comments, you need to enable Javascript.
+        </p>
+        <p>
+          Rationale: This server that hosts my website is a static server.
+          In order to implement comments, a XmlHttpRequest is made on an API
+          server to both retrieve the comments and post a new comment.
+        </p>
+      </noscript>
+      <div class='clear'></div>
+    </div>
+    <div class='clear'></div>
+    <div class='footer'>
+      <hr>
+      <p>E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a></p>
+      <p>Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+      I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/test/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:19:43 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:19:43 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>Testing image attachment in blog posts</title>
+      <link>http://mildred.fr/Blog/2012/10/28/testing_image_attachment_in_blog_posts/index.html</link>
+      <description></description>
+      <pubDate>Sun, 28 Oct 2012 14:07:41 +0100</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/10/28/testing_image_attachment_in_blog_posts/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

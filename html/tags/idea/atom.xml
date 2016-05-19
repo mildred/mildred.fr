@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/idea/" rel="alternate" />
+  <link href="http://mildred.fr/tags/idea/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:19:00+01:00</updated>
+  <id>http://mildred.fr/tags/idea/</id>
+
+  
+  <entry>
+    <title type="html">wwwgen: imagined architecture</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/09/13/wwwgen_imagined_architecture/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-09-13T15:30:42+02:00</published>
+    
+    <content type="html">&lt;p&gt;I started writing wwwgen: a website generator that uses redo for its
+dependency tracking. Unfortunately, I might not have taken the correct
+approach to the problem. I reuse the webgen concepts, and that might be
+a bad idea.&lt;/p&gt;
+
+&lt;p&gt;Specifically, webgen (and my first version of wwwgen) are bottom-up
+systems (you take the sources and build everything they can generate).
+The problem is that redo itself is top-down (you take the target and
+build it, building sources as they are needed), and I tried to make the
+two match. It's very difficult, and impossible to do with a clean design.&lt;/p&gt;
+
+&lt;p&gt;What I'd like to have is a simple &lt;code&gt;wwwgen&lt;/code&gt; binary that generates a HTML
+file from a source file. Let's imagine how it could work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with no templates, just generate
+the HTML and this is it&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a simple page with a template, redo-ifchange the
+template source and build the HTML combining the two&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, we have a problem because multiple
+outputs are generated. Redo doesn't support this case and we must find a
+way to make it work.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So, we have a problem here ...&lt;/p&gt;
+
+&lt;p&gt;Now, we have another problem. Specifically, my source file is called
+&lt;code&gt;title.page&lt;/code&gt; and I want my output file to be &lt;code&gt;title/index.html&lt;/code&gt;. In
+webgen, this is implemented by a configuration in &lt;code&gt;title.page&lt;/code&gt; telling
+it to build in &lt;code&gt;title/index.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a solution to solve both problems at once. the wwwgen command
+creates an archive (the formats needs to be defined, it could be tar, or
+different yaml documents in the same file for example). Then, the build
+process would be:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; find src -name &quot;*.src&quot; \
+   | sed 's/src$/gen/' \
+   | xargs -d '\n' redo-ifchange
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;wwwgen generate&lt;/code&gt; would parse the source file and generate an archive,
+that will be unpacked later by &lt;code&gt;wwwgen unpack&lt;/code&gt;. Let's see how it can work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The source file can choose where it unpacks, relatively to the
+directory where the source file is&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is an index, it will redo-ifchange the other source
+files for the index and redo-ifchange the template, generate multiple
+pages packed together.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the source file is a tag tree (a special source that doesn't output
+anything on its own but create index files dynamically), then it parses
+every child to find a canonical list of tags and the paths they refer
+to. Then, it creates the index files. Unfortunately, those index files
+will never be compiled until next build.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How an we improve the design to be able to create source files dynamically.&lt;/p&gt;
+
+&lt;p&gt;There are different views to the problem:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;pages, index and tags should all generate all the output files they
+are related to. It means that index files should be able to generate
+pages, and tags should be able to generate indexes and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;pages should generate the output file, index should generate pages and
+feeds and tags should generate index.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mixed solution (the one described): pages generate output file, index
+should generate the output files as well and tags generates index.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;How can we generate source files on the fly:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;have a predefined compilation order: first tags, then index and lastly
+feeds and pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;rebuild everything until no more source files are generated. We might
+build unnecessary things.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I prefer the second solution which is more flexible, but we need a way
+to avoid building things twice. For example, it's not necessary to build
+a page if on the next phase the page source is going to be regenerated.&lt;/p&gt;
+
+&lt;p&gt;Very simply, the generated page can contain a link to the index source
+file that generated it, and when generating the page, &lt;code&gt;redo-ifchange&lt;/code&gt; is
+run on the index file.&lt;/p&gt;
+
+&lt;p&gt;Next question: what if a tag is deleted. The corresponding index page is
+going to stay around until the next clean. The tag page should keep
+around a list of index files it generated and delete them when a tag is
+no longer detected. And deleting the index should not be done using &lt;code&gt;rm&lt;/code&gt;
+because the index will need to delete the pages it generated. The best
+solution would be to integrate to redo to detect these files.&lt;/p&gt;
+
+&lt;p&gt;The build scripts now are:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; oldsrclist=
+ srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ while [ &quot;$oldsrclist&quot; != &quot;$srclist&quot; ]; do
+   echo &quot;$srclist&quot; \
+     | sed 's/src$/gen/' \
+     | xargs -d '\n' redo-ifchange
+   oldsrclist=&quot;$srclist&quot;
+   srclist=&quot;$(find src -name &quot;*.src&quot;)&quot;
+ done
+
+ find src -name &quot;*.gen&quot; \
+   | xargs -d '\n' wwwgen unpack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;default.gen.do&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; redo-ifchange &quot;$2.src&quot;
+ wwwgen --redo-dependencies -o &quot;$3&quot; generate &quot;$2.src&quot;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">A New Architecture for the Web</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/07/26/a_new_architecture_for_the_web/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/07/26/a_new_architecture_for_the_web/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-07-26T12:37:15+02:00</published>
+    
+    <content type="html">&lt;p&gt;I want a new architecture for the web. But what web ?&lt;/p&gt;
+
+&lt;h2&gt;The Traditional Web&lt;/h2&gt;
+
+&lt;p&gt;A Web Site is a collection of Web Pages. A Web Page is a document, a
+static document I might add. The document contains text, images, sound
+and videos to present some information to the public. This is the
+traditional version of the web that I respect very much.&lt;/p&gt;
+
+&lt;p&gt;There is no need to change this as it works very well. The web was
+designed to allow a collection of documents to be accessed and does the
+job very well&lt;/p&gt;
+
+&lt;p&gt;The one this that is sensible to do however is not to use any scripting
+language to render the content of the pages. By definitions, these pages
+are static, using a scripting language like PHP is not only going to be
+inefficient, but is going to be a security risk.&lt;/p&gt;
+
+&lt;h2&gt;Web Applications&lt;/h2&gt;
+
+&lt;p&gt;This is an entire different thing, and the way we do this is completely
+wrong. We think that a web application is a collection of dynamic web
+pages. This should be erased from your mind.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A Web Application is an application of its own right.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Most unfortunately, applications are written in HTML which is not suited
+for this purpose. The widgets are very few and the framework is not
+suited to create complex User Interfaces.&lt;/p&gt;
+
+&lt;h3&gt;The very bad thing to do&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;You should not do this.&lt;/strong&gt; Unfortunately, this is how it works for most.&lt;/p&gt;
+
+&lt;p&gt;A very bad programmer is going to create a web page for each of the
+different aspects of its program. The web page would be dynamically
+generated on the server using a template engine. Some JavaScript would
+be included in this mess to avoid refreshing a page while in fact you
+should.&lt;/p&gt;
+
+&lt;p&gt;This is bad because you'll have a ton of page refresh, and that's bad
+for the user. If you're not using JavaScript, this is the old way of web
+applications and is acceptable, but if you're using JavaScript for more
+than a few things, it's bad.&lt;/p&gt;
+
+&lt;p&gt;You shouldn't use JavaScript to change the content of a page to match
+what the server would generate just to avoid a refresh. Just because
+this is just a way to recreate a template engine on the client that is
+redundant with the one on the server.&lt;/p&gt;
+
+&lt;p&gt;And if you are using JavaScript to change the content of a page to get
+the content that you should generally see in another page, you're a
+moron. This breaks the back/forward mechanism and is very bad.&lt;/p&gt;
+
+&lt;p&gt;The only sensible thing to do  in this configuration with JavaScript is
+to script the user interface. Show hidden sections, enable a button.
+Don't contact the server using AJAX, you are already getting information
+from the server using normal page reload.&lt;/p&gt;
+
+&lt;h3&gt;The sensible thing to do&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Please do this!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An application is an application. It's a bundle and can't be separated
+into pages. It can be separated into sub-sections if you want, but those
+will necessarily trigger a page refresh.&lt;/p&gt;
+
+&lt;p&gt;The application should be the equal of a desktop application using a
+native toolkit, except that web technologies are used instead.
+Contacting the server should be limited to what is necessary only
+(fetching resources, exchange data, ...). In particular, the templates
+should be on the client side.&lt;/p&gt;
+
+&lt;p&gt;On the server side, you'd have just a classic Web API, and static
+resources. The Web API should be designed with care and security in
+mind. It should be easily shared with third parties that want to
+integrate within your application.&lt;/p&gt;
+
+&lt;p&gt;It is as simple as that:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Server = Web API + Resources&lt;/li&gt;
+&lt;li&gt;Client = UI (incl templates)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I heard that SproutCore is a solution to work this way, but it was
+horrible to use it as well.&lt;/p&gt;
+
+&lt;p&gt;Perhaps, we need to get away from frameworks, there are many solutions
+that can integrate well together and that don't need a framework. Read
+this article for example: &lt;a href=&quot;http://blog.getify.com/grab-ui-by-the-handlebar/&quot;&gt;Grab UI by the Handlebar&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;An Example&lt;/h2&gt;
+
+&lt;p&gt;I have a very simple example to show you what I mean, the comment
+mechanism on this website. Each page contain a JavaScript script (just
+look at the sources) that will add the comment features. The page
+delivered by the server contain no information about the comments,
+except a &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt; tag to tell the people without JavaScript that
+they miss the comments.&lt;/p&gt;
+
+&lt;p&gt;The script does an AJAX query on a third party server (with PHP and a
+database). The arguments are the URL of the page and the answer is the
+JSON formatted list of comments for the page. These comments are then
+presented on the page. (The refresh link does this again)&lt;/p&gt;
+
+&lt;p&gt;The script also creates a form to add a comment. When the form is
+submitted, an AJAX query is made with the URL of the page and the
+content of the comment as arguments.&lt;/p&gt;
+
+&lt;p&gt;This is how all web applications should work.&lt;/p&gt;
+
+&lt;h2&gt;Going further: static databases on the server&lt;/h2&gt;
+
+&lt;p&gt;I already wrote an article on this, but I'll summarize the idea here.&lt;/p&gt;
+
+&lt;p&gt;With this new idea for web applications, the application logic is moved
+from the server to the client. Perhaps not all the way, but for simple
+applications like the comments above, the server API is nothing much
+than a fancy database API.&lt;/p&gt;
+
+&lt;p&gt;Why not model a database on this model? But it already exists:
+&lt;a href=&quot;https://en.wikipedia.org/wiki/CouchDB&quot;&gt;CouchDB&lt;/a&gt;. This is a database which API is a web API. I want to
+take the principles of this database and mix them with the ideas of a
+static page generator.&lt;/p&gt;
+
+&lt;p&gt;The idea is that read only access when the resource URL is known, a
+static page should correspond to the URL and a classic web server should
+answer the query.&lt;/p&gt;
+
+&lt;p&gt;Only update and search queries would be filtered by the web server to a
+FastCGI application that is going to update the static files, or look at
+them to answer the search.&lt;/p&gt;
+
+&lt;p&gt;I find it difficult to find advantages of this compared to CouchDB.
+There is one thing, your data will always be accessible read only. No
+obscure database format that require a database server that might not
+work on new hardware, might not be maintained any more...&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;With this approach, most web applications could be composed of static
+assets that are accessing a database with a Web API. The static assets
+and the database could be on the same server or on a different one. No
+limit is posed here, except the same origin restriction of web browsers.&lt;/p&gt;
+
+&lt;p&gt;Fortunately, a new standard (that I'm using for the comments of this
+website) let you specify if the same origin policy should apply or not:
+&lt;a href=&quot;http://www.w3.org/TR/access-control/&quot;&gt;Cross-Origin Resource Sharing&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;What about Cookies Then?&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;They should not exist in their current form.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This was a late addition to the HTTP standard, because it was already
+implemented. It was never really thought of, and is a breach of the
+original HTTP model.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The cookies are what allows XSS vulnerabilities, NOT JavaScript&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The current web community takes the things the wrong way. Instead of
+damning cookies forever, they blame on JavaScript and try to build walls
+all over the place to avoid XSS while there is a most simple solution.&lt;/p&gt;
+
+&lt;h3&gt;What are XSS?&lt;/h3&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Cross-site scripting (XSS) is a type of computer security vulnerability typically found in Web applications, such as web browsers through breaches of browser security, that enables attackers to inject client-side script into Web pages viewed by other users. A cross-site scripting vulnerability may be used by attackers to bypass access controls such as the same origin policy. Cross-site scripting carried out on websites accounted for roughly 84% of all security vulnerabilities documented by Symantec as of 2007.[1] Their effect may range from a petty nuisance to a significant security risk, depending on the sensitivity of the data handled by the vulnerable site and the nature of any security mitigation implemented by the site's owner.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;(Source: &lt;a href=&quot;https://en.wikipedia.org/wiki/Cross-site_scripting&quot;&gt;Wikipedia&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;This is a wrong way to look at the problem. Inclusion of other items in
+web pages dates from the very beginning. It is the foundation of the
+web. What allows to have rich documents, with links between them. The
+same origin policy is just one of these walls that I talked about, that
+assumes that all pages on the current domain can be trusted. Is that true?&lt;/p&gt;
+
+&lt;p&gt;The real story is that if the design of the web was correct, the script
+injected by attackers in web pages would be completely harmless. The
+same origin policy shouldn't exist and bypassing it should be by no mean
+be a security risk.&lt;/p&gt;
+
+&lt;p&gt;We have come to a situation where WebGL can be a security risk because
+it can determine the colours of an image included in the web page. Just
+because an image can, from the very beginning of the web, bypass the
+same origin policy. Some people say that images should respect the same
+origin policy, but what they don't imagine is that we could just forget
+all of this mess.&lt;/p&gt;
+
+&lt;h3&gt;The Real Problem.&lt;/h3&gt;
+
+&lt;p&gt;The &lt;em&gt;real&lt;/em&gt; problem is that when loading foreign content, though AJAX,
+the use of images or whatever, a page can load a foreign page where you
+are logged in using cookies. And access your foreign account. For
+example your bank account.&lt;/p&gt;
+
+&lt;p&gt;The problem is that the page containing the XSS script was granted the
+access to the cookie protecting your bank account.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Why the hell your bank account is just protected by a cookie than any
+page can have access to???&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3&gt;The solution&lt;/h3&gt;
+
+&lt;p&gt;Unless you have in your address bar the address of your bank, the cookie
+protecting your bank account should be locked away. In fact, instead of
+having everything in a page respect the same origin policy, &lt;strong&gt;cookies
+should be the single thing respecting the same origin policy;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is just a change in the handling of the cookie by the browser. Not
+a very big change at that. Only cookies for the domain in the address
+bar should be exploitable. But it would break a number of assumption:&lt;/p&gt;
+
+&lt;p&gt;Third party cookies would no longer exist, this would be a big shock for
+advertisers and tracking programs. A loss for these companies, but a win
+for personal privacy.&lt;/p&gt;
+
+&lt;h4&gt;Allow third party cookies nonetheless&lt;/h4&gt;
+
+&lt;p&gt;We could nonetheless allow third party cookies, but only in the context
+of a specific page:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;each tab/window of the browser share the same cookie jar for the requests&lt;/li&gt;
+&lt;li&gt;for each tab/window, a separate cookie jar would be assigned that will
+be emptied when a link is followed to a different origin&lt;/li&gt;
+&lt;li&gt;the sub-elements of a page that are not of the same origin of the page
+itself, should have their cookies in the sub cookie jar only&lt;/li&gt;
+&lt;li&gt;if there are sub-sub elements, they should be assigned to a sub-sub
+cookie jar recursively.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h4&gt;Allow third party cookies to access the main cookie jar on demand&lt;/h4&gt;
+
+&lt;p&gt;This would nonetheless break a number of things. Third party scripts
+expect to see the same cookies they set a while ago, even if it was not
+on the same page.&lt;/p&gt;
+
+&lt;p&gt;A solution to this problem would be to add an option in the browser UI
+to specifically allow a third party script in a page to access the
+global cookie jar. There would be a button saying for example &quot;Some
+cookies have been blocked&quot;. When clicked it would open a menu with:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Allow access to ad.doubleclick.com&lt;/li&gt;
+&lt;li&gt;Allow access to facebook.com&lt;/li&gt;
+&lt;li&gt;Allow access to my-bank.com&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;A sensible person would not allow a blog with an XSS script access his
+bank website, but would allow facebook if he wants to use a facebook button.&lt;/p&gt;
+
+&lt;h4&gt;Browser plugins, anyone ?&lt;/h4&gt;
+
+&lt;p&gt;I'd love a browser plugin for that !&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, on Firefox, creating sub cookie jar would be difficult
+due to the architecture of it. Webkit is better on that.&lt;/p&gt;
+
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Cookies aren't necessarily bad, they should just respect the same origin
+policy they introduced instead of imposing it to all of the other
+elements of a page. This can already be done now in web browsers, it
+just needs a consensus. Or at least, an extension with the right UI to
+bypass the same origin on demand when the scripts needs to.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">WWWGen : Static Page Generator and Beyond</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-07-26T10:57:35+02:00</published>
+    
+    <content type="html">&lt;p&gt;I want to create a new static webpage generator. There are tons of them,
+you'll tell me, why do I want to create a new one?&lt;/p&gt;
+
+&lt;h2&gt;Static Website Generator&lt;/h2&gt;
+
+&lt;p&gt;Let's see what we have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;webby: my first love&lt;/li&gt;
+&lt;li&gt;nanoc: the second one I used&lt;/li&gt;
+&lt;li&gt;webgen: the one I'm using currently (with tons of local modifications)&lt;/li&gt;
+&lt;li&gt;jekyll: powering GitHub pages&lt;/li&gt;
+&lt;li&gt;and many more most probably&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Most of these systems take the assumption that you are a developer and
+you are comfortable to write code to have your website running. In all
+of these systems, I was forced to code some Ruby here and there to get
+it working how I wanted to.&lt;/p&gt;
+
+&lt;p&gt;The case of nanoc3 is very special because the main configuration uses a
+special Ruby DSL to manage the path locations. If you have non technical
+users, they won't be willing to write code in this file anyway. And for
+technical users, it might not be powerful enough.&lt;/p&gt;
+
+&lt;p&gt;Jekyll is probably the simplest system and can probably be used by non
+technical users, but it is far too simple and not powerful enough.
+That's why I didn't used it.&lt;/p&gt;
+
+&lt;p&gt;In the end, I modified Webgen a lot to include the following features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ability to write ruby code in haml instead on having to rely on the
+template engine included in webgen&lt;/li&gt;
+&lt;li&gt;special .index nodes that will generate a paginated index of articles
+found dynamically. The index would contain the last articles in reverse
+order while the pages will contain each N articles in the natural order.
+This way, an article that end up on page 3 is always going to be on page 3.&lt;/li&gt;
+&lt;li&gt;special .tags nodes that will generate .index pages dynamically to
+create an index or articles for each tag.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you look around, there are not many static web page generators that
+permit that. First, I decided I would maintain my own version of webgen
+with these modifications, but now, I have the idea that the code base is
+so horrible that I prefer rewrite the same functions from scratch.&lt;/p&gt;
+
+&lt;h2&gt;Rewriting From Scratch&lt;/h2&gt;
+
+&lt;p&gt;As I said, I'm not satisfied with the current status of the webgen code.
+There is a complex system of cache, and a blackboard object that is used
+to dispatch method call to the correct objects around the system. The
+problem is that this extra indirection level makes it difficult to know
+the code path. It would be useful if the hooks in the blackboard would
+be highly dynamic, but it's mostly static. it serves no purpose whatsoever.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I don't like big programs that do everything. And all of these
+static website generators have a component that is used to determine
+which pages are out of date, and only update them. This is traditionally
+what make(1) should do. And recently, I found that
+&lt;a href=&quot;https://github.com/apenwarr/redo/&quot;&gt;redo&lt;/a&gt; does the job very well. So, I want it to be an integral
+part of my new system.&lt;/p&gt;
+
+&lt;h2&gt;WWWSupport&lt;/h2&gt;
+
+&lt;p&gt;Recently, I wrote a piece of code: &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=tree&quot;&gt;WWWSupport&lt;/a&gt;. It's a very
+simple git repository that is supposed to be included as a submodule of
+the git repository of a website. it contains a
+&lt;a href=&quot;http://cr.yp.to/daemontools.html&quot;&gt;daemontools&lt;/a&gt; daemon that receives e-mail from a special
+mailbox and convert them into blog posts on the fly (that's how I'm
+currently writing this block post).&lt;/p&gt;
+
+&lt;p&gt;I want my WWWGen project to integrate the same way into my website.&lt;/p&gt;
+
+&lt;h2&gt;WWWGen&lt;/h2&gt;
+
+&lt;p&gt;WWWGen is the name of my website generator. The architecture is very simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;code&gt;src&lt;/code&gt; directory containing the pages, in the same format as webgen&lt;/li&gt;
+&lt;li&gt;A &lt;code&gt;nodes&lt;/code&gt; directory containing the files WWWGen is working on to
+generate output&lt;/li&gt;
+&lt;li&gt;An output directory where the result files in &lt;code&gt;nodes&lt;/code&gt; is copied to,
+and where some static assets are copied as well (using rsync)&lt;/li&gt;
+&lt;li&gt;A redo script &lt;code&gt;all.do&lt;/code&gt; that contains the configuration and invokes the
+wwwgen script.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The wwwgen script will create the &lt;code&gt;nodes&lt;/code&gt; directory and the redo scripts
+necessary to its working in it. Then, it will do three things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;For each source file, the script will create:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A .node file that contain a relative path to the source file, and
+represents it.&lt;/li&gt;
+&lt;li&gt;As many .outdep files as the source file will generate output
+files. The .outdep file is not managed by redo (because redo doesn't
+support multiple targets yet). It references the .node file using a
+relative path.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;  Note that during this process, new sources can be generated to allow
+to create new nodes. This step will be executed until no new sources are
+generated.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once this is done, the main script will look for all of the .outdep
+files and will build the corresponding .out file. The .out file will
+contain the final processed result of the page&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Copy all .out files in the output directory (after removing the .out
+extension) and all the static files in the static directory.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Note that step 1 and 2 recursively call redo to generate the .node and
+.out files. This two step design is necessary to account for multiple
+pages generated from a single source.&lt;/p&gt;
+
+&lt;h2&gt;Beyond&lt;/h2&gt;
+
+&lt;p&gt;In all my projects, I always want to focus on the usability of what I
+create. I always think that non programmers should be able to do the
+same that I did, to a certain limit. For example, my personal e-mail
+server at home is scripted all the way. Reinstalling it should be a
+matter of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;installing a debian system with a basic configuration&lt;/li&gt;
+&lt;li&gt;clone my git repositories&lt;/li&gt;
+&lt;li&gt;Set some basic configuration (hostname, ...)&lt;/li&gt;
+&lt;li&gt;run &lt;code&gt;redo install&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I agree that even then, not anybody can install at home a mail server,
+but with a process that simple, it's possible to create user interfaces
+for it. So even if it's not there, it's a possibility.&lt;/p&gt;
+
+&lt;p&gt;I want the same for WWWGen. It leaves a possibility for creating a user
+interface. Nothing prevents from creating a web application or even a
+native application, that will create markdown pages with a WYSIWYG
+editor (à la WordPress). The page files thus created could be checked
+out in a git repository and pushed to a server. There, a hook will run
+WWWGen to update the website with the modifications.&lt;/p&gt;
+
+&lt;p&gt;This could be seriously a very good alternative to WordPress, and I'd
+preefer working with such a system than WordPress.&lt;/p&gt;
+
+&lt;h2&gt;What already exists&lt;/h2&gt;
+
+&lt;p&gt;I am not very good at creating desktop applications. So I thought I
+would reuse the existing ones : my mailer. I's like a Content Management
+System where everything must be configured by hand, and only articles
+can be submitted using an e-mail.&lt;/p&gt;
+
+&lt;p&gt;This post is being sent by e-mail to my personal web server. Currently,
+I'm still using plain text with a markdown syntax, but we could reuse
+the HTML markup in a mail. This e-mail is then processed by a special
+alias in &lt;code&gt;/etc/aliases&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; http.www: &quot;|/srv/http/www/wwwsupport/push.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This line was automatically generated by an install.do script. The
+push.sh script will read the mail using a ruby script and will create a
+file in my website git repository with the content of the mail. Then
+webgen is run and the content of the repository is pushed to origin.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, the new article appears on the website. This is a very
+simple form of user interface, but it permits anybody to write blog posts.&lt;/p&gt;
+
+&lt;h2&gt;What features I would like to see&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Better parsing of HTML e-mail&lt;/li&gt;
+&lt;li&gt;Using wwwgen instead of webgen&lt;/li&gt;
+&lt;li&gt;Support for image galleries using git-annex in wwwgen&lt;/li&gt;
+&lt;li&gt;Support for taking the attached images in an e-mail to create a
+gallery on my website?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What features a customer would want&lt;/h2&gt;
+
+&lt;p&gt;A web application that can :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;modify the website configuration in the &lt;code&gt;all.do&lt;/code&gt; file&lt;/li&gt;
+&lt;li&gt;modify any source files, using a WYSIWYG editor when applicable&lt;/li&gt;
+&lt;li&gt;add static assets (possibly using git-annex)&lt;/li&gt;
+&lt;li&gt;run the website compilation and preview it&lt;/li&gt;
+&lt;li&gt;push to a server to update the production website&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This is entirely possible.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Static database over HTTP</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/07/06/static_database_over_http/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/07/06/static_database_over_http/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-07-06T11:08:36+02:00</published>
+    
+    <content type="html">&lt;p&gt;Websites should be static. Any dynamic thingy (scripting using php,
+ruby, python and the like) should be limited to a set of features that
+absolutely cannot be implemented otherwise. Most GET requests should
+lead to a static resolution (there can be exceptions such as GET queries
+of search engines for instance).&lt;/p&gt;
+
+&lt;p&gt;Respecting this principle is quite simple, just generate the static
+pages when they are updated, and no not worry about them afterwards.
+This is what I try to use for my website, and it works quite well.&lt;/p&gt;
+
+&lt;p&gt;Advantages of this technique :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;your data will always be readable in the future, even if you may not
+write it any more&lt;/li&gt;
+&lt;li&gt;improved security: normal operations only involve static files. You
+get to spend more time with update actions (POST and PUT) and design
+them better.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, I had the idea to extend this to databases. Do you know about
+&lt;a href=&quot;https://en.wikipedia.org/wiki/CouchDB&quot;&gt;CouchDB&lt;/a&gt; ? It's a database which
+has a web interface only. I very like its design but again, I'd like it
+to use the same principle as above.&lt;/p&gt;
+
+&lt;p&gt;The idea of such a database came with the feature I developed for my
+blog: the user comments. In this blog, the user comments are completely
+managed with JavaScript. If you don't have JavaScript, you don't have
+comments at all. How do that work ?&lt;/p&gt;
+
+&lt;h2&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;To get the comments for an article, the JavaScript will contact a simple
+PHP application in another server (a free hosting service). This simple
+application is able to store and get JSON data using REST requests. The
+JavaScript will then use &lt;code&gt;XmlHttpRequest&lt;/code&gt; to contact the server and give
+it the canonical URL (&lt;code&gt;&amp;lt;link rel=canonical&amp;gt;&lt;/code&gt;). The server will answer a
+JSON object with the comments.&lt;/p&gt;
+
+&lt;p&gt;Storing a comments is done the same way, using a &lt;code&gt;POST&lt;/code&gt; request instead
+of a &lt;code&gt;GET&lt;/code&gt; request.&lt;/p&gt;
+
+&lt;h2&gt;To a Database Server&lt;/h2&gt;
+
+&lt;p&gt;This is very simple yet powerful. Why not extend this design to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;allow any kind of data, not just comments&lt;/li&gt;
+&lt;li&gt;allow simple &lt;code&gt;GET&lt;/code&gt; requests to bypass any script and just fetch the
+raw data&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;We can imagine the data store to be publicly accessible using URL that
+end up with the &lt;code&gt;.json&lt;/code&gt; suffix. There would be a similar URL with
+&lt;code&gt;.json.meta&lt;/code&gt; to access the metadata about an object (its current
+version, right access, ...). We can imagine the web applications of the
+future being completely implemented on the client side. The server side
+would be just a shared database.&lt;/p&gt;
+
+&lt;p&gt;We would obviously need a security layer to prevent anyone to read
+anything if they should not be allowed. We can imagine three levels of
+permissions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;read and write by everyone&lt;/li&gt;
+&lt;li&gt;read by everyone, write only by authorized user&lt;/li&gt;
+&lt;li&gt;read and write only by authorized user&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;We could imagine many different authentication mechanisms. For most
+data, the mechanism could be of a shared secret. The metadata of a json
+file would contain :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &quot;auth&quot;: &quot;shared-secret&quot;,
+ &quot;secret&quot;: &quot;path/to/another/file&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To get access to the file, the client would have to provide the exact
+content of the file &lt;code&gt;&quot;path/to/another/file&quot;&lt;/code&gt;, which would obviously be a
+protected file, readable only by authorized access. It could be a
+login/password or anything else.&lt;/p&gt;
+
+&lt;p&gt;Update operations would be :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;PUT&lt;/code&gt;: to update the entire content of the file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POST&lt;/code&gt;: append to the existing data (the data should be a JSON array)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The data file will have an associated version which will be in the form
+of &quot;sha1:&lt;sha1 of the file&gt;&quot;. To successfully update a data file, the
+existing version of the file must be given. If it is not the same, the
+client should retry. This is the same concept as in CouchDB.&lt;/p&gt;
+</content>
+  </entry>
+  
+</feed>

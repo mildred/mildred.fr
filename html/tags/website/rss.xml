@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/website/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:19:51 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:19:51 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>A new way to update my blog</title>
+      <link>http://mildred.fr/Blog/2012/06/21/a_new_way_to_update_my_blog/index.html</link>
+      <description>&lt;p&gt;Hi everyone, I just developed a new way to update my blog. I am just
+using my mailer (which is currently Thunderbird for a lack of a better
+alternative). As you may know, I already manage my own server. I have a
+nginx web server and my website is just plain old static pages generated
+from markdown using my own version of webgen.&lt;/p&gt;
+
+&lt;p&gt;My code is available at two locations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://git.mildred.fr&quot;&gt;my personal git server&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/mildred/&quot;&gt;github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I just developed a few scripts which does the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;hooked in /etc/aliases, receive e-mail from a special e-mail address.
+Put this mail in an inbox directory on the server&lt;/li&gt;
+&lt;li&gt;another daemon (a shell script run by daemontools actually) run as the
+www-data user is monitoring the inbox using inotifywait. When a mail
+comes, or every 60 seconds, it process the mail using a ruby script that
+convert the mail to a markdown page, and run webgen on the website. It
+also commit and push the changes.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;And that's all.&lt;/p&gt;
+
+&lt;p&gt;The one thing I couldn't automate is the creation of the private key to
+push the changes back to the git server.&lt;/p&gt;
+
+&lt;p&gt;All the code &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=summary&quot;&gt;is
+there&lt;/a&gt;. I
+just don't know if I have a public URl for these repos :)&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/06/21/a_new_way_to_update_my_blog/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Static website architecture</title>
+      <link>http://mildred.fr/Blog/2011/04/24/static_website_architecture/index.html</link>
+      <description>&lt;p&gt;This website is made of static pages. I see two good reasons for that: first,
+there is no need to recompute endlessly the same information. Then, with static
+pages, you can leave your web site online forever without having it defaced.&lt;/p&gt;
+
+&lt;p&gt;So, how to create a modern web site with that? First, I have to start with what
+I want:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A blog, with the recent posts on the front page&lt;/li&gt;
+&lt;li&gt;An atom feed with the recent posts as well&lt;/li&gt;
+&lt;li&gt;Older posts on other pages&lt;/li&gt;
+&lt;li&gt;Each posts categorized in tags&lt;/li&gt;
+&lt;li&gt;Each tag having a page with posts in it&lt;/li&gt;
+&lt;li&gt;The tags pages must have atom feeds as well&lt;/li&gt;
+&lt;li&gt;And tag pages must be splitted in pages&lt;/li&gt;
+&lt;li&gt;Posts can have comments, anyone can add a comment&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This can be achieved using an off-line compiler that creates a hierarchy of HTML
+files. Many of these compilers exists, I choose &lt;a href=&quot;http://nanoc.stoneship.org&quot;&gt;nanoc&lt;/a&gt;,
+but I had to customize it, mostly using &lt;a href=&quot;http://github.com/mgutz/nanoc3_blog&quot;&gt;nanoc3_blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Some features can be easily provided:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The atom feed can be created using a helper included in nanoc&lt;/li&gt;
+&lt;li&gt;The tags can be easily crafted using page attributes.&lt;/li&gt;
+&lt;li&gt;Tag pages can be created on the fly using a hand-made helper&lt;/li&gt;
+&lt;li&gt;Pagination can be done the same way&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, a word about design:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Pagination,&lt;/strong&gt; this is frowned upon by the nanoc author as demonstrated on the
+&lt;a href=&quot;http://nanoc.stoneship.org/docs/6-guides/#paginating-articles&quot;&gt;guide&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;First, a word of caution: I am not a fan of paginating items. Even though
+pagination is fairly easy to do in nanoc, I recommend not doing it, for one
+specific reason. Every time an object is added to a paginated collection, one
+object shifts from one page to the next. When a paginated page is bookmarked,
+it may show entirely different content a month later, and when a paginated
+page turns up as a result on a search engine, it may no longer contain the
+content that the person was looking for anymore. To avoid these issues, I
+recommend creating separate pages for each category, tag or year. Having said
+all this, I’ll nonetheless show you how to do pagination in nanoc, so you can
+get an idea of how it can be done.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;In order to avoid having the object shifting pages, the most simple solution is
+to have the pages remain static. Say you want to have 10 items per page, the
+first page starts empty until it has 10 items. When an 11th item is added, a
+second page is created with one element. For blogs, it might seem to be in
+reverse order, but for archives, this is not a bad solution.&lt;/p&gt;
+
+&lt;p&gt;The pagination system must be uniform and available for any page on the website.
+This way, the index page and tag page can have the same pagination system. The
+pagination system must also support creating atom feeds. This way, we can have
+a feed for the whole blog and a feed per tag. In nanoc, this can be done using
+alternative representations for an item.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Comments,&lt;/strong&gt; can be done using JavaScript. For a first solution, this is
+acceptable, even though having a solution working with user agents without
+javascript is a goal. For this, we can use jQuery and XmlHttpRequest. Because
+the server only provides static pages, XmlHttpRequest, having a same-origin
+policy, will refuse to work. There are several solutions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Proxy the foreign resource on the local server. This unfortunately requires
+&lt;code&gt;mod_proxy&lt;/code&gt; which is not available on my server.&lt;/li&gt;
+&lt;li&gt;Another solution is to use &lt;a href=&quot;http://www.w3.org/TR/cors/&quot;&gt;Cross Origin Resource Sharing&lt;/a&gt;, a W3C
+recommendation that is still a draft unfortunately, but is started to be
+implemented.&lt;/li&gt;
+&lt;li&gt;Or to use an iframe with a page of the foreign server, and use the
+postMessage method to communicate with it, for example with the
+&lt;a href=&quot;https://github.com/oyvindkinsey/easyXDM/&quot;&gt;easyXDM&lt;/a&gt; library.&lt;/li&gt;
+&lt;li&gt;Or use HTML &lt;code&gt;&amp;lt;form&amp;gt;&lt;/code&gt; element to post the comment on the the API server. The
+server would then include the comment on the static page and publish it.
+This unfortunately requires a server with more than a simple php scripting
+ability. I don't have this.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;For now, I am using the XmlHttpRequest solution with the CORS mechanism on the
+API server to allow communication. Here is where I'd like to move:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, integrate &lt;a href=&quot;https://github.com/oyvindkinsey/easyXDM/&quot;&gt;easyXDM&lt;/a&gt; for wider browser compatibility, at the
+cost of the design.&lt;/li&gt;
+&lt;li&gt;Then, use a variation of the static HTML form.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;For the static form, here is what i'm thinking of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, the client can POST the form on the PAI server. If XmlHttpRequest
+with CORS is available, this can be done using Ajax, else we have to deal
+with a page reload.&lt;/li&gt;
+&lt;li&gt;The server would store this message on the database with a unique UUID.&lt;/li&gt;
+&lt;li&gt;Other clients can access this message accessing the API server as usual.&lt;/li&gt;
+&lt;li&gt;Frequently, on my computer, I would dump the messages on the API server
+database and put them in a local yaml file. Comments i'd like to remove can
+then be removed here.&lt;/li&gt;
+&lt;li&gt;When the site is regenerated, a nanoc helper would read this yaml file and
+put comments statically in the page. The page would then be published and
+comments would be available to users without javascript.&lt;/li&gt;
+&lt;li&gt;The script that fetches comments would ignore received comments that are
+already present statically on the page, based on the UUID.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This way, comments would be available for everyone.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/24/static_website_architecture/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Comments</title>
+      <link>http://mildred.fr/Blog/2011/04/22/comments/index.html</link>
+      <description>&lt;p&gt;It is now possible to add comments in my blog. Comments are purely in
+javascript, and you need a recent browser (Firefox 3.5 minimum). This is because
+I use a cross-domain XmlHttpRequest.&lt;/p&gt;
+
+&lt;p&gt;How does it work?&lt;/p&gt;
+
+&lt;p&gt;I have a php script somewhere that understand two methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;GET&lt;/strong&gt; will return all the posted objects associated with a tag passed as a
+REQUEST_URI (the thing after the question mark in URL)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;POST&lt;/strong&gt; will add an item to this series.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All of this in JSON of course, using jQuery.&lt;/p&gt;
+
+&lt;p&gt;Now, feel free to comment :)&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/22/comments/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Update to nanoc</title>
+      <link>http://mildred.fr/Blog/2011/04/11/update_to_nanoc/index.html</link>
+      <description>&lt;p&gt;Je vais maintenant gérer mon site avec &lt;a href=&quot;http://nanoc.stoneship.org/&quot;&gt;nanoc&lt;/a&gt;. Si vous remarquez des
+problèmes comme des erreurs 404, merci de me l'indiquer.&lt;/p&gt;
+
+&lt;p&gt;This web site is going to be updated using &lt;a href=&quot;http://nanoc.stoneship.org/&quot;&gt;nanoc&lt;/a&gt;. If you notice any dead
+links or anything of the sort, please tell me.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/04/11/update_to_nanoc/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

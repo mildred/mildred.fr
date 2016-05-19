@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HMP: HTTP Message Protocol (0.1) - Mildred's Website</title>
+    <meta charset='utf-8'>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content='comp, en, dev' name='keywords'>
+    <meta content='' name='description'>
+    <meta content='initial-scale=1.0, width=device-width' name='viewport'>
+    <meta content='article' name='x-kind'>
+    <link href='http://mildred.fr/Blog/2011/05/09/hmp_http_message_protocol/' rel='canonical'>
+    <link href='../../../../../favicon.png' rel='icon' type='image/png'>
+    <link href='../../../../../favicon.png' rel='shortcut icon' type='image/png'>
+    <link href='../../../../../style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script src='../../../../../Scripts/json/json2.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/jquery.min.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/comments.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/local.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='header'>
+      <p class='access-links'>
+        <a href='#menu'>Go to Menu</a>
+        <br>
+        <a href='#content'>Go to Content</a>
+      </p>
+      <div class='left'>
+        <a href='../../../../../'>
+          <img alt='My photo' class='photo' src='../../../../../Images/IMG_5669_square_128.jpeg'>
+        </a>
+      </div>
+      <div class='title'>
+        <h1>
+          <a href='../../../../../'>Mildred's Website</a>
+        </h1>
+      </div>
+      <div class='float-right'></div>
+      <div class='clear-right'></div>
+      <div class='right'>
+        <strong>Tags:</strong>
+        <ul class='tags'>
+          <li>
+            <a class='tag' href='../../../../../tags/cobra/'>cobra</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/comp/'>comp</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/configuration/'>configuration</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dev/'>dev</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dream/'>dream</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/en/'>en</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fedora/'>fedora</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fr/'>fr</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/freedombox/'>freedombox</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/git/'>git</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/html/'>html</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/idea/'>idea</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/liens/'>liens</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lysaac/'>lysaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/misc/'>misc</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/photos/'>photos</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/physics/'>physics</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/politique/'>politique</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/privacy/'>privacy</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/srs/'>srs</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/test/'>test</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/web/'>web</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/website/'>website</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwgen/'>wwwgen</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwsupport/'>wwwsupport</a>
+          </li>
+        </ul>
+      </div>
+      <div class='content'>
+        <div class='links' id='menu'>
+          <ul>
+            <li>
+              <a href='../../../../../'>Home</a>
+            </li>
+            <li>
+              <a href='../../../../'>Blog</a>
+            </li>
+            <li>
+              <a href='//survie.mildred.fr'>Survie</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class='clear'></div>
+    </div>
+    <div class='leftcol'>
+      <img alt='My avatar' class='photo' src='../../../../../Images/all128.jpeg'>
+      <hr>
+      <p>GoogleTalk, Jabber, XMPP address:
+      <br /><strong><a href="xmpp:mildred&#64;jabber.fr">mildred&#64;jabber.fr</a></strong><!--&nbsp;<img src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/image-dcraven.png" alt="" /><br /><em><script type="text/javascript" src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/message_js.js"></script></em>-->
+      </p>
+      <hr>
+      <p>
+        <a href='../../../../../gpg_key.txt'>GPG Public Key</a>
+        <br>
+        <span style='font-size: 0.8em'>
+          (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+        </span>
+      </p>
+    </div>
+    <div class='main' id='content'>
+      <h1>HMP: HTTP Message Protocol (0.1)</h1>
+<p class='meta'>
+  <span class='date-time'>
+    <span class='date'>Mon 09 May 2011,</span>
+    <span class='time'>02:40 PM</span>
+  </span>
+  <span class='tags'>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/comp/'>comp</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/dev/'>dev</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/en/'>en</a>
+    </span>
+  </span>
+</p>
+<div class='body'><h2>FAQ</h2>
+
+<ul>
+<li><p><strong>What is HMP:</strong> It is a messaging protocol destined to replace e-mails.</p></li>
+<li><p><strong>Why replace e-mails:</strong> Because it is full of spam and unmaintainable. This
+alternative is lighter and easier to implement than a full SMTP server with
+SPAM management.</p></li>
+<li><p><strong>Why use HTTP:</strong> I'm not fan of putting everything over HTTP but it has its
+advantages:</p>
+
+<ul>
+<li>It has a security layer (HTTPS)</li>
+<li>It is (relatively) simple and implemented everywhere</li>
+<li>It manages content-types and different types of requests</li>
+<li>It is extensible</li>
+<li>It goes easily through proxys and NATs</li>
+<li>It allows multiplexing many different resources on the same server</li>
+</ul>
+
+
+<p>In the long run, perhaps we should move away from HTTP as:</p>
+
+<ul>
+<li>It is too associated with the web</li>
+<li>It doesn't allow initiative from the server.</li>
+</ul>
+
+
+<p>WebSockets could be a good alternative one day.</p></li>
+<li><p><strong>How do I get my messages:</strong> Not specified, although you could possibly
+authenticate using a standard HTTP method to the same resource as your
+address and issue a GET command.</p></li>
+<li><p><strong>Does this allows a web implementation:</strong> Yes, it will need to be further
+specified but if the server detects a browser request (without the HMP
+headers) on the resource, it could issue a web-page with a form.</p></li>
+<li><p><strong>Is the message format specified</strong>: no, it needs to be. I plan on using
+JSON.</p></li>
+<li><p><strong>Do you plan an implementation:</strong> Yes, using probably node.js or Lua.</p></li>
+<li><p><strong>What prompted this:</strong> The Tor network doesn't have any standard messaging
+system. I don't believe SMTP is suited for that.</p></li>
+<li><p><strong>Why write this spec, you have no code to back this up:</strong> because I like
+writing specs, and it's a way for me to remind me to write the code, and to
+tell me how I should write it. I might not get the time to write this as
+soon as I want.</p></li>
+</ul>
+
+
+<h2>What is a hmp address</h2>
+
+<p>Scheme:</p>
+
+<pre><code>[hmp:]server[:port][/path]&#x000A;</code></pre>
+
+<p>Example:</p>
+
+<pre><code>hmp:gmail.com:80/user&#x000A;gmail.com:80/user&#x000A;gmail.com/user&#x000A;&#x000A;domain.org/u/alicia&#x000A;</code></pre>
+
+<h2>Translation to HTTPS resources</h2>
+
+<p>A HMP address can directly be translated to an HTTPS resource. The standard
+scheme translates to:</p>
+
+<pre><code>https://server:port/path&#x000A;</code></pre>
+
+<h2>Message sending overview</h2>
+
+<p>To send a message from <code>domain.org/alicia</code> to <code>users.net/~bob</code>, the sequence is:</p>
+
+<ul>
+<li><p>Connection to users.net:</p>
+
+<pre><code>[1] POST https://users.net/~bob&#x000A;[1] HMP-Pingback: 235&#x000A;[1] HMP-From: domain.org/alicia&#x000A;[1] Content: message-content&#x000A;</code></pre></li>
+<li><p>users.net opens a connection to domain.org</p>
+
+<pre><code>[2] GET https://domain.org/alicia&#x000A;[2] HMP-Pingback: 235&#x000A;[2] HMP-Method: MD5&#x000A;</code></pre></li>
+<li><p>domain.org responds to users.net</p>
+
+<pre><code>[2] HMP-Hash: ef0167eca19bb2d4c8dfe4c3803cc204&#x000A;[2] Status: 200&#x000A;</code></pre></li>
+<li><p>users.net responds to the original sender</p>
+
+<pre><code>[1] Status: 200&#x000A;</code></pre></li>
+</ul>
+
+
+<h2>Headers to the POST request</h2>
+
+<p>The POST request is the request used to post a message. It contains two specific
+headers:</p>
+
+<ul>
+<li><p>HMP-From: The address the message is sent from</p></li>
+<li><p>HMP-Pingback: A sequence number that uniquely identifies the message for the
+sender. it needs not be unique, as long as at ont point in time, there are
+only one message corresponding to this ID.</p></li>
+</ul>
+
+
+<p>Particular status codes:</p>
+
+<ul>
+<li><p>200 in case of success</p></li>
+<li><p>403 in case the From address could not be authenticated</p></li>
+</ul>
+
+
+<h2>From address authentication, pingpack</h2>
+
+<p>In order to avoid SPAM, the sender must be authenticated when the message is
+sent. For this reason, before accepting or rejecting the request, the server
+must initiate a pingback procedure to the sender.</p>
+
+<p>First, the From address is converted to an HTTPS resource and a GET connection
+is initiated. The specific request-headers are:</p>
+
+<ul>
+<li><p>HMP-Pingback: the pingback sequence number from the previous request</p></li>
+<li><p>HMP-Method: method for verifying the originating message. The only specified
+method is "MD5"</p></li>
+</ul>
+
+
+<h3>MD5 Method</h3>
+
+<p>In case the message is recognized, the from server responds with the following
+header:</p>
+
+<ul>
+<li>HMP-Hash: MD5 hash of the content of the message identified by the pingback
+identifier</li>
+</ul>
+
+
+<p>The status code can be:</p>
+
+<ul>
+<li><p>200 in case the message was recognized</p></li>
+<li><p>404 in case the message was not found</p></li>
+</ul>
+
+
+<p>If the MD5 sum corresponds to the message received and a success code was given,
+the from is verified and the message can be sent.</p></div>
+      <noscript>
+        <p>
+          Scripts are disabled on your computer. In order to access existing
+          comments and post new comments, you need to enable Javascript.
+        </p>
+        <p>
+          Rationale: This server that hosts my website is a static server.
+          In order to implement comments, a XmlHttpRequest is made on an API
+          server to both retrieve the comments and post a new comment.
+        </p>
+      </noscript>
+      <div class='clear'></div>
+    </div>
+    <div class='clear'></div>
+    <div class='footer'>
+      <hr>
+      <p>E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a></p>
+      <p>Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+      I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Index</title>
+    <link>http://mildred.fr/tags/web/"</link>
+    <description></description>
+    <pubDate>Thu, 14 Feb 2013 18:19:47 +0100</pubDate>
+    <lastBuildDate>Thu, 14 Feb 2013 18:19:47 +0100</lastBuildDate>
+    <generator>webgen - Webgen::SourceHandler::Feed</generator>
+
+    
+    <item>
+      <title>A New Architecture for the Web</title>
+      <link>http://mildred.fr/Blog/2012/07/26/a_new_architecture_for_the_web/index.html</link>
+      <description>&lt;p&gt;I want a new architecture for the web. But what web ?&lt;/p&gt;
+
+&lt;h2&gt;The Traditional Web&lt;/h2&gt;
+
+&lt;p&gt;A Web Site is a collection of Web Pages. A Web Page is a document, a
+static document I might add. The document contains text, images, sound
+and videos to present some information to the public. This is the
+traditional version of the web that I respect very much.&lt;/p&gt;
+
+&lt;p&gt;There is no need to change this as it works very well. The web was
+designed to allow a collection of documents to be accessed and does the
+job very well&lt;/p&gt;
+
+&lt;p&gt;The one this that is sensible to do however is not to use any scripting
+language to render the content of the pages. By definitions, these pages
+are static, using a scripting language like PHP is not only going to be
+inefficient, but is going to be a security risk.&lt;/p&gt;
+
+&lt;h2&gt;Web Applications&lt;/h2&gt;
+
+&lt;p&gt;This is an entire different thing, and the way we do this is completely
+wrong. We think that a web application is a collection of dynamic web
+pages. This should be erased from your mind.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A Web Application is an application of its own right.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Most unfortunately, applications are written in HTML which is not suited
+for this purpose. The widgets are very few and the framework is not
+suited to create complex User Interfaces.&lt;/p&gt;
+
+&lt;h3&gt;The very bad thing to do&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;You should not do this.&lt;/strong&gt; Unfortunately, this is how it works for most.&lt;/p&gt;
+
+&lt;p&gt;A very bad programmer is going to create a web page for each of the
+different aspects of its program. The web page would be dynamically
+generated on the server using a template engine. Some JavaScript would
+be included in this mess to avoid refreshing a page while in fact you
+should.&lt;/p&gt;
+
+&lt;p&gt;This is bad because you'll have a ton of page refresh, and that's bad
+for the user. If you're not using JavaScript, this is the old way of web
+applications and is acceptable, but if you're using JavaScript for more
+than a few things, it's bad.&lt;/p&gt;
+
+&lt;p&gt;You shouldn't use JavaScript to change the content of a page to match
+what the server would generate just to avoid a refresh. Just because
+this is just a way to recreate a template engine on the client that is
+redundant with the one on the server.&lt;/p&gt;
+
+&lt;p&gt;And if you are using JavaScript to change the content of a page to get
+the content that you should generally see in another page, you're a
+moron. This breaks the back/forward mechanism and is very bad.&lt;/p&gt;
+
+&lt;p&gt;The only sensible thing to do  in this configuration with JavaScript is
+to script the user interface. Show hidden sections, enable a button.
+Don't contact the server using AJAX, you are already getting information
+from the server using normal page reload.&lt;/p&gt;
+
+&lt;h3&gt;The sensible thing to do&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Please do this!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An application is an application. It's a bundle and can't be separated
+into pages. It can be separated into sub-sections if you want, but those
+will necessarily trigger a page refresh.&lt;/p&gt;
+
+&lt;p&gt;The application should be the equal of a desktop application using a
+native toolkit, except that web technologies are used instead.
+Contacting the server should be limited to what is necessary only
+(fetching resources, exchange data, ...). In particular, the templates
+should be on the client side.&lt;/p&gt;
+
+&lt;p&gt;On the server side, you'd have just a classic Web API, and static
+resources. The Web API should be designed with care and security in
+mind. It should be easily shared with third parties that want to
+integrate within your application.&lt;/p&gt;
+
+&lt;p&gt;It is as simple as that:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Server = Web API + Resources&lt;/li&gt;
+&lt;li&gt;Client = UI (incl templates)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I heard that SproutCore is a solution to work this way, but it was
+horrible to use it as well.&lt;/p&gt;
+
+&lt;p&gt;Perhaps, we need to get away from frameworks, there are many solutions
+that can integrate well together and that don't need a framework. Read
+this article for example: &lt;a href=&quot;http://blog.getify.com/grab-ui-by-the-handlebar/&quot;&gt;Grab UI by the Handlebar&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;An Example&lt;/h2&gt;
+
+&lt;p&gt;I have a very simple example to show you what I mean, the comment
+mechanism on this website. Each page contain a JavaScript script (just
+look at the sources) that will add the comment features. The page
+delivered by the server contain no information about the comments,
+except a &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt; tag to tell the people without JavaScript that
+they miss the comments.&lt;/p&gt;
+
+&lt;p&gt;The script does an AJAX query on a third party server (with PHP and a
+database). The arguments are the URL of the page and the answer is the
+JSON formatted list of comments for the page. These comments are then
+presented on the page. (The refresh link does this again)&lt;/p&gt;
+
+&lt;p&gt;The script also creates a form to add a comment. When the form is
+submitted, an AJAX query is made with the URL of the page and the
+content of the comment as arguments.&lt;/p&gt;
+
+&lt;p&gt;This is how all web applications should work.&lt;/p&gt;
+
+&lt;h2&gt;Going further: static databases on the server&lt;/h2&gt;
+
+&lt;p&gt;I already wrote an article on this, but I'll summarize the idea here.&lt;/p&gt;
+
+&lt;p&gt;With this new idea for web applications, the application logic is moved
+from the server to the client. Perhaps not all the way, but for simple
+applications like the comments above, the server API is nothing much
+than a fancy database API.&lt;/p&gt;
+
+&lt;p&gt;Why not model a database on this model? But it already exists:
+&lt;a href=&quot;https://en.wikipedia.org/wiki/CouchDB&quot;&gt;CouchDB&lt;/a&gt;. This is a database which API is a web API. I want to
+take the principles of this database and mix them with the ideas of a
+static page generator.&lt;/p&gt;
+
+&lt;p&gt;The idea is that read only access when the resource URL is known, a
+static page should correspond to the URL and a classic web server should
+answer the query.&lt;/p&gt;
+
+&lt;p&gt;Only update and search queries would be filtered by the web server to a
+FastCGI application that is going to update the static files, or look at
+them to answer the search.&lt;/p&gt;
+
+&lt;p&gt;I find it difficult to find advantages of this compared to CouchDB.
+There is one thing, your data will always be accessible read only. No
+obscure database format that require a database server that might not
+work on new hardware, might not be maintained any more...&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;With this approach, most web applications could be composed of static
+assets that are accessing a database with a Web API. The static assets
+and the database could be on the same server or on a different one. No
+limit is posed here, except the same origin restriction of web browsers.&lt;/p&gt;
+
+&lt;p&gt;Fortunately, a new standard (that I'm using for the comments of this
+website) let you specify if the same origin policy should apply or not:
+&lt;a href=&quot;http://www.w3.org/TR/access-control/&quot;&gt;Cross-Origin Resource Sharing&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;What about Cookies Then?&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;They should not exist in their current form.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This was a late addition to the HTTP standard, because it was already
+implemented. It was never really thought of, and is a breach of the
+original HTTP model.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The cookies are what allows XSS vulnerabilities, NOT JavaScript&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The current web community takes the things the wrong way. Instead of
+damning cookies forever, they blame on JavaScript and try to build walls
+all over the place to avoid XSS while there is a most simple solution.&lt;/p&gt;
+
+&lt;h3&gt;What are XSS?&lt;/h3&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Cross-site scripting (XSS) is a type of computer security vulnerability typically found in Web applications, such as web browsers through breaches of browser security, that enables attackers to inject client-side script into Web pages viewed by other users. A cross-site scripting vulnerability may be used by attackers to bypass access controls such as the same origin policy. Cross-site scripting carried out on websites accounted for roughly 84% of all security vulnerabilities documented by Symantec as of 2007.[1] Their effect may range from a petty nuisance to a significant security risk, depending on the sensitivity of the data handled by the vulnerable site and the nature of any security mitigation implemented by the site's owner.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;(Source: &lt;a href=&quot;https://en.wikipedia.org/wiki/Cross-site_scripting&quot;&gt;Wikipedia&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;This is a wrong way to look at the problem. Inclusion of other items in
+web pages dates from the very beginning. It is the foundation of the
+web. What allows to have rich documents, with links between them. The
+same origin policy is just one of these walls that I talked about, that
+assumes that all pages on the current domain can be trusted. Is that true?&lt;/p&gt;
+
+&lt;p&gt;The real story is that if the design of the web was correct, the script
+injected by attackers in web pages would be completely harmless. The
+same origin policy shouldn't exist and bypassing it should be by no mean
+be a security risk.&lt;/p&gt;
+
+&lt;p&gt;We have come to a situation where WebGL can be a security risk because
+it can determine the colours of an image included in the web page. Just
+because an image can, from the very beginning of the web, bypass the
+same origin policy. Some people say that images should respect the same
+origin policy, but what they don't imagine is that we could just forget
+all of this mess.&lt;/p&gt;
+
+&lt;h3&gt;The Real Problem.&lt;/h3&gt;
+
+&lt;p&gt;The &lt;em&gt;real&lt;/em&gt; problem is that when loading foreign content, though AJAX,
+the use of images or whatever, a page can load a foreign page where you
+are logged in using cookies. And access your foreign account. For
+example your bank account.&lt;/p&gt;
+
+&lt;p&gt;The problem is that the page containing the XSS script was granted the
+access to the cookie protecting your bank account.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Why the hell your bank account is just protected by a cookie than any
+page can have access to???&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3&gt;The solution&lt;/h3&gt;
+
+&lt;p&gt;Unless you have in your address bar the address of your bank, the cookie
+protecting your bank account should be locked away. In fact, instead of
+having everything in a page respect the same origin policy, &lt;strong&gt;cookies
+should be the single thing respecting the same origin policy;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is just a change in the handling of the cookie by the browser. Not
+a very big change at that. Only cookies for the domain in the address
+bar should be exploitable. But it would break a number of assumption:&lt;/p&gt;
+
+&lt;p&gt;Third party cookies would no longer exist, this would be a big shock for
+advertisers and tracking programs. A loss for these companies, but a win
+for personal privacy.&lt;/p&gt;
+
+&lt;h4&gt;Allow third party cookies nonetheless&lt;/h4&gt;
+
+&lt;p&gt;We could nonetheless allow third party cookies, but only in the context
+of a specific page:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;each tab/window of the browser share the same cookie jar for the requests&lt;/li&gt;
+&lt;li&gt;for each tab/window, a separate cookie jar would be assigned that will
+be emptied when a link is followed to a different origin&lt;/li&gt;
+&lt;li&gt;the sub-elements of a page that are not of the same origin of the page
+itself, should have their cookies in the sub cookie jar only&lt;/li&gt;
+&lt;li&gt;if there are sub-sub elements, they should be assigned to a sub-sub
+cookie jar recursively.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h4&gt;Allow third party cookies to access the main cookie jar on demand&lt;/h4&gt;
+
+&lt;p&gt;This would nonetheless break a number of things. Third party scripts
+expect to see the same cookies they set a while ago, even if it was not
+on the same page.&lt;/p&gt;
+
+&lt;p&gt;A solution to this problem would be to add an option in the browser UI
+to specifically allow a third party script in a page to access the
+global cookie jar. There would be a button saying for example &quot;Some
+cookies have been blocked&quot;. When clicked it would open a menu with:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Allow access to ad.doubleclick.com&lt;/li&gt;
+&lt;li&gt;Allow access to facebook.com&lt;/li&gt;
+&lt;li&gt;Allow access to my-bank.com&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;A sensible person would not allow a blog with an XSS script access his
+bank website, but would allow facebook if he wants to use a facebook button.&lt;/p&gt;
+
+&lt;h4&gt;Browser plugins, anyone ?&lt;/h4&gt;
+
+&lt;p&gt;I'd love a browser plugin for that !&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, on Firefox, creating sub cookie jar would be difficult
+due to the architecture of it. Webkit is better on that.&lt;/p&gt;
+
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Cookies aren't necessarily bad, they should just respect the same origin
+policy they introduced instead of imposing it to all of the other
+elements of a page. This can already be done now in web browsers, it
+just needs a consensus. Or at least, an extension with the right UI to
+bypass the same origin on demand when the scripts needs to.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/07/26/a_new_architecture_for_the_web/index.html</guid>
+    </item>
+    
+    <item>
+      <title>WWWGen : Static Page Generator and Beyond</title>
+      <link>http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</link>
+      <description>&lt;p&gt;I want to create a new static webpage generator. There are tons of them,
+you'll tell me, why do I want to create a new one?&lt;/p&gt;
+
+&lt;h2&gt;Static Website Generator&lt;/h2&gt;
+
+&lt;p&gt;Let's see what we have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;webby: my first love&lt;/li&gt;
+&lt;li&gt;nanoc: the second one I used&lt;/li&gt;
+&lt;li&gt;webgen: the one I'm using currently (with tons of local modifications)&lt;/li&gt;
+&lt;li&gt;jekyll: powering GitHub pages&lt;/li&gt;
+&lt;li&gt;and many more most probably&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Most of these systems take the assumption that you are a developer and
+you are comfortable to write code to have your website running. In all
+of these systems, I was forced to code some Ruby here and there to get
+it working how I wanted to.&lt;/p&gt;
+
+&lt;p&gt;The case of nanoc3 is very special because the main configuration uses a
+special Ruby DSL to manage the path locations. If you have non technical
+users, they won't be willing to write code in this file anyway. And for
+technical users, it might not be powerful enough.&lt;/p&gt;
+
+&lt;p&gt;Jekyll is probably the simplest system and can probably be used by non
+technical users, but it is far too simple and not powerful enough.
+That's why I didn't used it.&lt;/p&gt;
+
+&lt;p&gt;In the end, I modified Webgen a lot to include the following features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ability to write ruby code in haml instead on having to rely on the
+template engine included in webgen&lt;/li&gt;
+&lt;li&gt;special .index nodes that will generate a paginated index of articles
+found dynamically. The index would contain the last articles in reverse
+order while the pages will contain each N articles in the natural order.
+This way, an article that end up on page 3 is always going to be on page 3.&lt;/li&gt;
+&lt;li&gt;special .tags nodes that will generate .index pages dynamically to
+create an index or articles for each tag.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you look around, there are not many static web page generators that
+permit that. First, I decided I would maintain my own version of webgen
+with these modifications, but now, I have the idea that the code base is
+so horrible that I prefer rewrite the same functions from scratch.&lt;/p&gt;
+
+&lt;h2&gt;Rewriting From Scratch&lt;/h2&gt;
+
+&lt;p&gt;As I said, I'm not satisfied with the current status of the webgen code.
+There is a complex system of cache, and a blackboard object that is used
+to dispatch method call to the correct objects around the system. The
+problem is that this extra indirection level makes it difficult to know
+the code path. It would be useful if the hooks in the blackboard would
+be highly dynamic, but it's mostly static. it serves no purpose whatsoever.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I don't like big programs that do everything. And all of these
+static website generators have a component that is used to determine
+which pages are out of date, and only update them. This is traditionally
+what make(1) should do. And recently, I found that
+&lt;a href=&quot;https://github.com/apenwarr/redo/&quot;&gt;redo&lt;/a&gt; does the job very well. So, I want it to be an integral
+part of my new system.&lt;/p&gt;
+
+&lt;h2&gt;WWWSupport&lt;/h2&gt;
+
+&lt;p&gt;Recently, I wrote a piece of code: &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=tree&quot;&gt;WWWSupport&lt;/a&gt;. It's a very
+simple git repository that is supposed to be included as a submodule of
+the git repository of a website. it contains a
+&lt;a href=&quot;http://cr.yp.to/daemontools.html&quot;&gt;daemontools&lt;/a&gt; daemon that receives e-mail from a special
+mailbox and convert them into blog posts on the fly (that's how I'm
+currently writing this block post).&lt;/p&gt;
+
+&lt;p&gt;I want my WWWGen project to integrate the same way into my website.&lt;/p&gt;
+
+&lt;h2&gt;WWWGen&lt;/h2&gt;
+
+&lt;p&gt;WWWGen is the name of my website generator. The architecture is very simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;code&gt;src&lt;/code&gt; directory containing the pages, in the same format as webgen&lt;/li&gt;
+&lt;li&gt;A &lt;code&gt;nodes&lt;/code&gt; directory containing the files WWWGen is working on to
+generate output&lt;/li&gt;
+&lt;li&gt;An output directory where the result files in &lt;code&gt;nodes&lt;/code&gt; is copied to,
+and where some static assets are copied as well (using rsync)&lt;/li&gt;
+&lt;li&gt;A redo script &lt;code&gt;all.do&lt;/code&gt; that contains the configuration and invokes the
+wwwgen script.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The wwwgen script will create the &lt;code&gt;nodes&lt;/code&gt; directory and the redo scripts
+necessary to its working in it. Then, it will do three things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;For each source file, the script will create:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A .node file that contain a relative path to the source file, and
+represents it.&lt;/li&gt;
+&lt;li&gt;As many .outdep files as the source file will generate output
+files. The .outdep file is not managed by redo (because redo doesn't
+support multiple targets yet). It references the .node file using a
+relative path.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;  Note that during this process, new sources can be generated to allow
+to create new nodes. This step will be executed until no new sources are
+generated.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once this is done, the main script will look for all of the .outdep
+files and will build the corresponding .out file. The .out file will
+contain the final processed result of the page&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Copy all .out files in the output directory (after removing the .out
+extension) and all the static files in the static directory.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Note that step 1 and 2 recursively call redo to generate the .node and
+.out files. This two step design is necessary to account for multiple
+pages generated from a single source.&lt;/p&gt;
+
+&lt;h2&gt;Beyond&lt;/h2&gt;
+
+&lt;p&gt;In all my projects, I always want to focus on the usability of what I
+create. I always think that non programmers should be able to do the
+same that I did, to a certain limit. For example, my personal e-mail
+server at home is scripted all the way. Reinstalling it should be a
+matter of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;installing a debian system with a basic configuration&lt;/li&gt;
+&lt;li&gt;clone my git repositories&lt;/li&gt;
+&lt;li&gt;Set some basic configuration (hostname, ...)&lt;/li&gt;
+&lt;li&gt;run &lt;code&gt;redo install&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I agree that even then, not anybody can install at home a mail server,
+but with a process that simple, it's possible to create user interfaces
+for it. So even if it's not there, it's a possibility.&lt;/p&gt;
+
+&lt;p&gt;I want the same for WWWGen. It leaves a possibility for creating a user
+interface. Nothing prevents from creating a web application or even a
+native application, that will create markdown pages with a WYSIWYG
+editor (� la WordPress). The page files thus created could be checked
+out in a git repository and pushed to a server. There, a hook will run
+WWWGen to update the website with the modifications.&lt;/p&gt;
+
+&lt;p&gt;This could be seriously a very good alternative to WordPress, and I'd
+preefer working with such a system than WordPress.&lt;/p&gt;
+
+&lt;h2&gt;What already exists&lt;/h2&gt;
+
+&lt;p&gt;I am not very good at creating desktop applications. So I thought I
+would reuse the existing ones : my mailer. I's like a Content Management
+System where everything must be configured by hand, and only articles
+can be submitted using an e-mail.&lt;/p&gt;
+
+&lt;p&gt;This post is being sent by e-mail to my personal web server. Currently,
+I'm still using plain text with a markdown syntax, but we could reuse
+the HTML markup in a mail. This e-mail is then processed by a special
+alias in &lt;code&gt;/etc/aliases&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; http.www: &quot;|/srv/http/www/wwwsupport/push.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This line was automatically generated by an install.do script. The
+push.sh script will read the mail using a ruby script and will create a
+file in my website git repository with the content of the mail. Then
+webgen is run and the content of the repository is pushed to origin.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, the new article appears on the website. This is a very
+simple form of user interface, but it permits anybody to write blog posts.&lt;/p&gt;
+
+&lt;h2&gt;What features I would like to see&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Better parsing of HTML e-mail&lt;/li&gt;
+&lt;li&gt;Using wwwgen instead of webgen&lt;/li&gt;
+&lt;li&gt;Support for image galleries using git-annex in wwwgen&lt;/li&gt;
+&lt;li&gt;Support for taking the attached images in an e-mail to create a
+gallery on my website?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What features a customer would want&lt;/h2&gt;
+
+&lt;p&gt;A web application that can :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;modify the website configuration in the &lt;code&gt;all.do&lt;/code&gt; file&lt;/li&gt;
+&lt;li&gt;modify any source files, using a WYSIWYG editor when applicable&lt;/li&gt;
+&lt;li&gt;add static assets (possibly using git-annex)&lt;/li&gt;
+&lt;li&gt;run the website compilation and preview it&lt;/li&gt;
+&lt;li&gt;push to a server to update the production website&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This is entirely possible.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Migration to Webgen</title>
+      <link>http://mildred.fr/Blog/2012/02/28/migration_to_webgen/index.html</link>
+      <description>&lt;p&gt;Webgen allows me to split a post in two, an excerpt and a content. Perhaps the
+name excerpt is ill chosen as currently it seems more like a teaser. Anyway.&lt;/p&gt;
+
+&lt;p&gt;I already improved or added the following features in webgen:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;an index content handler type which job is to list other pages' content and
+provide pagination. It also create atom and rss feeds.&lt;/li&gt;
+&lt;li&gt;a tag content handler that creates index pages, thus creating pagination and
+feeds for each and every tag.&lt;/li&gt;
+&lt;li&gt;ability to include other pages' content directly from within haml or erb.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Next, I'll want to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Have a cron job that updates the website automatically, or a git hook doing
+just that.&lt;/li&gt;
+&lt;li&gt;Look at what I can do in terms of a gallery.&lt;/li&gt;
+&lt;li&gt;Parse e-mails sent to a special mailbox to create blog post from them
+automatically&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All of this is released open source.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 19 Oct 2012 21:03:17 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2012/02/28/migration_to_webgen/index.html</guid>
+    </item>
+    
+    <item>
+      <title>Blueprints for a Privacy Respecting Browser</title>
+      <link>http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html</link>
+      <description>&lt;p&gt;What is this all about: web privacy. We are tracked everywhere, and i'd like to
+help if possible. So, let's design a web browser that for once respects your
+privacy.&lt;/p&gt;
+
+&lt;p&gt;Main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each website has its own cookie jar, its own cache and its own HTML5 local
+storage&lt;/li&gt;
+&lt;li&gt;History related css attributes are disabled&lt;/li&gt;
+&lt;li&gt;External plugins are only enabled on demand&lt;/li&gt;
+&lt;li&gt;Support for Tor/I2P is enabled by default&lt;/li&gt;
+&lt;li&gt;You have complete control over who receives what information&lt;/li&gt;
+&lt;li&gt;Let's you control in the settings if you want to allow referrers or not.&lt;/li&gt;
+&lt;li&gt;The contextual menu let's you open links anonymously (no referrer, anonymous
+session)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The browser is bundled with a particular UI that let you control everything
+during your browsing session. it is non intrusive and makes the best choice by
+default. I am thinking of a notification bar that shows at the bottom. I noticed
+that this place is not intrusive when I realized that the search bar in Firefox
+was most of the time open, even if most of the time I didn't use it.&lt;/p&gt;
+
+&lt;p&gt;First, let's define a session:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A session can be used my more than one domain at the same time.&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cache storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific HTML5 storage&lt;/li&gt;
+&lt;li&gt;A session is associated to a specific cookie jar&lt;/li&gt;
+&lt;li&gt;A session acn be closed. When it is closed, session cookies are deleted from
+the session&lt;/li&gt;
+&lt;li&gt;A session can be reopened. All long lasting cookies, cache, HTML5 storage
+and such is then used again.&lt;/li&gt;
+&lt;li&gt;A session can be anonymous. In such a case, the session is deleted
+completely when it is closed.&lt;/li&gt;
+&lt;li&gt;A session is associated to none, one or more domains. These domains are the
+domains the end user can see in the address bar, not the sub items in the
+page.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Sessions are like Firefox profiles. If you iopen a new session, it's like you
+opened a new Firefox profile you just created. Because people will never create
+a different Firefox profile for each site.&lt;/p&gt;
+
+&lt;p&gt;If we want to protect privacy, when a link is opened, a new session should be
+created each time. To make it usable to browse web sites, it is made possible to
+share sessions in specific cases. Let's define the cases where it might be
+intelligent to share a profile:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You click a link or submit a form and expect to still be logged-in in the
+site you are viewing. You don't care if you follow a link to an external
+page.&lt;/p&gt;
+
+&lt;p&gt;User Interface: If the link matches one of the domains of the session, then
+keep the session. No UI. If the user wanted a new session, the &quot;Open
+anonymously&quot; entry in the context menu exists. A button on the toolbar might
+be available to enter a state where we always want to open links
+anonymously.&lt;/p&gt;
+
+&lt;p&gt;If the link points to another domain, then open the link in a new session
+unless &quot;Open in the same session&quot; was specified in the context menu. The UI
+contains:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We Protected your privacy by separating &amp;lt;domain of the new site&amp;gt; from
+the site you were visiting previously (&amp;lt;domain of the previous site&amp;gt;).
+
+Choices: [ (1) Create a new anonymous session          | ▼ ]
+         | (2) Continue session from &amp;lt;previous domain&amp;gt; |
+         | (3) Use a previous session for &amp;lt;new domain&amp;gt; |
+         | (4) Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;      |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first choice is considered the default and the page is loaded with it.
+If the user chooses a new option, then the page is reloaded.&lt;/p&gt;
+
+&lt;p&gt;If the user chooses (2), the page is reloaded with the previous session and
+the user will be asked if &quot;Do you want &lt;old domain&gt; and &lt;new domain&gt; to have
+access to the same private information about you?&quot;. Answers are Yes, No and
+Always. If the answer is Always, then in the configuration, the two domains
+are considered one and the same.&lt;/p&gt;
+
+&lt;p&gt;The choice (3) will use the most recent session for the new domain. It might
+be a session currently in use or a session in the history.&lt;/p&gt;
+
+&lt;p&gt;There are as many (4) options as there are bookmarks for the new domain. If
+different bookmarks share a single session, only one bookmark is shown. This
+choice will load the session from the bookmark.&lt;/p&gt;
+
+&lt;p&gt;If (3) and (4) are the same sessions, and there is only one bookmark (4),
+then the (4) option is left out.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You use a bookmark and expect to continue the session you had for this
+bookmark (webmails)&lt;/p&gt;
+
+&lt;p&gt;The session is simpely stored in the bookmark. When saving a bookmark, there
+is an option to store the session with it or not.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[X] Do not save any personal information with this bookmark
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You open a new URL and you might want reuse a session that was opened for
+this URL.&lt;/p&gt;
+
+&lt;p&gt;The User Interface allows you to restore the session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;We protected your privacy by not sending any personal information to
+&amp;lt;domain&amp;gt;. If you want &amp;lt;domain&amp;gt; to receive private information, please
+select:
+
+Choices: [ Do not send private information     | ▼ ]
+         | Use a previous session for &amp;lt;domain&amp;gt; |
+         | Use session from bookmark &quot;&amp;lt;name&amp;gt;&quot;  |
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you can see other use cases, please comment on that.&lt;/p&gt;
+
+&lt;p&gt;From these use cases, I can infer three kind of sessions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Live sessions, currently in use&lt;/li&gt;
+&lt;li&gt;Saved sessions, associated to a bookmark&lt;/li&gt;
+&lt;li&gt;Closed sessions in the past, accessible using history. Collected after a too
+long time.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, how to implement that? I was thinking of QtWebKit as I already worked with
+Qt and it's easy to work with.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We have a main widget: &lt;code&gt;QWebView&lt;/code&gt;. We want to change the session when a new
+page is loaded. So we hook up with the signal &lt;code&gt;loadStarted&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;We prevent history related CSS rules by implementing &lt;code&gt;QWebHistoryInterface&lt;/code&gt;,
+more specifically, we store the history necessary to implement
+&lt;code&gt;QWebHistoryInterface&lt;/code&gt; in the session.&lt;/li&gt;
+&lt;li&gt;We change the cache by implementing &lt;code&gt;QAbstractNetworkCache&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCache(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;We change the cookie jar by implementing &lt;code&gt;QNetworkCookieJar&lt;/code&gt; and setting it
+using &lt;code&gt;view-&amp;gt;page()-&amp;gt;networkAccessManager()-&amp;gt;setCookieJar(...)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Change the local storage path using a directory dedicated for the session
+and using &lt;code&gt;view-&amp;gt;page()-&amp;gt;settings()-&amp;gt;setLocalStoragePath(QString)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;After all that, we'll have to inspect the resulting browser to determine if
+there are still areas where we fail at protecting privacy.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/10/19/blueprints_for_a_privacy_respecting_browser/index.html</guid>
+    </item>
+    
+    <item>
+      <title>HTML 2.0: Why I think HTML is broken</title>
+      <link>http://mildred.fr/Blog/2011/08/05/html_2_0/index.html</link>
+      <description>&lt;p&gt;First postulate: HTML was designed as a stateless protocol&lt;/p&gt;
+
+&lt;p&gt;Context: web sites need to maintain a context (or state) to track the client.
+This is required by the log-in procedures the various websites have. It is also
+useful to track the user in a web store, to know which items the user wants to
+buy. In fact, it is requires almost everywhere.&lt;/p&gt;
+
+&lt;p&gt;The first solution to be thrown out for this problem are the cookies. People
+didn't like cookies but now, everyone accepts them. Nothing works without
+cookies. Why did people dislike cookies back then? They liked their provacy and
+cookies makes it possible to track the user. Through advertisement networks, the
+advertiser known exactly which website the user visited. And it is still the
+case now. What changed is that the users got tried to fight cookies and have
+every website break, and they got used to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;People got used to being tracked&lt;/strong&gt; just as people are used to be watched by
+video cameras in the street and people are used to get tracked by the government
+and big companies and banks.&lt;/p&gt;
+
+&lt;p&gt;Cookies are a great way to track prople, all because HTTP didn't include session
+management. The way Google track you is very simple. Google Analytics puts a
+cookie on your computer and each time you access the Google Server, they know
+it's the same person. Google is everywhere:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Many web sites are using Google APIs, or the jQuery library at Google.&lt;/li&gt;
+&lt;li&gt;Many web sites ask Google to track their users to know how many prople visit
+their page.&lt;/li&gt;
+&lt;li&gt;Google makes advertisement.&lt;/li&gt;
+&lt;li&gt;Youtube, Blogger, Picasa and others are owned by Google&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;With this alone, Google is found on almost every page. If you have an account at
+Google (YouTube, Picase, Gmail, Blogger, Android or other), they can even give a
+name or an e-mail address to all of these information.&lt;/p&gt;
+
+&lt;p&gt;Google motto is &lt;em&gt;Don't be Evil&lt;/em&gt;, they are perhaps not evil but can they become
+evil? Yes.&lt;/p&gt;
+
+&lt;p&gt;Whatever, my dream HTTP 2.0 protocol would include of course push support like
+WebSockets, but more importantly: session management. How should this be done?&lt;/p&gt;
+
+&lt;h3&gt;HTTP and Session Management&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;When the server needs a session, it initiates the session by giving a session
+token to the client.&lt;/strong&gt; The client needs to protect this token from being stolen
+and should display that a session is in pogress for this website. It could
+appear on the URL bar for example. The client could close the session at any
+moment.&lt;/p&gt;
+
+&lt;p&gt;With the token, the server provides its validity scope. Domains, subdomains,
+path. Only the resources in the session scope will receive the tocken back. If
+for example &lt;code&gt;http://example.com&lt;/code&gt; starts a session at &lt;code&gt;example.com&lt;/code&gt; but have an
+&lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt; that includes facebook. Facebook won't receive the session token. If
+Facebook wants to start a session (because the user wants to log-in) it will
+start a second session.&lt;/p&gt;
+
+&lt;p&gt;Session cannot escape the page. If you have two tabs open with facebook in each
+tab (either full page or embedded), the two facebook instances don't share the
+same session, unless the user explicitely allowed this. For instance, when
+Facebook starts a session, the browser could tell the user that Facebook already
+have an existing session and the user would be free to choose between the new
+session and the existing one.&lt;/p&gt;
+
+&lt;h3&gt;How does this solve XSS&lt;/h3&gt;
+
+&lt;p&gt;XSS is when a website you don't trust access the session of a website you trust,
+and steal it. At least I think so.&lt;/p&gt;
+
+&lt;p&gt;With this kind of session management, the session couldn't possibly be stolen.
+Suppose that the non-trusted site makes an XmlHttpRequest to gmail.com. If
+cross-domain wasn't forbidden, any web-site could read your mails.&lt;/p&gt;
+
+&lt;p&gt;With the new session management, if the untrusted site makes a request to
+gmail.com, gmail.com session wouldn't be available and the login page would be
+returned instead of the list of e-mails. If the non trusted website tries to
+log-in, you would be prompted to associate the Gmail session with the site you
+don't trust. If you aren't completely idion, you wouldn't allow the online
+pharmacy to connect to Gmail.&lt;/p&gt;
+
+&lt;h3&gt;Extra&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;What is known about you?&lt;/strong&gt; Let's take an average person that uses her credit
+card, have and Android phone with Gmail, uses Facebook:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;All your relationships are known by Google (Gmail, Google+) and Facebook&lt;/li&gt;
+&lt;li&gt;All your interests are known by Google and Facebook (Ad Sense track which
+website you visit and Facebook have a huge profile on you)&lt;/li&gt;
+&lt;li&gt;All your posessions are known to your bank&lt;/li&gt;
+&lt;li&gt;Your photograph is known by Google and Facebook (people probably took a
+photo of you and placed it on their Android phone synchronized with Google)&lt;/li&gt;
+&lt;li&gt;Your location is known (using your Android phone, your credit card, or your
+RFID card you use for public transportation)&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you ever want to keep private, it is becoming very difficult.&lt;/p&gt;
+</description>
+      <pubDate>Tue, 10 Apr 2012 16:57:20 +0200</pubDate>
+      <guid isPermaLink="true">http://mildred.fr/Blog/2011/08/05/html_2_0/index.html</guid>
+    </item>
+    
+
+  </channel>
+</rss>
+
+
+

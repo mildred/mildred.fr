@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/git/" rel="alternate" />
+  <link href="http://mildred.fr/tags/git/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:18:55+01:00</updated>
+  <id>http://mildred.fr/tags/git/</id>
+
+  
+  <entry>
+    <title type="html">Git, Google Summer of Code enhancements</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/08/02/git_google_summer_of_code_enhancements/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-08-02T11:15:20+02:00</published>
+    
+    <content type="html">&lt;p&gt;I was looking at Git, and which features may land in the next few
+releases, and I found the following things:&lt;/p&gt;
+
+&lt;h2&gt;Git-SVN will be completely redesigned&lt;/h2&gt;
+
+&lt;p&gt;If you worked with git-svn, you probably know that the git-svn workflow
+has nothing to do with git. Basically, you just have the svn history and
+have to use git-svn to push the changes back to the subversion
+repository. You can't use git-push and that's really annoying.&lt;/p&gt;
+
+&lt;p&gt;Recently, the &lt;a href=&quot;https://www.kernel.org/pub/software/scm/git/docs/git-remote-helpers.html&quot;&gt;git-remote-helpers&lt;/a&gt; feature was
+added. It allows git to interact with any kind of remote url, using a
+specific &lt;code&gt;git-remote-*&lt;/code&gt; command. For example, you can already use
+mercurial this way (according to &lt;a href=&quot;https://github.com/rfk/git-remote-hg&quot;&gt;git-remote-hg&lt;/a&gt;):&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Git allows pluggable remote repository protocols via helper scripts. If you have a script named &quot;git-remote-XXX&quot; then git will use it to interact with remote repositories whose URLs are of the form XXX::some-url-here. So you can imagine what a script named git-remote-hg will do.&lt;/p&gt;
+
+&lt;p&gt;Yes, this script provides a remote repository implementation that communicates with mercurial. Install it and you can do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone hg::https://hg.example.com/some-mercurial-repo
+$ cd some-mercurial-repo
+$ # hackety hackety hack
+$ git commit -a
+$ git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;The plan is to do the same with subversion. You could just do:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; $ git clone svn::http://svn.host.org/repo/trunk/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Branches might be tricky to implement, they might not be there. But you
+will get what's already in git-svn but with a way better UI. And far
+more possibilities for the future.&lt;/p&gt;
+
+&lt;p&gt;Here is the summary from the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Remote_helper_for_Subversion_and_git-svn&quot;&gt;GSoc&lt;/a&gt; page:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Submodules will be improved a lot&lt;/h2&gt;
+
+&lt;p&gt;I wish it was already there. From the &lt;a href=&quot;https://github.com/jlehmann/git-submod-enhancements/wiki/&quot;&gt;wiki page&lt;/a&gt;, the
+improvements will be:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;As Dscho put it, submodules are the “neglected ugly duckling” of git. Time to change that …&lt;/p&gt;
+
+&lt;p&gt;Issues still to be tackled in this repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let am, bisect, checkout, checkout-index, cherry-pick, merge, pull, read-tree, rebase, reset &amp;amp; stash work recursively on submodules (in progress)&lt;/li&gt;
+&lt;li&gt;Teach grep the --recursive option&lt;/li&gt;
+&lt;li&gt;Add means to specify which submodules shall be populated on clone&lt;/li&gt;
+&lt;li&gt;Showing that a submodule has a HEAD not on any branch in “git status”&lt;/li&gt;
+&lt;li&gt;gitk: Add popup menu for submodules to see the detailed history of changes&lt;/li&gt;
+&lt;li&gt;Teach “git prune” the “--recurse-submodules” option (and maybe honour the same default and options “git fetch” uses)&lt;/li&gt;
+&lt;li&gt;Better support for displaying merge conflicts of submodules&lt;/li&gt;
+&lt;li&gt;git gui: Add submodule menu for adding and fetching submodules&lt;/li&gt;
+&lt;li&gt;git status should call “git diff --submodule --ignore-submodules=dirty” instead of “git submodule summary” for providing a submodule summary when configured to do so.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Add an “always-tip” mode&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Other commands that could benefit from a “--recurse-submodules” option: archive, branch, clean, commit, revert, tag.&lt;/li&gt;
+&lt;li&gt;In the long run git-submodule.sh should be converted to a rather simple wrapper script around core git functionality as more and more of that is implemented in the git core.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Submodule related bugs to fix&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cherry picking across submodule creation fails even if the cherry pick doesn’t touch any file in the submodules path&lt;/li&gt;
+&lt;li&gt;git submodule add doesn’t record the url in .git/config when the submodule path doesn’t exist.&lt;/li&gt;
+&lt;li&gt;git rebase --continue won’t work if the commit only contains submodule changes.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Issues already solved and merged into Junio’s Repo:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Since git 1.6.6:
+
+&lt;pre&gt;&lt;code&gt;New --submodule option to “git diff” (many thanks to Dscho for writing the core part!)
+Display of submodule summaries instead of plain hashes in git gui and gitk
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.0:
+
+&lt;pre&gt;&lt;code&gt;“git status” and “git diff*” show submodules with untracked or modified files in their work tree as “dirty”
+git gui: New popup menu for submodule diffs
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.1:
+
+&lt;pre&gt;&lt;code&gt;Show the reason why working directories of submodules are dirty (untracked content and/or modified content) in superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.2:
+
+&lt;pre&gt;&lt;code&gt;Add parameters to the “--ignore-submodules” option for “git diff” and “git status” to control when a submodule is considered dirty
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.3:
+
+&lt;pre&gt;&lt;code&gt;Add the “ignore” config option for the default behaviour of “git diff” and “git status”. Both .git/config and .gitmodules are parsed for this option, the value set in .git/config. will override that from .gitmodules
+Add a global config option to control when a submodule is considered dirty (written by Dscho)
+Better support for merging of submodules (thanks to Heiko Voigt for writing that)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.4:
+
+&lt;pre&gt;&lt;code&gt;Recursive fetching of submodules can be enabled via command line option or configuration.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.5:
+
+&lt;pre&gt;&lt;code&gt;fetch runs recursively on submodules by default when new commits have been recorded for them in the superproject
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.7:
+
+&lt;pre&gt;&lt;code&gt;git push learned the --recurse-submodules=check option which errors out when trying to push a superproject commit where the submodule changes are not pushed (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Since git 1.7.8:
+
+&lt;pre&gt;&lt;code&gt;The “update” option learned the value “none” which disables “submodule init” and “submodule update”
+The git directory of a newly cloned submodule is stored in the .git directory of the superproject, the submodules work tree contains only a gitfile. This is the first step towards recursive checkout, as it enables us to remove a submodule directory (part of Frederik Gustafsson’s 2011 GSoC project)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And the &lt;a href=&quot;https://git.wiki.kernel.org/index.php/SoC2011Projects#Git_submodule_improvements&quot;&gt;GSoC page&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The submodule system of git is very powerful, yet not that easy to work with. This proposed work will strengthen the submodule system even more and improve the user experience when working with submodules.&lt;/p&gt;
+
+&lt;p&gt;Git repository: https://github.com/iveqy/git&lt;/p&gt;
+
+&lt;p&gt;Midterm evaluation: passed&lt;/p&gt;
+
+&lt;p&gt;Progress report / status:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[GSoC 11] submodule improvements at git mailing list&lt;/li&gt;
+&lt;li&gt;[GSoC 11 submodule] Status update at git mailing list&lt;/li&gt;
+&lt;li&gt;[RFC PATCH] Move git-dir for submodules at git mailing list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</content>
+  </entry>
+  
+</feed>

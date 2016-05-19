@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aliasing Strings in Lisaac - Mildred's Website</title>
+    <meta charset='utf-8'>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content='fr, comp, lisaac, dev' name='keywords'>
+    <meta content='' name='description'>
+    <meta content='initial-scale=1.0, width=device-width' name='viewport'>
+    <meta content='article' name='x-kind'>
+    <link href='http://mildred.fr/Blog/2010/09/06/aliasing-strings-in-lisaac/' rel='canonical'>
+    <link href='../../../../../favicon.png' rel='icon' type='image/png'>
+    <link href='../../../../../favicon.png' rel='shortcut icon' type='image/png'>
+    <link href='../../../../../style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script src='../../../../../Scripts/json/json2.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/jquery.min.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/comments.js' type='text/javascript'></script>
+    <script src='../../../../../Scripts/local.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='header'>
+      <p class='access-links'>
+        <a href='#menu'>Go to Menu</a>
+        <br>
+        <a href='#content'>Go to Content</a>
+      </p>
+      <div class='left'>
+        <a href='../../../../../'>
+          <img alt='My photo' class='photo' src='../../../../../Images/IMG_5669_square_128.jpeg'>
+        </a>
+      </div>
+      <div class='title'>
+        <h1>
+          <a href='../../../../../'>Mildred's Website</a>
+        </h1>
+      </div>
+      <div class='float-right'></div>
+      <div class='clear-right'></div>
+      <div class='right'>
+        <strong>Tags:</strong>
+        <ul class='tags'>
+          <li>
+            <a class='tag' href='../../../../../tags/cobra/'>cobra</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/comp/'>comp</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/configuration/'>configuration</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dev/'>dev</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/dream/'>dream</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/en/'>en</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fedora/'>fedora</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/fr/'>fr</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/freedombox/'>freedombox</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/git/'>git</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/html/'>html</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/idea/'>idea</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/liens/'>liens</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/lysaac/'>lysaac</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/misc/'>misc</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/photos/'>photos</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/physics/'>physics</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/politique/'>politique</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/privacy/'>privacy</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/srs/'>srs</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/test/'>test</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/web/'>web</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/website/'>website</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwgen/'>wwwgen</a>
+          </li>
+          <li>
+            <a class='tag' href='../../../../../tags/wwwsupport/'>wwwsupport</a>
+          </li>
+        </ul>
+      </div>
+      <div class='content'>
+        <div class='links' id='menu'>
+          <ul>
+            <li>
+              <a href='../../../../../'>Home</a>
+            </li>
+            <li>
+              <a href='../../../../'>Blog</a>
+            </li>
+            <li>
+              <a href='//survie.mildred.fr'>Survie</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class='clear'></div>
+    </div>
+    <div class='leftcol'>
+      <img alt='My avatar' class='photo' src='../../../../../Images/all128.jpeg'>
+      <hr>
+      <p>GoogleTalk, Jabber, XMPP address:
+      <br /><strong><a href="xmpp:mildred&#64;jabber.fr">mildred&#64;jabber.fr</a></strong><!--&nbsp;<img src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/image-dcraven.png" alt="" /><br /><em><script type="text/javascript" src="http://presence.jabberfr.org/2dc519ffec76a836c2f2c2f66ac38291/message_js.js"></script></em>-->
+      </p>
+      <hr>
+      <p>
+        <a href='../../../../../gpg_key.txt'>GPG Public Key</a>
+        <br>
+        <span style='font-size: 0.8em'>
+          (Fingerprint 197C A7E6 645B 4299 6D37 684B 6F9D A8D6 9A7D 2E2B)
+        </span>
+      </p>
+    </div>
+    <div class='main' id='content'>
+      <h1>Aliasing Strings in Lisaac</h1>
+<p class='meta'>
+  <span class='date-time'>
+    <span class='date'>Mon 06 Sep 2010,</span>
+    <span class='time'>09:13 AM</span>
+  </span>
+  <span class='tags'>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/comp/'>comp</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/dev/'>dev</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/fr/'>fr</a>
+    </span>
+    <span class='tag'>
+      <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+    </span>
+  </span>
+</p>
+<div class='body'><p>En Lisaac, il y a trois types de chaînes de caractères: <code>ABSTRACT_STRING</code> qui
+sert de parent à <code>STRING</code> et <code>STRING_CONSTANT</code>.</p>
+
+<ul>
+<li><p>Le prototype <code>ABSTRACT_STRING</code> contient les méthodes de bases pour toutes
+les chaînes de caractères, utile à leur manipulation. C'est une <em>classe
+abstraite</em> qui sert à la manipulation en lecture seule de toute chaîne de
+caractères.</p></li>
+<li><p><code>STRING</code> est un prototype qui introduit des méthodes de modification, comme
+l'ajout d'une autre chaîne en fin. Il est très pratique en tant que buffer
+pour construire une chaîne.</p></li>
+<li><p>Vous l'aurez deviné, les <code>STRING_CONSTANT</code> sont des chaînes constantes qu'on
+ne peux pas modifier (non mutables). Ce n'est pas techniquement impossible,
+il vaut cependant mieux éviter. Ces <code>STRING_CONSTANT</code> correspondent en fait
+aux chaînes littérales incluses dans le segment DATA de l'exécutable généré.
+Ainsi, toutes ces chaînes sont obligatoirement terminées par <code>'\0'</code>
+contrairement aux autres chaînes.</p>
+
+<p>Une autre particularité est que les chaînes <code>STRING_CONSTANT</code> sont générées
+par le compilateur, qui va s'assurer qu'il n'y aura pas deux chaînes
+différentes compilées dans le programme avec le même contenu.</p></li>
+</ul>
+
+
+<p>Quelle conclusion peut on en tirer quant à la comparaison entre chaînes ?</p>
+
+<ol>
+<li><p>Il est nécessaire de comparer les chaînes caractère à caractère pour
+s'assurer de leur égalité</p></li>
+<li><p>Dans le cas des <code>STRING_CONSTANT</code>, il est possible de ne faire qu'une
+comparaison de pointeurs.</p></li>
+</ol>
+
+
+<p>Bien sûr, la méthode n°2 est beaucoup plus rapide, Si possible, on aimerait
+pouvoir l'utiliser tout le temps. Dans le cas du compilateur Lisaac, les
+performances étant tellement critiques (nous avons affaire à un algorithme
+exponentiel) que Benoît s'est arrangé pour toujours faire une comparaison de
+pointeurs. Comment ?</p>
+
+<p>Tout simplement en transformant les chaînes classiques en <code>STRING_CONSTANT</code>.
+Cela est fait en construisant de toute pièces l'objet <code>STRING_CONSTANT</code> en
+copiant les données contenues dans n'importe quelle autre chaîne. Et pour
+s'assurer de l'unicité de la chaîne, il est nécesaire au préalable de vérifier
+que la chaîne <code>STRING_CONSTANT</code> n'existe pas déjà.</p>
+
+<p>Pour cela, toutes les chaînes utiles dans le compilateur à tout instant se
+trouvent dans un prototype <code>ALIAS_STR</code>. Pour les utiliser, on fait juste
+référence au nom du slot dans <code>ALIAS_STR</code>. Ces chaînes sont de plus insérées
+au démarrage du compilateur dans l'ensemble <code>SET(ABSTRACT_STRING)</code> qui contient
+toutes les chaînes constantes.</p>
+
+<p>Cela reste une manipulation lourde (il est nécessaire d'insérer à la main toutes
+les chaînes constantes qu'on utilise quelque part dans le compilateur dans cet
+ensemble de chaînes) réservée au compilateur Lisaac. La conversion entre
+<code>ABSTRACT_STRING</code> et <code>STRING_CONSTANT</code> reste explicite et alourdit le code. J'ai
+eu donc envie de généraliser cela en l'implémentant en bibliothèque.</p>
+
+<p>Avec les systèmes d'auto-import et auto-export, la conversion peut être très
+facile. Il restait cependant le problème délicat de référencer toutes les
+<code>STRING_CONSTANT</code> du segment DATA et de les insérer dans l'ensemble des chaînes.
+Pour cela il faut ajouter un système d'introspection qui permet au programme de
+parcourir toutes les chaînes constantes compilées. J'ai pensé à plusieurs
+solutions:</p>
+
+<ul>
+<li><p>Ajouter trois externals pour respectivement avoir la borne basse du tableau
+des chaînes compilées, la borne haute, et un moyen d'obtenir la chaîne à un
+indice donné. Cela s'est avéré trop compliqué dans la mesure où les
+externals sont évalués lors du depending pass et que les chaînes constantes
+ne sont connues que lors de l'executong pass (voire à la toute fin de
+l'exécution du compilateur).</p>
+
+<p>Il aurait donc fallu ajouter une instruction pour évaluer la borne haute et
+basse, et évaluer la <em>n</em><sup>ième</sup> chaîne. Puisque le paramètre est
+tout sauf une constante entière, cela voudrait dire construire un bloc
+conditionnel <code>SWITCH</code>. Trop complexe.</p></li>
+<li><p>Seconde solution, fournir ldans deux externals le nombre de chaînes et un
+pointeur vers un <code>NATIVE_ARRAY(STRING_CONSTANT)</code>. C'était la solution la
+plus prometteuse, mais cela aurait complexifié la génération de code.</p>
+
+<p>En effet, <code>NATIVE_ARRAY(STRING_CONSTANT)</code> se traduit en type C par
+<code>STRING_CONSTANT**</code>. J'ai pensé au début que construire le code C suivant
+suffirait:</p>
+
+<pre><code>STRING_CONSTANT* __string = {&#x000A;  {12, "123456789012"},&#x000A;  ...&#x000A;  NULL&#x000A;};&#x000A;</code></pre>
+
+<p>Sauf que cette construction est invalide en C, nous avons affaire à un
+tableau de <code>Expanded STRING_CONSTANT</code>, et le marqueur <code>NULL</code> ne compile donc
+pas en C. J'aurais donc pu créer le tableau à part, mais je n'avais pas
+envie.</p>
+
+<p>Ce qui aurait été possible:</p>
+
+<pre><code>__STRING_CONSTANT __string_1 = {12, "123456789012"};&#x000A;...&#x000A;&#x000A;__STRING_CONSTANT* __string[] = {&#x000A;  __string_1,&#x000A;  ...&#x000A;  NULL&#x000A;};&#x000A;</code></pre></li>
+<li><p>Dernière solution, la liste chaînée. Chaque chaîne est liée par un pointeur
+à la chaîne précédante, et un unique external est généré pour avoir le haut
+de la liste. Au final, cela ne prend pas plus de place qu'un tableau et
+permet plus de possibilités (comme par exemple de faire rentrer dans la
+liste des chaînes construites après coup). Le code C généré ressemble à:</p>
+
+<pre><code>__STRING_CONSTANT __string_1 = {STRING_CONSTANT__, 12, "123456789012"};&#x000A;__STRING_CONSTANT __string_2 = {&amp;__string_1,       12, "123456789013"};&#x000A;__STRING_CONSTANT __string_3 = {&amp;__string_2,       12, "123456789014"};&#x000A;__STRING_CONSTANT* __string_first = &amp;__string_3;&#x000A;</code></pre>
+
+<p>La première chaîne est liée au prototype (qui est lié à <code>NULL</code>) et les
+chaînes suivantes sont liées à celles d'avant. Un symbole spécial représente
+le haut de la pile qui est très simplement disponnible avec un external.
+C'est la solution que j'ai retenue.</p></li>
+</ul>
+
+
+<p>Une fois le compilateur modifié, il faut modifier la bibliothèque standard. Au
+début, j'ai eu pour approche d'utiliser la liste chaînée comme ensemble de
+chaînes uniques au lieu d'un <code>HASHED_SET</code>. Mais les performances ont été
+tellement déplorables que j'en suis revenu à l'ensemble de hash.</p>
+
+<p>Les modifications sont presque prêtes, et il va être nécessaire d'introduire
+deux commits de bootstrap (un commit pour introduire la fonctionnalité dans le
+compilateur, l'autre avec une bibliothèque standard modifiée et le compilateur
+qui délègue l'aliasing à la bibliothèque).</p>
+
+<p>Il reste quelques problèmes à corriger, et ce sera prêt.</p>
+
+<p>Mildred.</p></div>
+      <noscript>
+        <p>
+          Scripts are disabled on your computer. In order to access existing
+          comments and post new comments, you need to enable Javascript.
+        </p>
+        <p>
+          Rationale: This server that hosts my website is a static server.
+          In order to implement comments, a XmlHttpRequest is made on an API
+          server to both retrieve the comments and post a new comment.
+        </p>
+      </noscript>
+      <div class='clear'></div>
+    </div>
+    <div class='clear'></div>
+    <div class='footer'>
+      <hr>
+      <p>E-mail: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#68;&#37;&#55;&#48;&#37;&#55;&#53;&#37;&#54;&#50;&#37;&#52;&#48;&#37;&#54;&#68;&#37;&#54;&#57;&#37;&#54;&#67;&#37;&#54;&#52;&#37;&#55;&#50;&#37;&#54;&#53;&#37;&#54;&#52;&#37;&#50;&#69;&#37;&#54;&#54;&#37;&#55;&#50;">&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#45;&#112;&#117;&#98;&#64;&#109;&#105;&#108;&#100;&#114;&#101;&#100;&#46;&#102;&#114;</a></p>
+      <p>Mildred's Website: <a href="http://mildred.fr">http://mildred.fr</a>.
+      I try to have <a href="http://www.w3.org/Provider/Style/URI">cools URI that don't change</a>.</p>
+    </div>
+  </body>
+</html>

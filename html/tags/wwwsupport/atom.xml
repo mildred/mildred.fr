@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/wwwsupport/" rel="alternate" />
+  <link href="http://mildred.fr/tags/wwwsupport/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:19:55+01:00</updated>
+  <id>http://mildred.fr/tags/wwwsupport/</id>
+
+  
+  <entry>
+    <title type="html">WWWGen : Static Page Generator and Beyond</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/07/26/wwwgen_static_page_generator_and_beyond/index.html</id>
+    <updated>2012-10-19T21:03:17+02:00</updated>
+    
+    <published>2012-07-26T10:57:35+02:00</published>
+    
+    <content type="html">&lt;p&gt;I want to create a new static webpage generator. There are tons of them,
+you'll tell me, why do I want to create a new one?&lt;/p&gt;
+
+&lt;h2&gt;Static Website Generator&lt;/h2&gt;
+
+&lt;p&gt;Let's see what we have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;webby: my first love&lt;/li&gt;
+&lt;li&gt;nanoc: the second one I used&lt;/li&gt;
+&lt;li&gt;webgen: the one I'm using currently (with tons of local modifications)&lt;/li&gt;
+&lt;li&gt;jekyll: powering GitHub pages&lt;/li&gt;
+&lt;li&gt;and many more most probably&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Most of these systems take the assumption that you are a developer and
+you are comfortable to write code to have your website running. In all
+of these systems, I was forced to code some Ruby here and there to get
+it working how I wanted to.&lt;/p&gt;
+
+&lt;p&gt;The case of nanoc3 is very special because the main configuration uses a
+special Ruby DSL to manage the path locations. If you have non technical
+users, they won't be willing to write code in this file anyway. And for
+technical users, it might not be powerful enough.&lt;/p&gt;
+
+&lt;p&gt;Jekyll is probably the simplest system and can probably be used by non
+technical users, but it is far too simple and not powerful enough.
+That's why I didn't used it.&lt;/p&gt;
+
+&lt;p&gt;In the end, I modified Webgen a lot to include the following features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ability to write ruby code in haml instead on having to rely on the
+template engine included in webgen&lt;/li&gt;
+&lt;li&gt;special .index nodes that will generate a paginated index of articles
+found dynamically. The index would contain the last articles in reverse
+order while the pages will contain each N articles in the natural order.
+This way, an article that end up on page 3 is always going to be on page 3.&lt;/li&gt;
+&lt;li&gt;special .tags nodes that will generate .index pages dynamically to
+create an index or articles for each tag.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;If you look around, there are not many static web page generators that
+permit that. First, I decided I would maintain my own version of webgen
+with these modifications, but now, I have the idea that the code base is
+so horrible that I prefer rewrite the same functions from scratch.&lt;/p&gt;
+
+&lt;h2&gt;Rewriting From Scratch&lt;/h2&gt;
+
+&lt;p&gt;As I said, I'm not satisfied with the current status of the webgen code.
+There is a complex system of cache, and a blackboard object that is used
+to dispatch method call to the correct objects around the system. The
+problem is that this extra indirection level makes it difficult to know
+the code path. It would be useful if the hooks in the blackboard would
+be highly dynamic, but it's mostly static. it serves no purpose whatsoever.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I don't like big programs that do everything. And all of these
+static website generators have a component that is used to determine
+which pages are out of date, and only update them. This is traditionally
+what make(1) should do. And recently, I found that
+&lt;a href=&quot;https://github.com/apenwarr/redo/&quot;&gt;redo&lt;/a&gt; does the job very well. So, I want it to be an integral
+part of my new system.&lt;/p&gt;
+
+&lt;h2&gt;WWWSupport&lt;/h2&gt;
+
+&lt;p&gt;Recently, I wrote a piece of code: &lt;a href=&quot;http://git.mildred.fr/?p=pub/mildred/wwwsupport.git;a=tree&quot;&gt;WWWSupport&lt;/a&gt;. It's a very
+simple git repository that is supposed to be included as a submodule of
+the git repository of a website. it contains a
+&lt;a href=&quot;http://cr.yp.to/daemontools.html&quot;&gt;daemontools&lt;/a&gt; daemon that receives e-mail from a special
+mailbox and convert them into blog posts on the fly (that's how I'm
+currently writing this block post).&lt;/p&gt;
+
+&lt;p&gt;I want my WWWGen project to integrate the same way into my website.&lt;/p&gt;
+
+&lt;h2&gt;WWWGen&lt;/h2&gt;
+
+&lt;p&gt;WWWGen is the name of my website generator. The architecture is very simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;code&gt;src&lt;/code&gt; directory containing the pages, in the same format as webgen&lt;/li&gt;
+&lt;li&gt;A &lt;code&gt;nodes&lt;/code&gt; directory containing the files WWWGen is working on to
+generate output&lt;/li&gt;
+&lt;li&gt;An output directory where the result files in &lt;code&gt;nodes&lt;/code&gt; is copied to,
+and where some static assets are copied as well (using rsync)&lt;/li&gt;
+&lt;li&gt;A redo script &lt;code&gt;all.do&lt;/code&gt; that contains the configuration and invokes the
+wwwgen script.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;The wwwgen script will create the &lt;code&gt;nodes&lt;/code&gt; directory and the redo scripts
+necessary to its working in it. Then, it will do three things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;For each source file, the script will create:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A .node file that contain a relative path to the source file, and
+represents it.&lt;/li&gt;
+&lt;li&gt;As many .outdep files as the source file will generate output
+files. The .outdep file is not managed by redo (because redo doesn't
+support multiple targets yet). It references the .node file using a
+relative path.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;  Note that during this process, new sources can be generated to allow
+to create new nodes. This step will be executed until no new sources are
+generated.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once this is done, the main script will look for all of the .outdep
+files and will build the corresponding .out file. The .out file will
+contain the final processed result of the page&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Copy all .out files in the output directory (after removing the .out
+extension) and all the static files in the static directory.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Note that step 1 and 2 recursively call redo to generate the .node and
+.out files. This two step design is necessary to account for multiple
+pages generated from a single source.&lt;/p&gt;
+
+&lt;h2&gt;Beyond&lt;/h2&gt;
+
+&lt;p&gt;In all my projects, I always want to focus on the usability of what I
+create. I always think that non programmers should be able to do the
+same that I did, to a certain limit. For example, my personal e-mail
+server at home is scripted all the way. Reinstalling it should be a
+matter of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;installing a debian system with a basic configuration&lt;/li&gt;
+&lt;li&gt;clone my git repositories&lt;/li&gt;
+&lt;li&gt;Set some basic configuration (hostname, ...)&lt;/li&gt;
+&lt;li&gt;run &lt;code&gt;redo install&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I agree that even then, not anybody can install at home a mail server,
+but with a process that simple, it's possible to create user interfaces
+for it. So even if it's not there, it's a possibility.&lt;/p&gt;
+
+&lt;p&gt;I want the same for WWWGen. It leaves a possibility for creating a user
+interface. Nothing prevents from creating a web application or even a
+native application, that will create markdown pages with a WYSIWYG
+editor (à la WordPress). The page files thus created could be checked
+out in a git repository and pushed to a server. There, a hook will run
+WWWGen to update the website with the modifications.&lt;/p&gt;
+
+&lt;p&gt;This could be seriously a very good alternative to WordPress, and I'd
+preefer working with such a system than WordPress.&lt;/p&gt;
+
+&lt;h2&gt;What already exists&lt;/h2&gt;
+
+&lt;p&gt;I am not very good at creating desktop applications. So I thought I
+would reuse the existing ones : my mailer. I's like a Content Management
+System where everything must be configured by hand, and only articles
+can be submitted using an e-mail.&lt;/p&gt;
+
+&lt;p&gt;This post is being sent by e-mail to my personal web server. Currently,
+I'm still using plain text with a markdown syntax, but we could reuse
+the HTML markup in a mail. This e-mail is then processed by a special
+alias in &lt;code&gt;/etc/aliases&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; http.www: &quot;|/srv/http/www/wwwsupport/push.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This line was automatically generated by an install.do script. The
+push.sh script will read the mail using a ruby script and will create a
+file in my website git repository with the content of the mail. Then
+webgen is run and the content of the repository is pushed to origin.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, the new article appears on the website. This is a very
+simple form of user interface, but it permits anybody to write blog posts.&lt;/p&gt;
+
+&lt;h2&gt;What features I would like to see&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Better parsing of HTML e-mail&lt;/li&gt;
+&lt;li&gt;Using wwwgen instead of webgen&lt;/li&gt;
+&lt;li&gt;Support for image galleries using git-annex in wwwgen&lt;/li&gt;
+&lt;li&gt;Support for taking the attached images in an e-mail to create a
+gallery on my website?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What features a customer would want&lt;/h2&gt;
+
+&lt;p&gt;A web application that can :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;modify the website configuration in the &lt;code&gt;all.do&lt;/code&gt; file&lt;/li&gt;
+&lt;li&gt;modify any source files, using a WYSIWYG editor when applicable&lt;/li&gt;
+&lt;li&gt;add static assets (possibly using git-annex)&lt;/li&gt;
+&lt;li&gt;run the website compilation and preview it&lt;/li&gt;
+&lt;li&gt;push to a server to update the production website&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This is entirely possible.&lt;/p&gt;
+</content>
+  </entry>
+  
+</feed>

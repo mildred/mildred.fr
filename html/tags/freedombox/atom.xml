@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/freedombox/" rel="alternate" />
+  <link href="http://mildred.fr/tags/freedombox/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:18:52+01:00</updated>
+  <id>http://mildred.fr/tags/freedombox/</id>
+
+  
+  <entry>
+    <title type="html">Freedombox Connectivity</title>
+    
+    <link href="http://mildred.fr/Blog/2011/03/23/freedombox-connectivity/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/03/23/freedombox-connectivity/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-03-23T09:21:20+01:00</published>
+    
+    <content type="html">&lt;p&gt;Suppose we want to have an E-Mail server on the freedombox. We need connectivity
+for SMTP, the ability to accept inbound connections. Which is impossible behind
+a NAT.&lt;/p&gt;
+
+&lt;p&gt;For E-Mails we also need a MX record in the DNS ... This is a problem if the
+network is completely hostile. In which case, the only solution is to have a
+somewhat P2P DNS database shared on freedombox. Access would then not be
+possible from the Internet.&lt;/p&gt;
+
+&lt;p&gt;Now, more likely, we are only going to have access to a dynamix DNS, which is
+fine. The DNS would store records A, AAAA and MX. Perhaps some others. Still, we
+need not to rely on them too much and have the ability to communicate from
+freedombox to another even if there is no DNS for us.&lt;/p&gt;
+
+&lt;p&gt;So ... it comes down to the firewall and NAT restrictions.&lt;/p&gt;
+
+&lt;p&gt;I suppose we could:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;First, autoconfigure IPv4 and IPv6&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Try opening NAT ports using UPnP&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Check the IP connectivity. We suppose IPv6 is accessible from the Internet and
+we look to see if the IPv4 is in a range that is routable (not in a private
+non-routable range).&lt;/p&gt;
+
+&lt;p&gt;Additionally, we could ask a service on the Internet to test our connectivity
+if such a service is available. Both for IPv4 and IPv6.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If we don't have an IPv6 connectivity, open a tunnel to the IPv6 Internet.
+Either Toredo or a manually configured tunnel if available.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Update our DNS record&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;So now, we have at least IPv6 available ... and we can at least communicate with
+the v6 Internet.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">How to update your Bind DNS Server from Avahi</title>
+    
+    <link href="http://mildred.fr/Blog/2011/03/22/update-bind-dns-from-avahi/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/03/22/update-bind-dns-from-avahi/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-03-22T10:10:37+01:00</published>
+    
+    <content type="html">&lt;p&gt;Attention: this post contains wrong information. What I discovered wasn't a way
+tu publish services to a DNS server but publish local workstations to the DNS.&lt;/p&gt;
+
+&lt;p&gt;Following my previous post, I wondered how to update the DNS server from Avahi.
+&lt;a href=&quot;http://www.gamers-forum.com/showthread.php?t=17882&quot;&gt;I was not alone&lt;/a&gt;. I found a script that could be run as a cron job that
+does the job. The next step is to use Avahi notifications instead of pooling
+every minute.&lt;/p&gt;
+
+&lt;!--
+
+Now, the script (in PHP, better to rewrite in something sensible):
+
+    #!/usr/bin/php
+
+    &lt;?php
+    $avahidata = explode(&quot;\n&quot;,`avahi-browse -ptr _workstation._tcp`);
+
+    $hosts=&quot;server localhost\nzone local\n&quot;;
+    $pointers=&quot;server localhost\nzone 0.168.192.in-addr.arpa\n&quot;;
+
+    $oldhosts=&quot;server localhost\nzone local\n&quot;;
+    $oldpointers=&quot;server localhost\nzone 0.168.192.in-addr.arpa\n&quot;;
+
+    for($i=0;$i&lt;count($avahidata)-1;$i++){
+        $hostInformation=explode(&quot;;&quot;,$avahidata[$i]);
+        if($hostInformation[0] != &quot;=&quot;) continue;
+
+        $hostname=$hostInformation[6];
+        $hostaddr=$hostInformation[7];
+        $ptraddr=implode(&quot;.&quot;,array_reverse(explode(&quot;.&quot;,$hostaddr)));
+
+        $hosts.=&quot;update add $hostname 2400 A $hostaddr\n&quot;;
+        $pointers.=&quot;update add $ptraddr.in-addr.arpa 2400 PTR $hostname\n&quot;;
+
+        $oldhosts.=&quot;update delete $hostname A\n&quot;;
+        $oldpointers.=&quot;update delete $ptraddr.in-addr.arpa PTR\n&quot;;
+    }
+
+    $hosts.=&quot;send\n&quot;;
+    $pointers.=&quot;send\n&quot;;
+
+    $oldhosts.=&quot;send\n&quot;;
+    $oldpointers.=&quot;send\n&quot;;
+
+    echo `cat .dns_purge_hosts | nsupdate`;
+    echo `cat .dns_purge_pointers | nsupdate`;
+
+    echo `echo &quot;$hosts&quot; | nsupdate`;
+    echo `echo &quot;$pointers&quot; | nsupdate`;
+
+    file_put_contents(&quot;.dns_purge_hosts&quot;,$oldhosts);
+    file_put_contents(&quot;.dns_purge_pointers&quot;,$oldpointers);
+
+    ?&gt;
+
+And configure Bind to allow updates from localhost:
+
+    acl lan { 192.168.0/24; 127.0.0.1; };
+
+    options {
+        directory &quot;/var/named&quot;;
+        pid-file &quot;/var/run/named/named.pid&quot;;
+        auth-nxdomain yes;
+        datasize default;
+        listen-on { any; };
+        forward first;
+        forwarders {
+            8.8.8.8;
+            8.8.4.4;
+        };
+    };
+
+    zone &quot;local&quot; {
+        type master;
+        file &quot;local.zone&quot;;
+        check-names ignore;
+        allow-transfer { lan; };
+        allow-update { lan; };
+    };
+
+    zone &quot;0.168.192.in-addr.arpa&quot; {
+        type master;
+        file &quot;0.168.192.in-addr.arpa.zone&quot;;
+        check-names ignore;
+        allow-transfer { lan; };
+        allow-update { lan; };
+    };
+
+--&gt;
+
+
+&lt;p&gt;Thanks to &lt;a href=&quot;http://gamers-forum.com/member.php?u=35088&quot;&gt;leica&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;edit: probably a better solution would to still use mDNS over unicast DNS (wide
+area). See a post from &lt;a href=&quot;http://0pointer.de/blog/projects/avahi-wide-area.html&quot;&gt;Lennart Poettering&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title type="html">Freedombox</title>
+    
+    <link href="http://mildred.fr/Blog/2011/03/22/freedombox/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2011/03/22/freedombox/index.html</id>
+    <updated>2012-04-10T16:57:20+02:00</updated>
+    
+    <published>2011-03-22T09:26:44+01:00</published>
+    
+    <content type="html">&lt;p&gt;Yesterday, I realized that we all needed to protect our privacy and that we
+might be facing something more than just ads. The solution, fortunately it was started: &lt;a href=&quot;http://www.freedomboxfoundation.org/&quot;&gt;Freedombox&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There is a specific part I want to cover: protected communication channels.
+Starting with E-Mails.&lt;/p&gt;
+
+&lt;p&gt;In the E-Mail world, GMail is the best, in my opinion, except that it is hoisted
+on Google servers. How about having a private GMail on your freedombox ? What
+are the use cases:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We need to know which server sent the E-mail or tell the user if we can't
+know. Solutions exists like &lt;a href=&quot;http://en.wikipedia.org/wiki/DomainKeys_Identified_Mail&quot;&gt;DKIM&lt;/a&gt;,
+&lt;a href=&quot;http://en.wikipedia.org/wiki/DomainKeys&quot;&gt;DomainKeys&lt;/a&gt; or &lt;a href=&quot;http://en.wikipedia.org/wiki/Sender_Policy_Framework&quot;&gt;SPF&lt;/a&gt;.
+The solution liew with all of thesesolution, not merely just one.&lt;/p&gt;
+
+&lt;p&gt;What we should see is before the E-mail a little line telling something
+like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We could not determine which server sent the E-Mail, it might be spam or
+scam.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We could not determine which server sent the E-Mail, it appears to come
+from google.com but google.com generally signs outgoing E-mails. This is
+probably spam or scam.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The E-Mail was sent from google.com&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The E-Mail was sent from toto31.freedombox.net and has been signed by
+sender@toto31.freedombox.net.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The E-Mail was sent from toto31.freedombox.net and has been encrypted by
+sender@toto31.freedombox.net.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, the freedombox provides many services. For example we need to have a PGP
+Key server. How do we advertise that? DNS was made for that. I was thinking
+specifically about &lt;a href=&quot;http://avahi.org/&quot;&gt;Avahi&lt;/a&gt;, providing Multicast-DNS on the
+local network. I think we need to either transform Avahi into a full DNS server
+that could run on the Freedombox or have it publish records in an existing DNS
+server on the box. Why? Because services are already used to publish DNS records
+using Avahi.&lt;/p&gt;
+
+&lt;p&gt;We also need to have a network of Freedombox to add redundancy to our DNS
+servers. That could be implemented as a second part.
+It would also be good if we could have a domain like freedombox.net where all
+freedombox could have a free subdomain for free. Domain names are a necessity.&lt;/p&gt;
+
+&lt;p&gt;Now, what I want to do is simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Buy a plug computer and install Freedombox on it&lt;/li&gt;
+&lt;li&gt;Work on integrating a SMTP server that would
+
+&lt;ul&gt;
+&lt;li&gt;send signed E-Mails&lt;/li&gt;
+&lt;li&gt;receive E-Mails and filter them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Integrate an IMAP server&lt;/li&gt;
+&lt;li&gt;Integrate a PGP Key server&lt;/li&gt;
+&lt;li&gt;Work on integration with DNS&lt;/li&gt;
+&lt;li&gt;Work on a client that would sign e-mails, send them and open the inbox on
+IMAP&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, it would be freat to have in all modern browsers a &lt;code&gt;dns:&lt;/code&gt; scheme which
+would present all the services of a specific server. For example it could tell
+you:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;This server provides a web server. &lt;em&gt;Browse&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;This server provides a LDAP address book. &lt;em&gt;Browse&lt;/em&gt; &lt;em&gt;Search&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;This server provides an XMPP server. &lt;em&gt;Sign-In&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;This server provides a SMTP server. &lt;em&gt;Send E-Mail&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This would be awesome.&lt;/p&gt;
+</content>
+  </entry>
+  
+</feed>

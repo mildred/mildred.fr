@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="html">Index</title>
+  <subtitle type="html"></subtitle>
+  <author>
+    <name>Administrator</name>
+    <uri></uri>
+  </author>
+
+  <link href="http://mildred.fr/tags/test/" rel="alternate" />
+  <link href="http://mildred.fr/tags/test/atom.xml" rel="self" />
+  <generator uri="http://webgen.rubyforge.org/documentation/sourcehandler/feed.html" version="0.5.14">
+    webgen - Webgen::SourceHandler::Feed
+  </generator>
+  <updated>2013-02-14T18:19:42+01:00</updated>
+  <id>http://mildred.fr/tags/test/</id>
+
+  
+  <entry>
+    <title type="html">Testing image attachment in blog posts</title>
+    
+    <author>
+      <name>Mildred Ki'Lya</name>
+      <uri></uri>
+    </author>
+    
+    <link href="http://mildred.fr/Blog/2012/10/28/testing_image_attachment_in_blog_posts/index.html" rel="alternate" />
+    <id>http://mildred.fr/Blog/2012/10/28/testing_image_attachment_in_blog_posts/index.html</id>
+    <updated>2012-10-28T14:07:41+01:00</updated>
+    
+    <published>2012-10-28T14:07:33+01:00</published>
+    
+    <content type="html"></content>
+  </entry>
+  
+</feed>
