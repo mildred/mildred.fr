@@ -14,8 +14,12 @@ autoimports: html/footer.html html/header.html
 out:
 	find html -type f -print0 | sed -z 's/^html\//out\//' | xargs -0 -n 1 $(MAKE) -B --no-print-directory
 
+check:
+	find html -type f -name "*.html" -print0 | xargs -0 -n 1 html-check >/dev/null
+
 out/%.html: html/%.html
-	htmltags '$<' '$@'
+	@mkdir -p '$(@D)'
+	cd $(@D) && <"$$OLDPWD"/'$<' html-includetag | html-expandurl >'$(@F)'
 
 out/%: html/%
 	@mkdir -p '$(@D)'
