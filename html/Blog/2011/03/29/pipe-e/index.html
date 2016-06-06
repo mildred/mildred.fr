@@ -29,17 +29,17 @@
   </span>
   <span class='tags'>
     <span class='tag'>
-      <a class='tag' href='../../../../../tags/comp/'>comp</a>
+      <a class="tag" href="../../../../../tags/comp/index.html">comp</a>
     </span>
     <span class='tag'>
-      <a class='tag' href='../../../../../tags/en/'>en</a>
+      <a class="tag" href="../../../../../tags/en/index.html">en</a>
     </span>
     <span class='tag'>
-      <a class='tag' href='../../../../../tags/lisaac/'>lisaac</a>
+      <a class="tag" href="../../../../../tags/lisaac/index.html">lisaac</a>
     </span>
   </span>
 </p>
-<div class='body'><p>Inspired from ruby #Array:</p>
+<div class="body"><p>Inspired from ruby #Array:</p>
 
 <pre><code>Section Header&#x000A;&#x000A;  + name := PIPE(E);&#x000A;&#x000A;Section Private&#x000A;&#x000A;  + blc :{;BOOLEAN,E};&#x000A;&#x000A;Section Public&#x000A;&#x000A;  - create blc_:{;BOOLEAN,E} :SELF &lt;-&#x000A;  (&#x000A;    blc := blc_;&#x000A;    Self&#x000A;  );&#x000A;&#x000A;  - read :(BOOLEAN,E) &lt;- blc.value&#x000A;&#x000A;  - map blc:{E;X} :PIPE(X) &lt;-&#x000A;  ( // Upvalue Self&#x000A;    PIPE(X).clone.make {&#x000A;      + have_e :BOOLEAN;&#x000A;      + e :E;&#x000A;      (have_e, e) := Self.read;&#x000A;      have_e.if {&#x000A;        e := blc.value e;&#x000A;      };&#x000A;      have_e, e&#x000A;    }&#x000A;  );&#x000A;&#x000A;  - select blc:{E;BOOLEAN} :PIPE(E) &lt;-&#x000A;  ( // Upvalue Self&#x000A;    PIPE(E).clone.make {&#x000A;      + have_e :BOOLEAN;&#x000A;      + e :E;&#x000A;      (have_e, e) := Self.read;&#x000A;      have_e.if {&#x000A;        blc.value e.if_false {&#x000A;          have_e := FALSE;&#x000A;        };&#x000A;      };&#x000A;      have_e, e&#x000A;    }&#x000A;  );&#x000A;&#x000A;  - flatten_1 :PIPE(X) &lt;-&#x000A;  ( // Upvalue Self, buffer&#x000A;    + buffer :PIPE(X);&#x000A;    PIPE(X).clone.make {&#x000A;      + have_e, have_x :BOOLEAN;&#x000A;      + e :E;&#x000A;      + x :X;&#x000A;      buffer.is_null.if_false {&#x000A;        (have_e, e) := buffer.read;&#x000A;        have_e.if_false {&#x000A;          buffer := NULL;&#x000A;        };&#x000A;      };&#x000A;      buffer.is_null.if {&#x000A;        (have_e, e) := Self.read;&#x000A;        have_e.if {&#x000A;          (buffer ?= e).is_null.if_false {&#x000A;            (have_x, x) := buffer.read&#x000A;            // TODO: cas où have_e = FALSE (buffer est vide)&#x000A;          };&#x000A;        };&#x000A;      };&#x000A;      have_x, x&#x000A;    }&#x000A;  );&#x000A;&#x000A;  - to_array_of_e :ARRAY(E) &lt;-&#x000A;  ( + result :ARRAY(E);&#x000A;    + have_e :BOOLEAN;&#x000A;    + e :E;&#x000A;    {(have_e, e) := read;&#x000A;    have_e&#x000A;    }.while_do {&#x000A;      result.add_last e;&#x000A;    };&#x000A;    result&#x000A;  );&#x000A;</code></pre>
 
@@ -63,9 +63,9 @@
           server to both retrieve the comments and post a new comment.
         </p>
       </noscript>
-      <div class='clear'></div>
+      <div class="clear"></div>
     </div>
-    <div class='clear'></div>
+    <div class="clear"></div>
 <include-file src="../../../../../footer.html" />
   </body>
 </html>

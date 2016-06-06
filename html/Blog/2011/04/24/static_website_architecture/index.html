@@ -29,14 +29,14 @@
   </span>
   <span class='tags'>
     <span class='tag'>
-      <a class='tag' href='../../../../../tags/en/'>en</a>
+      <a class="tag" href="../../../../../tags/en/index.html">en</a>
     </span>
     <span class='tag'>
-      <a class='tag' href='../../../../../tags/website/'>website</a>
+      <a class="tag" href="../../../../../tags/website/index.html">website</a>
     </span>
   </span>
 </p>
-<div class='body'><p>This website is made of static pages. I see two good reasons for that: first,
+<div class="body"><p>This website is made of static pages. I see two good reasons for that: first,
 there is no need to recompute endlessly the same information. Then, with static
 pages, you can leave your web site online forever without having it defaced.</p>
 
@@ -106,12 +106,12 @@ policy, will refuse to work. There are several solutions:</p>
 <ul>
 <li>Proxy the foreign resource on the local server. This unfortunately requires
 <code>mod_proxy</code> which is not available on my server.</li>
-<li>Another solution is to use <a href="http://www.w3.org/TR/cors/">Cross Origin Resource Sharing</a>, a W3C
+<li>Another solution is to use <a href="http://www.w3.org/TR/cors/index.html">Cross Origin Resource Sharing</a>, a W3C
 recommendation that is still a draft unfortunately, but is started to be
 implemented.</li>
 <li>Or to use an iframe with a page of the foreign server, and use the
 postMessage method to communicate with it, for example with the
-<a href="https://github.com/oyvindkinsey/easyXDM/">easyXDM</a> library.</li>
+<a href="https://github.com/oyvindkinsey/easyXDM/index.html">easyXDM</a> library.</li>
 <li>Or use HTML <code>&lt;form&gt;</code> element to post the comment on the the API server. The
 server would then include the comment on the static page and publish it.
 This unfortunately requires a server with more than a simple php scripting
@@ -123,7 +123,7 @@ ability. I don't have this.</li>
 API server to allow communication. Here is where I'd like to move:</p>
 
 <ul>
-<li>First, integrate <a href="https://github.com/oyvindkinsey/easyXDM/">easyXDM</a> for wider browser compatibility, at the
+<li>First, integrate <a href="https://github.com/oyvindkinsey/easyXDM/index.html">easyXDM</a> for wider browser compatibility, at the
 cost of the design.</li>
 <li>Then, use a variation of the static HTML form.</li>
 </ul>
@@ -160,9 +160,9 @@ already present statically on the page, based on the UUID.</li>
           server to both retrieve the comments and post a new comment.
         </p>
       </noscript>
-      <div class='clear'></div>
+      <div class="clear"></div>
     </div>
-    <div class='clear'></div>
+    <div class="clear"></div>
 <include-file src="../../../../../footer.html" />
   </body>
 </html>
