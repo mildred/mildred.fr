@@ -23,6 +23,9 @@ html {
     margin-left: 10em; }
   .header .right {
     float: right;
+    background-color: white;
+    padding-left: 0.5em;
+    padding-bottom: 0.5em;
     width: 10em; }
     .header .right > * {
       font-size: 0.8em; }

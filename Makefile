@@ -24,7 +24,7 @@ check-out:
 
 out/%.html: html/%.html
 	@mkdir -p '$(@D)'
-	cd $(@D) && <"$$OLDPWD"/'$<' html-includetag | html-expandurl >'$(@F)'
+	( cd '$(<D)'; html-includetag | html-expandurl ) <'$<' >'$@'
 
 out/%: html/%
 	@mkdir -p '$(@D)'
