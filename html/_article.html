@@ -1,0 +1,41 @@
+<include-file src="_template.html">
+  <template-instance>
+    <template>
+      <h1>My First Post</h1>
+      <p class='meta'>
+        <span class='date-time'>
+          <span class='date'></span>
+          <span class='time'></span>
+        </span>
+        <span class='tags'>
+          <span class='tag'>
+            <a class="tag" href="../../../../../tags/en/index.html"></a>
+          </span>
+        </span>
+      </p>
+      <div class="body">
+        <include-content/>
+      </div>
+    </template>
+    <map from="/html/head/title/text()"
+         to="//h1" />
+    <map from="/html/head/meta[@name='dc.modified']/@content"
+         to="//p[@class='meta']//span[@class='date']"
+         format="datetime"
+         strftime="%a %d %b %Y,"/>
+    <map from="/html/head/meta[@name='dc.modified']/@content"
+         to="//p[@class='meta']//span[@class='time']"
+         format="datetime"
+         strftime="%I:%M %p"/>
+    <map from="/html/head/link[@rel='tag']"
+         to="//p[@class='meta']//span[@class='tag']"
+         multiple="true">
+      <map from="./@href" to="./a/@href" format="link-relative"/>
+      <map from="./@title" to="./a" format="text"/>
+      <map from="./@href" fetch="resource">
+        <map from="/html/head/title/text()" to="./a" only-if="empty"/>
+      </map>
+      <map from="./@title" to="./a" only-if="empty"/>
+    </map>
+  </template-instance>
+</include-file>
