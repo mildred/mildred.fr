@@ -28,6 +28,9 @@
       </div>
     </template>
 
+    <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
+    <meta name="dc.modified" content="2016-06-10T08:21:11+02:00" />
+    <meta name="dc.created" content="2016-06-10T08:21:11+02:00" />
   </head>
   <body>
     <include-file src="../../template.html">
@@ -57,46 +60,48 @@
 
       -->
       <div class="article-list">
-        <backlink-list id="main-list" rev="tag" using="art-template">
-          <map data="relative-url" to="./div/h2/a/@href"/>
-          <map from="/html/head/title/text()" to="./div/h2/a"/>
-          <map from="/html/head/meta[@name='dc.modified']/@content"
-               to="./div//p[@class='meta']/*/span[@class='date']"
-               format="datetime"
-               strftime="%a %d %b %Y,"/>
-          <map from="/html/head/meta[@name='dc.modified']/@content"
-               to="./div//p[@class='meta']/*/span[@class='time']"
-               format="datetime"
-               strftime="%I:%M %p"/>
-          <map from="/html/head/meta[@name='dc.created']/@content"
-               to="./div//p[@class='meta']/*/span[@class='date']"
-               format="datetime"
-               strftime="%a %d %b %Y,"
-               only-if="empty"/>
-          <map from="/html/head/meta[@name='dc.created']/@content"
-               to="./div//p[@class='meta']/*/span[@class='time']"
-               format="datetime"
-               strftime="%I:%M %p"
-               only-if="empty"/>
-          <map from="/html/head/link[@rel='tag']"
-               to="./div//p[@class='meta']//span[@class='tag']"
-               multiple="true">
-            <map from="./@href" to="./a/@href" format="link-relative"/>
-            <map from="./@href" fetch="resource">
-              <map from="/html/head/title/text()" to="./a"/>
+        <template-instance using="art-template">
+          <map from="/html/head/link[@rev='tag']/@href" fetch="resource">
+            <map data="relative-url" to="./div/h2/a/@href"/>
+            <map from="/html/head/title/text()" to="./div/h2/a"/>
+            <map from="/html/head/meta[@name='dc.modified']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='date']"
+                 format="datetime"
+                 strftime="%a %d %b %Y,"/>
+            <map from="/html/head/meta[@name='dc.modified']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='time']"
+                 format="datetime"
+                 strftime="%I:%M %p"/>
+            <map from="/html/head/meta[@name='dc.created']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='date']"
+                 format="datetime"
+                 strftime="%a %d %b %Y,"
+                 only-if="empty"/>
+            <map from="/html/head/meta[@name='dc.created']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='time']"
+                 format="datetime"
+                 strftime="%I:%M %p"
+                 only-if="empty"/>
+            <map from="/html/head/link[@rel='tag']"
+                 to="./div//p[@class='meta']//span[@class='tag']"
+                 multiple="true">
+              <map from="./@href" to="./a/@href" format="link-relative"/>
+              <map from="./@href" fetch="resource">
+                <map from="/html/head/title/text()" to="./a"/>
+              </map>
+              <map from="./@title" to="./a" only-if="empty"/>
             </map>
-            <map from="./@title" to="./a" only-if="empty"/>
+            <map from="//*[@id='content']//*[@class='excerpt']/.[1]/child::node()"
+                 to=".//div[@class='excerpt']"/>
+            <map from="//*[@id='content']/child::node()"
+                 to=".//div[@class='excerpt']"
+                 only-if="empty"/>
+            <map from="/html/body/child::node()"
+                 to=".//div[@class='excerpt']"
+                 only-if="empty"/>
+            <map data="relative-dir" to=".//div[@class='excerpt']/@xml:base"/>
           </map>
-          <map from="//*[@id='content']//*[@class='excerpt']/.[1]/child::node()"
-               to=".//div[@class='excerpt']"/>
-          <map from="//*[@id='content']/child::node()"
-               to=".//div[@class='excerpt']"
-               only-if="empty"/>
-          <map from="/html/body/child::node()"
-               to=".//div[@class='excerpt']"
-               only-if="empty"/>
-          <map data="relative-dir" to=".//div[@class='excerpt']/@xml:base"/>
-        </backlink-list>
+        </template-instance>
       </div>
       <!--
       <pagination for="main-list">
