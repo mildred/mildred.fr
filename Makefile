@@ -10,7 +10,10 @@ xref:
 	find html -name "*.html" | xargs -n 1 htmlxref
 
 updatetime:
-	find html -name "*.html" | xargs -n 1 sh -c 'html-updatetime-git "$$0" >"$$0+"; mv "$$0+" "$$0"'
+	find html -name "*.html" | xargs -n 1 sh -c 'html-updatetime-git "$$0" >"$$0+"; mv "$$0+" "$$0"; echo "$$0"'
+
+convertoldtimes:
+	find html/Blog -name index.html | sed -e 'p; y:/:-: ; s:^html-Blog-:src/Blog/: ; s/-index.html$$/.page/g' | xargs -n 2 sh -c 'h=$$(git log -1 --format=format:%H --all -- "$$1"); [ -z "$$h" ] && exit 0; : echo "$0 $$h:$$1"; ctime=$$(git cat-file blob "$$h:$$1" | grep created_at | cut -d: -f2- | xargs); oldctime="$$ctime"; ctime="$${ctime/ +/+}"; ctime="$${ctime/ -/-}"; ctime="$${ctime/ /T}"; (set -x; html-updatetime-git --ctime="$$ctime" "$$0") >"$$0+"; mv "$$0+" "$$0"'
 
 autoimports: html/footer.html html/header.html
 	find html -name "*.html" -type f | $(foreach h,$+,fgrep -v $(h) |) xargs -n 1 htmlautoimports $+
