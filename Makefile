@@ -33,7 +33,7 @@ check-out:
 
 out/%.html: html/%.html
 	@mkdir -p '$(@D)'
-	( cd '$(<D)'; html-includetag | html-template | html-expandurl ) <'$<' >'$@'
+	( cd '$(<D)'; html-includetag | html-expandurl | html-template | html-expandurl ) <'$<' >'$@'
 
 out/%: html/%
 	@mkdir -p '$(@D)'
