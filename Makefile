@@ -9,6 +9,9 @@ add-index-link-to-blog-posts:
 xref:
 	find html -name "*.html" | xargs -n 1 htmlxref
 
+updatetime:
+	find html -name "*.html" | xargs -n 1 sh -c 'html-updatetime-git "$$0" >"$$0+"; mv "$$0+" "$$0"'
+
 autoimports: html/footer.html html/header.html
 	find html -name "*.html" -type f | $(foreach h,$+,fgrep -v $(h) |) xargs -n 1 htmlautoimports $+
 
