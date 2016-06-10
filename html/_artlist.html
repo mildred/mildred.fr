@@ -1,0 +1,112 @@
+    <template id="art-template">
+      <div class="sub-article">
+        <h2>
+          <a class="permalink" href="link">Title</a>
+        </h2>
+        <div>
+          <p class='meta'>
+          <span class='date-time'>
+            <span class='date'>Day DD Month YYYY,</span>
+            <span class='time'>HH:MM AM</span>
+          </span>
+          <span class='tags'>
+            <span class='tag'>
+              <a class="tag" href="TAG-URL">TAG-NAME</a>
+            </span>
+          </span>
+          </p>
+          <div class="excerpt" xml:base=""></div>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </template>
+
+      <!--<p>Articles from <pagination-first-number start="1" for="main-list"/>
+        to <pagination-last-number start="1" for="main-list"/>.</p>-->
+      <!--
+
+        html-backlink-list: interpret backlink-list tags and convert them to a
+        list of template tags:
+
+          <template-instance src="<link to backlink>" using="<using>">
+            <map ...>
+            ...
+          </template-instance>
+          ...
+
+        html-template: transform template-instance tags with their instance by
+        fetching the html document in src and using the markup of the template
+        which is is the using attribute. Apply the mapping defined within.
+        use launchpad.net/xmlpath
+
+        html-paginate: truncate a list of items within a <pagination-list> tag
+        and generate other documents with the list truncated or organized in a
+        different way. Generate page numbers too.
+
+      -->
+      <div class="article-list">
+        <template-instance using="art-template">
+          <map from="/html/head/link[@rev='tag']/@href" fetch="resource">
+            <map data="relative-url" to="./div/h2/a/@href"/>
+            <map from="/html/head/title/text()" to="./div/h2/a"/>
+            <map from="/html/head/meta[@name='dc.modified']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='date']"
+                 format="datetime"
+                 strftime="%a %d %b %Y,"/>
+            <map from="/html/head/meta[@name='dc.modified']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='time']"
+                 format="datetime"
+                 strftime="%I:%M %p"/>
+            <map from="/html/head/meta[@name='dc.created']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='date']"
+                 format="datetime"
+                 strftime="%a %d %b %Y,"
+                 only-if="empty"/>
+            <map from="/html/head/meta[@name='dc.created']/@content"
+                 to="./div//p[@class='meta']/*/span[@class='time']"
+                 format="datetime"
+                 strftime="%I:%M %p"
+                 only-if="empty"/>
+            <map from="/html/head/link[@rel='tag']"
+                 to="./div//p[@class='meta']//span[@class='tag']"
+                 multiple="true">
+              <map from="./@href" to="./a/@href" format="link-relative"/>
+              <map from="./@href" fetch="resource">
+                <map from="/html/head/title/text()" to="./a"/>
+              </map>
+              <map from="./@title" to="./a" only-if="empty"/>
+            </map>
+            <map from="//*[@id='content']//*[@class='excerpt']/.[1]/child::node()"
+                 to=".//div[@class='excerpt']"/>
+            <map from="//*[@id='content']/child::node()"
+                 to=".//div[@class='excerpt']"
+                 only-if="empty"/>
+            <map from="/html/body/child::node()"
+                 to=".//div[@class='excerpt']"
+                 only-if="empty"/>
+            <map data="relative-dir" to=".//div[@class='excerpt']/@xml:base"/>
+          </map>
+        </template-instance>
+      </div>
+      <!--
+      <pagination for="main-list">
+        <div class="page-list">
+          <strong>Page:</strong>
+          <ul class='page-list'>
+            <pages>
+              <page>
+                <li>
+                  <a href=""><page-number/></a>
+                </li>
+              </page>
+              <current-page>
+                <li>
+                  <strong><page-number/></strong>
+                </li>
+              </current-page>
+            </pages>
+          </ul>
+        </div>
+      </pagination>
+      -->
+
