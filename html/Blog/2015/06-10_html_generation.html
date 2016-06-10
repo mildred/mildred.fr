@@ -7,6 +7,7 @@
 		<link rel="tag" href="../../tags/html/index.html" title="html"/>
 		<link rel="tag" href="../../tags/website/index.html" title="website"/>
 		<link rel="tag" href="../../tags/web/index.html" title="web"/>
+		<link rel="tag" href="../../tags/en/index.html" title="en"/>
 		<link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
 		<meta name="dc.modified" content="2016-06-10T17:59:22+02:00"/>
 		<meta name="dc.created" content="2016-06-10T17:52:13+02:00" />
@@ -14,7 +15,85 @@
 	<body>
 		<include-file src="../../_article.html">
 			<markdown>
-				Hello World génération HTML
+<![CDATA[
+
+Hello there, I'm here to talk about how I generate this website again. My
+requirements where:
+
+- To generate static pages. No server side running code except a basic static
+HTTP server
+
+- To keep away, as far as it is still possible, from javascript on the client
+side. The idea here is to allow the website to be seen from a javascript
+disabled browser.
+
+- Use HTML as the native source format instead of Markdown. HTML is the true
+format for the web. When making this site, I had to convert the source format
+many times. This is unacceptable anymore.
+
+- Use Markdown or similar formats for writing texts because HTML (XML) needs
+escaping for simple characters and is not easy to type in a text editor.
+
+- Use links (`<link rel="..."/>`) and backlinks (`<link rev="..."/>`) to make
+relations between pages. This is the future of hyperlink on the web. I imagine a
+world where these backlinks would be generated automatically and would be used
+to dynamically generate article comments for examples.
+
+- Allow templating. I want to have common header / footer / menu on all pages
+(even though that is not strictly necessary, I'll have to talk about it at some
+future time)
+
+The solution implies extending HTML by creating new tags. This can either be
+implemented server side, or client side (with the webcomponents). Because
+I don't want to rely on the client having Javascript enabled, I chose to go for
+server side. In the future, I could implement them client-side, and if it
+becomes popular, they could be directly integrated in the browser. Allowing the
+use of these tags on javascript disabled browsers.
+
+For parsing simplicity, I also chose to use a XML syntax with self closing tags
+like `<br/>` instead of `<br>`. I also plan to make use of XML namespaces as it
+allow to avoid conflicts in new tags and attributes.
+
+Basically, I have a directory with the sources files, and a destination
+directory. Non HTML files are copied verbatim, while HTML files go through the
+following pipeline:
+
+    html-includetag | html-expandurl | html-template | html-markdown | html-expandurl
+
+Each of these is a program I developped in Go that transforms the input HTML in
+some way, generally by processing a tag.
+
+The pipeline is run in the same directory as the source file because in many
+cases, the scripts needs to access related resources. The source file location
+is required, and this information is not passed on the pipeline.
+
+`html-includetag`
+-----------------
+
+This is the first component I developped. It process includes, by copying the
+included file content in place of the `<include-file/>` tag. This is important
+for layouting for it allows to reuse markup. This is how the header and footer
+is kept the same on all the pages here.
+
+The simplest inclusion is:
+
+    <include-file src="..."/>
+
+which will put the content of the file in `...` in place of the tag. It will
+also set the attribute `xml:base` on each root element included so the links of
+the included file can still point to the correct target.
+
+It is possible to embed content:
+
+    <include-file src="...">
+      ...
+    </include-file>
+
+The enclosed text will be kept and replaced where the included file has the
+`<include-content/>` tag.
+
+
+]]>
 			</markdown>
 		</include-file>
 	</body>
