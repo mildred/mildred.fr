@@ -68,25 +68,48 @@
       </div>
     
       </div>
-      <!--
-      <pagination for="main-list">
+      <pagination for="//*[@class='article-list']"
+                  filename="${basename}.${pagenum}.${ext}"></pagination>
+
+      <template id="pagination-template">
         <div class="page-list">
           <strong>Page:</strong>
           <ul class='page-list'>
-            <pages>
-              <page>
-                <li>
-                  <a href=""><page-number/></a>
-                </li>
-              </page>
-              <current-page>
-                <li>
-                  <strong><page-number/></strong>
-                </li>
-              </current-page>
-            </pages>
+            <li>
+              <a href=""></a>
+            </li>
+            <li>
+              <strong></strong>
+            </li>
           </ul>
         </div>
-      </pagination>
-      -->
+      </template>
+
+      <template-instance using="pagination-template"
+        if="/html/head/meta[@name='pagination']" watch="/html/head">
+        <map from="/html/head/meta[@name='pagination.numpages']/@content"
+             format="split"
+             multiple="conditional">
+          <map if="eq"
+               op1="."
+               op2="/html/head/meta[@name='pagination.pagenum']/@content"
+               to=".//li[./strong]">
+            <map from="." to="./strong"/>
+          </map>
+          <map ifnot="eq"
+               op1="."
+               op2="/html/head/meta[@name='pagination.pagenum']/@content"
+               to=".//li[./a]">
+            <map from="." to="./a" />
+            <map if="eq" op1="." op1="'latest'">
+              <map from="/html/head/meta[@name='pagination.latest']"
+                   to="./a/@href"/>
+            </map>
+            <map ifnot="eq" op1="." op1="'latest'">
+              <map from="." to="./a/@href" format="sprintf"
+                   sprintf="/html/head/meta[@name='pagination.pageformat']/@content" />
+            </map>
+          </map>
+        </map>
+      </template-instance>
 

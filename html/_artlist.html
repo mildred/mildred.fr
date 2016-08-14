@@ -90,6 +90,21 @@
       </div>
       <pagination for="//*[@class='article-list']"
                   filename="${basename}.${pagenum}.${ext}"></pagination>
+
+      <template id="pagination-template">
+        <div class="page-list">
+          <strong>Page:</strong>
+          <ul class='page-list'>
+            <li>
+              <a href=""></a>
+            </li>
+            <li>
+              <strong></strong>
+            </li>
+          </ul>
+        </div>
+      </template>
+
       <template-instance using="pagination-template"
         if="/html/head/meta[@name='pagination']" watch="/html/head">
         <map from="/html/head/meta[@name='pagination.numpages']/@content"
@@ -117,18 +132,4 @@
           </map>
         </map>
       </template-instance>
-
-      <template id="pagination-template">
-        <div class="page-list">
-          <strong>Page:</strong>
-          <ul class='page-list'>
-            <li>
-              <a href=""></a>
-            </li>
-            <li>
-              <strong></strong>
-            </li>
-          </ul>
-        </div>
-      </template>
 
