@@ -1,5 +1,10 @@
+check?=1
+check_out?=1
+
 all: ## Command to run the build
+ifeq ($(check),1)
 	$(MAKE) check
+endif
 	$(MAKE) xref
 	$(MAKE) out
 
@@ -23,7 +28,9 @@ autoimports: html/_footer.html html/_header.html ## Run htmlautoimports
 
 out: ## Build output
 	find html -type f -print0 | sed -z 's/^html\//out\//' | xargs -0 -n 1 $(MAKE) -B --no-print-directory
+ifeq ($(check_out),1)
 	$(MAKE) check-out
+endif
 
 html:
 	$(MAKE) updatetime
