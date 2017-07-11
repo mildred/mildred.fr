@@ -12,7 +12,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'make check=0'
+        sh 'make check=0 check_out=0'
       }
     }
     stage('Deploy') {
