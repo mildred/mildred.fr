@@ -1,0 +1,18 @@
+<form method="POST" action="/datamgr/comment/add">
+  <input type="hidden" name="redirect.ok"     value="{{ .context.Permalink }}#post-submitted">
+  <input type="hidden" name="redirect.error"  value="{{ .context.Permalink }}#post-error">
+  <input type="hidden" name="field.entry_id" value="{{ .entryId }}">
+  <input type="hidden" name="field.path"     value="{{ .entryPath }}">
+  <input type="hidden" name="field.reply_to" value="{{ .replyTo }}">
+
+  <fieldset>
+    <label><span>Nom&nbsp;:</span>    <input name="field.name" type="text"></label>
+    <label><span>E-mail&nbsp;:</span> <input name="field.email" type="email"></label>
+  </fieldset>
+
+  <fieldset>
+    <textarea name="field.body"></textarea>
+  </fieldset>
+
+  <input type="submit" value="Envoyer">
+</form>

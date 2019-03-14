@@ -1,0 +1,5 @@
+_gen/
+/id_ed25519
+/hugo
+/public/
+/hugo_extended_*.tar.gz

@@ -1,0 +1,14 @@
+{{ if (fileExists (printf "layouts/partials/summary-%s.html" .Section)) }}
+{{ partial (printf "summary-%s.html" .Section) . }}
+{{ else }}
+      <div>
+        <h1>
+          <a href="{{ .URL }}">
+            {{ .Title }}
+          </a>
+        </h1>
+        <div>
+          {{ .Summary  }}
+        </div>
+      </div>
+{{ end }}

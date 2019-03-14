@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{ $.Site.LanguageCode | default "en" }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    {{/* NOTE: the Site's title, and if there is a page title, that is set too */}}
+    <title>{{ block "title" . }}{{ .Site.Title }} {{ with .Params.Title }} | {{ . }}{{ end }}{{ end }}</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    {{ .Hugo.Generator }}
+
+    {{ $style := resources.Get "style.scss" | resources.ToCSS }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}" />
+
+    {{ block "favicon" . }}
+      {{ partial "site-favicon.html" . }}
+    {{ end }}
+
+    {{ if .RSSLink }}
+      <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+      <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+    {{ end }}
+  </head>
+
+  <body>
+
+    {{ block "header" . }}{{ partial "site-header.html" .}}{{ end }}
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer>
+    {{ block "footer" . }}{{ partial "site-footer.html" . }}{{ end }}
+    {{ block "scripts" . }}{{ partial "site-scripts.html" . }}{{ end }}
+    </footer>
+  </body>
+</html>
+

@@ -1,0 +1,49 @@
+baseURL = "http://mildred.fr/"
+title = "Chez Mildred"
+
+DefaultContentLanguage = "fr"
+
+[languages]
+  [languages.fr]
+    title = "Chez Mildred"
+    languageName = "Français"
+    weight = 1
+
+    [languages.fr.blackfriday]
+      angledQuotes = true
+
+    [[languages.fr.menu.main]]
+      identifier = "accueil"
+      name       = "Accueil"
+      title      = ""
+      url        = "/"
+      weight     = -120
+
+    [[languages.fr.menu.main]]
+      identifier = "curriculum-vitae"
+      name       = "Curriculum Vitæ"
+      title      = ""
+      url        = "/curriculum-vitae/"
+      weight     = -110
+
+  [languages.en]
+    title = "Mildred's Website"
+    languageName = "English"
+    weight = 2
+
+    [languages.en.blackfriday]
+      angledQuotes = false
+
+    [[languages.en.menu.main]]
+      identifier = "home"
+      name       = "Home"
+      title      = ""
+      url        = "/"
+      weight     = -120
+
+    [[languages.en.menu.main]]
+      identifier = "curriculum-vitae"
+      name       = "Curriculum Vitæ"
+      title      = ""
+      url        = "/curriculum-vitae/"
+      weight     = -110

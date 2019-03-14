@@ -1,0 +1,23 @@
+<header>
+  <h1>{{ .Site.Title }}</h1>
+  <h2>{{ .Params.Title }}</h2>
+</header>
+{{ partial "site-navigation.html" .}}
+<div class="left">
+  <img alt="My photo" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="My avatar" class="photo" src="/Images/all128.jpeg">
+
+  {{ if .IsTranslated }}
+  <div class="translations">
+  <h4>{{ i18n "translations" }}</h4>
+  <ul>
+      {{ range .Translations }}
+      <li>
+          <a href="{{ .Permalink }}">{{ .Lang }}: {{ .Title }}{{ if .IsPage }} ({{ i18n "wordCount" . }}){{ end }}</a>
+      </li>
+      {{ end}}
+  </ul>
+  </div>
+  {{ end }}
+
+</div>

@@ -1,0 +1,12 @@
+      <div>
+        <h1>
+          <a href="{{ .URL }}">
+            {{ .Title }}
+          </a>
+        </h1>
+        <img src="{{ path.Join .URL .Params.image | relURL }}" />
+        <div>
+          {{ .Summary  }}
+        </div>
+      </div>
+

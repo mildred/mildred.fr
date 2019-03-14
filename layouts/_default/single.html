@@ -1,0 +1,13 @@
+{{ define "main" }}
+<article>
+  <h1>
+    <a href="{{ .URL }}">
+      {{ .Title }}
+    </a>
+  </h1>
+  <div>
+    {{ .Content  }}
+  </div>
+  {{ partial "comments.html" . }}
+</article>
+{{ end }}

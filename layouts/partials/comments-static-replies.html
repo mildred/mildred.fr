@@ -1,0 +1,39 @@
+{{ $entryPath := substr ($.context.Permalink | relURL) 0 }}
+{{ $entryId := replace $entryPath  "/" "-" }}
+
+{{ if not (eq nil $.context.Site.Data.comments) }}
+  {{ range $index, $comments := (index $.context.Site.Data.comments $entryId ) }}
+    {{ $isReply := eq .reply_to $.parentId }}
+    {{ $isRoot  := and (not $.parentId) (not .reply_to) }}
+    {{ if and (eq .path $entryPath) (or $isReply $isRoot) }}
+      <div class="comment">
+        <div class="comment-header" id="comment-{{ $index }}">
+          <img class="comment-avatar" src="https://www.gravatar.com/avatar/{{ .email }}?s=100">
+          <p class="comment-info">
+            <strong>{{ .name }}</strong>
+            {{ if .reply_to }}
+              <br>
+              <i><small>En réponse à {{ $.parentName }}</i></small>
+            {{ end }}
+            <br>
+            {{ dateFormat "Monday, Jan 2, 2006" .date }}
+          </p>
+        </div>
+        <div>
+          {{ .body | markdownify }}
+        </div>
+        <a href="#reply-{{ $index }}">Répondre...</a>
+        <div class="dialog" id="reply-{{ $index }}">
+          {{ partial "comments-static-form.html" (dict "context" $.context "replyTo" $index "entryId" $entryId "entryPath" $entryPath) }}
+        </div>
+        {{ partial "comments-static-replies" (dict "context" $.context "parentId" $index "parentName" .name) }}
+      </div>
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if not $.parentId }}
+  <h3>Envoyer un commentaire</h3>
+
+  {{ partial "comments-static-form.html" (dict "context" $.context "replyTo" "" "entryId" $entryId "entryPath" $entryPath) }}
+{{ end }}

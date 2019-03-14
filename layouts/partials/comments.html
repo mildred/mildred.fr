@@ -1,0 +1,6 @@
+{{ $comments_params_unset := (or (not (isset .Params "comments")) (eq .Params.comments nil)) }}
+{{ if (.Params.comments) | or (and $comments_params_unset (.Site.Params.comments)) }}
+  {{ if (.Site.Params.staticman_api) }}
+    {{ partial "comments-static.html" . }}
+  {{ end }}
+{{ end }}
