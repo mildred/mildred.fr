@@ -117,7 +117,7 @@ The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273
 
         vi ./etc/fstab
 
-    Update all `UUID=*` lines with SSD partition UUIDs
+    Update all `UUID=*` lines with UUID for SSD partition for /boot, and the UUID of the device-mapper system partition for root and home
 
 3.  Get into the boot partition
 
@@ -155,9 +155,9 @@ Let's go in the deployment directory to prepare for the chroot:
     mount --bind /sys sys
     chroot .
 
-Now, install GRUB:
+Now, install GRUB (recheck to ensure device names are not improperly cached):
 
-    grub2-install /dev/sdb
+    grub2-install --recheck /dev/sdb
 
 ### Reboot
 
