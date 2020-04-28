@@ -36,6 +36,12 @@ btrfs-receive:
         btrfs send fedora@2020-04-28 | btrfs receive /media/mildred/system/
         btrfs send home@2020-04-28 | btrfs receive /media/mildred/system/
 
+4.  Now, create a read-write subvolume for the system. I keep the read-only snapshots for now in case I continue to use the system on the HDD and I need to move the newest changes to the SSD (btrfs-send and btrfs-receive can make incremental copies using the snapshot I kept):
+
+        cd /media/mildred/system/
+        btrfs sub snap fedora@2020-04-28 fedora
+        btrfs sub snap home@2020-04-28 home
+
 Let's move the boot partition over too (SSD boot is mounted over
 `/mildred/media/boot`):
 
