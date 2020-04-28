@@ -52,3 +52,7 @@ GRUB and in `/etc/fstab` must be off. I'll need to update this all to get the
 system booting.
 
 ... to be continued ...
+
+Reference:
+
+- [Forum topic on how to install GRUB from chroot](https://discussion.fedoraproject.org/t/recover-grub-after-reinstall-windows/9123/4)
