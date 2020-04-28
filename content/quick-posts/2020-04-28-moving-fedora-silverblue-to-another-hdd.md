@@ -128,6 +128,10 @@ The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273
         vi loader/entries/ostree-2-fedora-workstation.conf
  
     Then, change again all the `UUID=*` strings to match your newer partitions. Beware, the `resume=` option should match your swap and `root=` should match your root partition.
+    
+    To set up encryption, the command-line options must be used:
+    
+        rd.luks.name=27948583-d046-42ae-bcee-e1394553e0b6=cryptroot root=/dev/mapper/cryptroot
 
 5.  Update the GRUB configuration manually (because grub2-mkconfig cannot work, even in a chroot, because it will not be able to find the root device). Make sure you change the right entry again, using the same UUIDs as in the loader entry. Also update the `set root=` and `search` grub options with the physical address of the boot partition
 
