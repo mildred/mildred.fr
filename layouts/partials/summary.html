@@ -1,14 +1,20 @@
 {{ if (fileExists (printf "layouts/partials/summary-%s.html" .Section)) }}
 {{ partial (printf "summary-%s.html" .Section) . }}
 {{ else }}
-      <div>
+      <div class="article summary">
         <h1>
           <a href="{{ .URL }}">
             {{ .Title }}
           </a>
         </h1>
-        <div>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">{{ .Date.Format "2006" }}</span>-<span class="month">{{ .Date.Format "1" }}</span>-<span class="day">{{ .Date.Format "2" }}</span>
+          </span>
+        </p>
+        <p class="summary">
           {{ .Summary  }}
-        </div>
+        </p>
       </div>
 {{ end }}

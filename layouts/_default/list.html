@@ -4,7 +4,12 @@
       {{- .Content -}}
     </main>
     <section>
-      {{ range .Paginator.Pages }}
+      {{ $pages := .Site.RegularPages }}
+      {{ range .Site.Home.Translations }}
+      {{   $pages = $pages | lang.Merge .Site.RegularPages }}
+      {{ end }}
+      {{ $paginator := .Paginate $pages }}
+      {{ range $paginator.Pages }}
       {{ partial "summary.html" . }}
       {{ end }}
     </section>

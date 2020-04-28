@@ -1,0 +1,16 @@
+sudo: required
+dist: xenial
+services:
+  - docker
+before_script:
+  - echo $DEPLOY_KEY | base64 -d > id_ed25519
+  - chmod 600 id_ed25519
+  - eval "$(ssh-agent -s)" #start the ssh agent
+  - ssh-add id_ed25519
+  - git config url.ssh://git@github.com/.insteadOf https://github.com/
+  - git fetch origin empty:empty
+script:
+  - pwd
+  - ./build.sh
+after_success:
+- ./deploy.sh

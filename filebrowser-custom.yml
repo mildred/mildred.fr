@@ -1,0 +1,91 @@
+bookmarks:
+  - Pages: content
+  - Fiches: content/fiches
+  - Commentaires: data/comment
+
+actions:
+  - name: Nouvelle fiche
+    dialog:
+      - name: Identifiant
+        id:   slug
+        type: text
+        regexp: [a-z-]+_[a-z-]+
+        placeholder: nom-de-lieu_nom-du-monument
+    actions:
+      - copy-file:
+          dest: content/fiches/{{ field.slug }}/index.md
+          from: archetypes/fiche.md
+          redirect: true
+
+  - name: Visualiser
+    location:
+      - content/fiches/*/**
+    actions:
+      - redirect:
+          url: /fiches/{{ location | split "/" | index 2 }}/
+
+  - name: Commentaires associés
+    location:
+      - content/**/
+    actions:
+      - redirect:
+          path: data/comments/fiches/{{ location | substr 7 -1 | replace "/" "-" }}/
+
+  - name: Commentaires associés
+    location:
+      - content/**/index.md
+    actions:
+      - redirect:
+          path: data/comments/fiches/{{ location | substr 7 -9 | replace "/" "-" }}/
+
+metadata:
+  - location:
+      - data/comments/**
+    fields:
+      draft: draft
+
+rich-editor:
+  - name: Contenu Markdown
+    widget: markdown
+    order: 100
+    section: content
+    location:
+      - content/**.md
+
+  - name: Titre
+    widget: entryline-title
+    order: 1
+    section: metadata
+    field: title
+    location:
+      - content/**.md
+
+  - name: Photo
+    widget: filechooser
+    order: 10
+    section: metadata
+    field: image
+    location:
+      - content/**.md
+
+  - name: Lieux
+    widget: textlist
+    order: 20
+    section: metadata
+    field: lieux
+    location:
+      - content/fiches/**.md
+
+  - name: Catégories
+    widget: checklist
+    order: 30
+    section: metadata
+    field: categories
+    datasource:
+      static:
+        - Petit Monument: petit monument
+        - Croix: croix
+    location:
+      - content/fiches/**.md
+
+

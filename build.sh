@@ -10,6 +10,7 @@ tar zxvf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz hugo
 
 rm -rf public
 git worktree prune
+git branch -D gh-pages
 git worktree add -B gh-pages public empty
 
 ./hugo

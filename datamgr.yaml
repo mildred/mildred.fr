@@ -1,0 +1,38 @@
+receive:
+  "/datamgr/comment/add":
+    fields:
+
+      draft:
+        internal: true
+        value: true
+        type: bool
+
+      id:
+        internal: true
+        generate: timestamp
+
+      date:
+        internal: true
+        generate: timestamp
+        format: 2006-01-02T15:04:05Z07:00
+
+      entry_id:
+        required: true
+
+      path:
+        required: true
+
+      reply_to:
+
+      name:
+        required: true
+
+      email:
+
+      body:
+        required: true
+
+    create_file:
+      name:    "data/comments/{{ field.entry_id }}/{{ field.id }}.yaml"
+      format:  yaml
+

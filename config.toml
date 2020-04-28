@@ -17,6 +17,13 @@ DefaultContentLanguage = "fr"
       name       = "Accueil"
       title      = ""
       url        = "/"
+      weight     = -130
+
+    [[languages.fr.menu.main]]
+      identifier = "home"
+      name       = "Home"
+      title      = ""
+      url        = "/en/"
       weight     = -120
 
     [[languages.fr.menu.main]]
@@ -25,6 +32,13 @@ DefaultContentLanguage = "fr"
       title      = ""
       url        = "/curriculum-vitae/"
       weight     = -110
+
+    [[languages.fr.menu.main]]
+      identifier = "contact"
+      name       = "Contact"
+      title      = ""
+      url        = "/contact/"
+      weight     = -100
 
   [languages.en]
     title = "Mildred's Website"
@@ -35,10 +49,17 @@ DefaultContentLanguage = "fr"
       angledQuotes = false
 
     [[languages.en.menu.main]]
+      identifier = "accueil"
+      name       = "Accueil"
+      title      = ""
+      url        = "/"
+      weight     = -130
+
+    [[languages.en.menu.main]]
       identifier = "home"
       name       = "Home"
       title      = ""
-      url        = "/"
+      url        = "/en/"
       weight     = -120
 
     [[languages.en.menu.main]]
@@ -47,3 +68,10 @@ DefaultContentLanguage = "fr"
       title      = ""
       url        = "/curriculum-vitae/"
       weight     = -110
+
+    [[languages.en.menu.main]]
+      identifier = "contact"
+      name       = "Contact"
+      title      = ""
+      url        = "/contact/"
+      weight     = -100
