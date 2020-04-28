@@ -51,8 +51,16 @@ Note, the SSD does not have any GRUB installed, and the partition references in
 GRUB and in `/etc/fstab` must be off. I'll need to update this all to get the
 system booting.
 
+I will need the partition UUIDs to reconfigure the system. Here is how I get them (the first, sdb2, is system, the second, sdb1, is boot):
+
+    # ls -l /dev/disk/by-uuid | grep sdb
+    lrwxrwxrwx. 1 root root 10 28 avril 13:36 27948583-d046-42ae-bcee-e1394553e0b6 -> ../../sdb2
+    lrwxrwxrwx. 1 root root 10 28 avril 13:36 365609fc-83cf-42ce-9ab9-c7a64547c227 -> ../../sdb1
+
+
+
 ... to be continued ...
 
-Reference:
+References:
 
 - [Forum topic on how to install GRUB from chroot](https://discussion.fedoraproject.org/t/recover-grub-after-reinstall-windows/9123)
