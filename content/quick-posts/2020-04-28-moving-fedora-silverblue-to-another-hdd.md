@@ -14,6 +14,30 @@ homedirs. it doesn't do LURKS encryption, and I want to add this in the process.
 
 ### Copy the files
 
+Before all, the GPT disk must contains a specific partition that will contain the GRUB boot loader, else you won't be able to install GRUB. You can set up this partition in parted with:
+
+    # parted /dev/sdb
+    (parted) print                                                            
+    Model: ATA KINGSTON SUV500M (scsi)
+    Disk /dev/sdb: 240GB
+    Sector size (logical/physical): 512B/4096B
+    Partition Table: gpt
+    Disk Flags: 
+    
+    Number  Start   End     Size    File system  Name  Flags
+     1      1049kB  17.8MB  16.8MB               grub
+     3      17.8MB  1001MB  984MB   ext4
+     2      1001MB  240GB   239GB
+    (parted) help toggle                                                      
+      toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER
+    
+	    NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions
+            from 5 onwards.
+            FLAG is one of: boot, root, swap, hidden, raid, lvm, lba, hp-service, palo, prep, msftres, bios_grub, atvrecv, diag, legacy_boot,
+            msftdata, irst, esp
+    (parted) toggle 1 bios_grub
+    (parted) quit
+
 First, I installed the SSD, booter off the hard drive as before, formatted the
 SSD with a 1GB ext4 boot partition and the rest as a btrfs partition all using
 gnome-disks. Then, I am moving the subvolumes to the SSD using btrfs-send and
@@ -105,11 +129,21 @@ The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273
  
     Then, change again all the `UUID=*` strings to match your newer partitions. Beware, the `resume=` option should match your swap and `root=` should match your root partition.
 
+5.  Update the GRUB configuration manually (because grub2-mkconfig cannot work, even in a chroot, because it will not be able to find the root device). Make sure you change the right entry again, using the same UUIDs as in the loader entry. Also update the `set root=` and `search` grub options with the physical address of the boot partition
+
+        vi loader/grub.cfg
+
 ### Get into the chroot and install GRUB
 
-Let's go in the deployment directory to prepare for the chroot:
+Create a target mount point:
 
-    cd /media/mildred/system/fedora/ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+    mkdir /mnt/target
+    mount /dev/mapper/luks-27948583-d046-42ae-bcee-e1394553e0b6 /mnt/target -o subvol=fedora
+    cd /mnt/target
+
+Let's go in the deployment directory to prepare for the chroot:
+    
+    cd ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
     mount --bind /media/mildred/boot ./boot
     mount --bind /dev dev
     mount --bind /dev/pts dev/pts
@@ -117,11 +151,15 @@ Let's go in the deployment directory to prepare for the chroot:
     mount --bind /sys sys
     chroot .
 
-Now, I'm inside the chroot. I'll need to change the UUID of the partitions in /etc/fstab and in grub configurations.
+Now, install GRUB:
 
+    grub2-install /dev/sdb
 
-... to be continued ...
+### Reboot
+
+Update BIOS boot device and choose the correct option in GRUB. After rebooting, regenerating the GRUB config might help to have something correct in the configuration files all the way.
 
 References:
 
 - [Forum topic on how to install GRUB from chroot](https://discussion.fedoraproject.org/t/recover-grub-after-reinstall-windows/9123)
+- https://github.com/ostreedev/ostree/issues/1009#issuecomment-506503756
