@@ -57,7 +57,37 @@ I will need the partition UUIDs to reconfigure the system. Here is how I get the
     lrwxrwxrwx. 1 root root 10 28 avril 13:36 27948583-d046-42ae-bcee-e1394553e0b6 -> ../../sdb2
     lrwxrwxrwx. 1 root root 10 28 avril 13:36 365609fc-83cf-42ce-9ab9-c7a64547c227 -> ../../sdb1
 
+I will also need to get the ostree ids for the booted system that I want to configure:
 
+    # cat /media/mildred/boot/loader/entries/*
+    title Fedora 32.20200424.n.0 (Silverblue) (ostree:1)
+    version 1
+    options resume=UUID=97b54b6f-9147-4879-953e-7619d9c012b6 rhgb quiet root=UUID=55c760d6-d020-4345-893b-839d00b5cff4 ostree=/ostree/boot.0/fedora-workstation/ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/0 rootflags=subvol=fedora rootflags=subvol=fedora
+    linux /ostree/fedora-workstation-ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/vmlinuz-5.6.6-300.fc32.x86_64
+    initrd /ostree/fedora-workstation-ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/initramfs-5.6.6-300.fc32.x86_64.img
+    title Fedora 32.20200428.0 (Silverblue) (ostree:0)
+    version 2
+    options resume=UUID=97b54b6f-9147-4879-953e-7619d9c012b6 rhgb quiet root=UUID=55c760d6-d020-4345-893b-839d00b5cff4 ostree=/ostree/boot.0/fedora-workstation/e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/0 rootflags=subvol=fedora rootflags=subvol=fedora
+    linux /ostree/fedora-workstation-e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/vmlinuz-5.6.6-300.fc32.x86_64
+    initrd /ostree/fedora-workstation-e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/initramfs-5.6.6-300.fc32.x86_64.img
+
+I'll only edit the `ostree:0` entry which is the latest system. Its boot id is `e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a`. I'll need the ostree deployment id:
+
+    # ls -l /media/mildred/system/fedora/ostree/boot.0/fedora-workstation/e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a
+    total 4
+    lrwxrwxrwx. 1 root root 108 28 avril 12:17 0 -> ../../../deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+
+The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0`. Let's go in the deployment directory to prepare for the chroot:
+
+    cd /media/mildred/system/fedora/ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+    mount --bind /media/mildred/boot ./boot
+    mount --bind /dev dev
+    mount --bind /dev/pts dev/pts
+    mount --bind /proc proc
+    mount --bind /sys sys
+    chroot .
+
+Now, I'm inside the chroot. I'll need to change the UUID of the partitions in /etc/fstab and in grub configurations.
 
 ... to be continued ...
 
