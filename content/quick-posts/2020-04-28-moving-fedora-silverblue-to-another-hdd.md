@@ -12,6 +12,8 @@ My setup uses an ext4 boot partition and a btrfs system partition with a
 `fedora` subvolume for the OSTree system, and a `home` subvolume for the
 homedirs. it doesn't do LURKS encryption, and I want to add this in the process.
 
+### Copy the files
+
 First, I installed the SSD, booter off the hard drive as before, formatted the
 SSD with a 1GB ext4 boot partition and the rest as a btrfs partition all using
 gnome-disks. Then, I am moving the subvolumes to the SSD using btrfs-send and
@@ -51,6 +53,8 @@ Note, the SSD does not have any GRUB installed, and the partition references in
 GRUB and in `/etc/fstab` must be off. I'll need to update this all to get the
 system booting.
 
+### Find important values to modify
+
 I will need the partition UUIDs to reconfigure the system. Here is how I get them (the first, sdb2, is system, the second, sdb1, is boot):
 
     # ls -l /dev/disk/by-uuid | grep sdb
@@ -77,7 +81,33 @@ I'll only edit the `ostree:0` entry which is the latest system. Its boot id is `
     total 4
     lrwxrwxrwx. 1 root root 108 28 avril 12:17 0 -> ../../../deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
 
-The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0`. Let's go in the deployment directory to prepare for the chroot:
+The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0`.
+
+### update configuration
+
+1.  Get in the deployment directory
+
+    cd /media/mildred/system/fedora/ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+
+2.  First thing, update /etc/fstab to change the partition UUIDs to account for the SSD partitions. The only partition that I kept on the HDD is the swap.
+
+        vi ./etc/fstab
+
+    Update all `UUID=*` lines with SSD partition UUIDs
+
+3.  Get into the boot partition
+
+        cd /media/mildred/boot
+
+4.  Update the loader file (check it's the right file compared to the deployment you modified)
+
+        vi loader/entries/ostree-2-fedora-workstation.conf
+ 
+    Then, change again all the `UUID=*` strings to match your newer partitions. Beware, the `resume=` option should match your swap and `root=` should match your root partition.
+
+### Get into the chroot and install GRUB
+
+Let's go in the deployment directory to prepare for the chroot:
 
     cd /media/mildred/system/fedora/ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
     mount --bind /media/mildred/boot ./boot
@@ -88,6 +118,7 @@ The deployment id is `c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273
     chroot .
 
 Now, I'm inside the chroot. I'll need to change the UUID of the partitions in /etc/fstab and in grub configurations.
+
 
 ... to be continued ...
 
