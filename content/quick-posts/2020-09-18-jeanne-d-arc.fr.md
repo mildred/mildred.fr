@@ -1,7 +1,6 @@
 ---
 title: "Jeanne d'Arc"
 date: 2020-09-18
-draft: false
 ---
 Bonjour,
 
