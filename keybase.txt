@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/mildred
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://mildred.fr
+  * I am mildred (https://keybase.io/mildred) on keybase.
+  * I have a public key ASCtlQk9iNjHjounQSorRqNKpQi9Wv2k6kxzUs7SNo7YkQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120d015eb34ed877f839ebe3cf57ce771b10b674ac14e5857b3735a65c9f1d74ffd0a",
+      "host": "keybase.io",
+      "kid": "0120ad95093d88d8c78e8ba7412a2b46a34aa508bd5afda4ea4c7352ced2368ed8910a",
+      "uid": "8dfe4b3e06719fcb3d457ba75420ae19",
+      "username": "mildred"
+    },
+    "merkle_root": {
+      "ctime": 1562688874,
+      "hash": "304c2187e70d6b5df5605d9affdc4b4ae11900aa840272951b41be0eae09bb9af37f5f5181fd71b162225f54d29d649dcf6ec7fe9e35d98c949338515fd57655",
+      "hash_meta": "08b5f7bfbadd4cbaa2691a486435de2e2b529ec2ee9881219284ee47e2d8faf0",
+      "seqno": 5722554
+    },
+    "service": {
+      "entropy": "bYZbGzhCTrlViGgjRbeYB6R5",
+      "hostname": "mildred.fr",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "3.1.2"
+  },
+  "ctime": 1562688895,
+  "expire_in": 504576000,
+  "prev": "2e8877951f7ab5c1a69b262b1ea231cb41d1491831b55ce513bfc1313ae359f3",
+  "seqno": 23,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgrZUJPYjYx46Lp0EqK0ajSqUIvVr9pOpMc1LO0jaO2JEKp3BheWxvYWTESpcCF8QgLoh3lR96tcGmmyYrHqIxy0HRSRgxtVzlE7/BMTrjWfPEIMZmw6g/kRS2cDV3qlRVtdQd49gfK3zUi06gXLJnoh68AgHCo3NpZ8RAzdoR6av6GMiuvIs60k9Lu2Cap71SsyamUh6ZYnCBOiFLwGJzVi8qz2IzPn1VPfCZytsjqPbrlJYgucAP9WL8CKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIEa+T0IMNa3l/x4GBlWtHJT/rKDu/bSku8DGraMz4lXVo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/mildred
+
+==================================================================

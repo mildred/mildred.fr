@@ -1,0 +1,78 @@
+---
+title: "How to manage automatic updates with Fedora Silverblue (rpm-ostree)"
+date: 2019-11-27
+draft: false
+---
+
+Just a quick recap around CoreOS and Atomic distributions. In the beginning,
+existed Fedora Atomic based on rpm-ostree and CoreOS based on ChromeOS. Both
+provided an immutable distribution. CoreOS was based on Gentoo and Atomic on
+Fedora with RPM packages.
+
+rpm-ostree is superior in the upgrade process because it allows additional
+package layering. If you are not satisfied with the immutable distribution, you
+can layer new RPM packages on top of the base distribution instead of installing
+manually the software you need. With each system updates, the layered packages
+will be reinstalled from scratch.
+
+CoreOS in itself was superior too in the upgrade process because it managed to
+install updates automatically and reboot without manual intervention. This
+allows you at the cost of a small downtime (which you can work around with HA
+setups if you care about that) to always be up to date.
+
+At some point, Red Hat bought CoreOS and decided to merge both projects. In the
+end, the new distribution is going to use rpm-ostree. This new distribution
+called Fedora CoreOS but is not yet released. And Fedora Atomic is no longer
+maintained either.
+
+I decided to install Fedora Silverblue, which is the Fedora rpm-ostree
+distribution for the desktop, which is maintained and has just desktop packages
+that I can just disable for now, and perhaps (or perhaps not) I will be able to
+rebase on CoreOS when it is going to be ready.
+
+This might not be easy as the [migration path is not
+supported](https://github.com/coreos/fedora-coreos-config/issues/243).
+
+In any case, Fedora Silverblue can
+[install updates automatically](https://manpag.es/f31/5+rpm-ostreed.conf) but
+will not reboot.
+
+Here is my trick to schedule an automatic reboot once the updates are staged.
+
+`/etc/systemd/system/ostree-staged-reboot.path`:
+
+```
+[Unit]
+Description=OSTree Monitor Staged Deployment
+
+[Path]
+PathExists=/run/ostree/staged-deployment
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`/etc/systemd/system/ostree-staged-reboot.service`:
+
+```
+[Unit]
+Description=OSTree Staged deployment automatic reboot
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c ' \
+	( echo "Update available, system will reboot when all users log-out."; \
+	  echo "Stop automatic reboot with: systemctl stop ostree-staged-reboot"; \
+	) | wall; \
+	while ! [ "$(users | wc -w)" -eq 0 ]; do \
+		sleep 1s; \
+	done; \
+	: shutdown -r +60 "Rebooting to apply updates, cancel with: shutdown -c"; \
+	( echo "System will reboot in 60 seconds to apply updates"; \
+	  echo "Stop automatic reboot with: systemctl stop ostree-staged-reboot"; \
+	) | wall; \
+	sleep 60; \
+	systemctl reboot; \
+	'
+```
+
