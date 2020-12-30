@@ -67,6 +67,36 @@ collections:
         label:  Contenu
         widget: markdown
         required: false
+  - name: "at-compile-time"
+    label: "At Compile Time"
+    folder: "content/at-compile-time"
+    create: true
+    i18n: true
+    slug: "{{slug}}"
+    fields: # front matter
+      - name:   title
+        i18n:   true
+        label:  Titre
+        widget: string
+      - name:   date
+        i18n:   true
+        label:  Date
+        widget: datetime
+      - name:     layout
+        label:    Layout
+        widget:   string
+        required: false
+      - name:     draft
+        i18n:     true
+        label:    Draft
+        widget:   boolean
+        required: false
+        default:  false
+      - name:     body
+        i18n:     true
+        label:    Contenu
+        widget:   markdown
+        required: false
   - name: "articles"  # in routes
     label: "Articles" # in UI
     folder: "content/articles"
