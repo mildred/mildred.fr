@@ -1,5 +1,6 @@
 ---
-title: "Curriculum Vitæ"
+title: Curriculum Vitæ
+date: 2020-12-30T16:16:44.953Z
 layout: single
 ---
 
@@ -7,7 +8,11 @@ layout: single
 
 ### Freelance (juillet 2019 - présent) ###
 
-- **juillet 2019, [RunAs](https://www.runas.io/) :** Démarrage du projet avec
+- **septembre 2020 - présent, [Codde](https://codde.fr) :** Application Rails utilisant [StimulusJS](https://stimulusjs.org) et [UiBibz](http://hummel.link/ui-bibz/) pour les widgets (basé sur Bootstrap). Refonte entière de l'application.
+
+- **septembre 2020, [Lancey](https://www.lancey.fr) :** Courte mission pour les accompagner sur [Terraform](https://www.terraform.io) et [Kubernetes](https://kubernetes.io/) sur [Digital Ocean](https://www.digitalocean.com/).
+
+- **juillet - août 2019, [RunAs](https://www.runas.io/) :** Démarrage du projet avec
   les premières fonctionnalités. Utilise Elixir et Phoenix. Visible sur
   [GitHub](https://github.com/runasio/sna/).
 
