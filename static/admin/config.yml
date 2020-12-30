@@ -1,0 +1,97 @@
+backend:
+  name: gitlab
+  repo: mildred/mildred.fr
+  auth_type: implicit
+  app_id: 647d6eaff204755e08740fa0c5368d8e9d93c309c204e5e5c6be13666c59220d
+
+  #name: test-repo
+  branch: hugo
+
+local_backend: true
+
+# Editorial workflow (disabled for simplicity)
+# publish_mode: editorial_workflow
+
+media_folder: "/assets/media"
+public_folder: "/media"
+
+collections:
+  - name: "contact"  # in routes
+    label: "Contact" # in UI
+    folder: "content/contact"
+    slug: "{{slug}}"
+    fields: # front matter
+      - name:   title
+        label:  Titre
+        widget: string
+      - name:   date
+        label:  Date
+        widget: datetime
+      - name:   layout
+        label:  Layout
+        widget: string
+        required: false
+      - name:   body
+        label:  Contenu
+        widget: markdown
+        required: false
+  - name: "curriculum-vitae"  # in routes
+    label: "Curriculum Vitæ"
+    folder: "content/curriculum-vitae"
+    slug: "{{slug}}"
+    fields: # front matter
+      - name:   title
+        label:  Titre
+        widget: string
+      - name:   date
+        label:  Date
+        widget: datetime
+      - name:   layout
+        label:  Layout
+        widget: string
+        required: false
+      - name:   body
+        label:  Contenu
+        widget: markdown
+        required: false
+  - name: "articles"  # in routes
+    label: "Articles" # in UI
+    folder: "content/articles"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields: # front matter
+      - name:   title
+        label:  Titre
+        widget: string
+      - name:   date
+        label:  Date
+        widget: datetime
+      - name:   layout
+        label:  Layout
+        widget: string
+        required: false
+      - name:   body
+        label:  Contenu
+        widget: markdown
+        required: false
+  - name: "quick-posts"  # in routes
+    label: "Quick Posts" # in UI
+    folder: "content/quick-posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields: # front matter
+      - name:   title
+        label:  Titre
+        widget: string
+      - name:   date
+        label:  Date
+        widget: datetime
+      - name:   layout
+        label:  Layout
+        widget: string
+        required: false
+      - name:   body
+        label:  Contenu
+        widget: markdown
+        required: false
+
