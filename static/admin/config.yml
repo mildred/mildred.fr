@@ -1,6 +1,6 @@
 backend:
   name: gitlab
-  repo: mildred/mildred.fr
+  repo: mildred593/mildred.fr
   auth_type: implicit
   app_id: 647d6eaff204755e08740fa0c5368d8e9d93c309c204e5e5c6be13666c59220d
 
