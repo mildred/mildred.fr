@@ -25,11 +25,14 @@ collections:
     label: "Contact" # in UI
     folder: "content/contact"
     slug: "{{slug}}"
+    i18n: true
     fields: # front matter
       - name:   title
+        i18n: true
         label:  Titre
         widget: string
       - name:   date
+        i18n: true
         label:  Date
         widget: datetime
       - name:   layout
@@ -37,6 +40,7 @@ collections:
         widget: string
         required: false
       - name:   body
+        i18n: true
         label:  Contenu
         widget: markdown
         required: false
@@ -44,11 +48,14 @@ collections:
     label: "Curriculum Vitæ"
     folder: "content/curriculum-vitae"
     slug: "{{slug}}"
+    i18n: true
     fields: # front matter
       - name:   title
+        i18n: true
         label:  Titre
         widget: string
       - name:   date
+        i18n: true
         label:  Date
         widget: datetime
       - name:   layout
@@ -56,6 +63,7 @@ collections:
         widget: string
         required: false
       - name:   body
+        i18n: true
         label:  Contenu
         widget: markdown
         required: false
@@ -64,11 +72,14 @@ collections:
     folder: "content/articles"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    i18n: true
     fields: # front matter
       - name:   title
+        i18n: true
         label:  Titre
         widget: string
       - name:   date
+        i18n: true
         label:  Date
         widget: datetime
       - name:   layout
@@ -76,11 +87,13 @@ collections:
         widget: string
         required: false
       - name:     draft
+        i18n: true
         label:    Draft
         widget:   boolean
         required: false
         default:  false
       - name:   body
+        i18n: true
         label:  Contenu
         widget: markdown
         required: false
@@ -89,11 +102,14 @@ collections:
     folder: "content/quick-posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    i18n: true
     fields: # front matter
       - name:   title
+        i18n: true
         label:  Titre
         widget: string
       - name:   date
+        i18n: true
         label:  Date
         widget: datetime
       - name:   layout
@@ -101,11 +117,13 @@ collections:
         widget: string
         required: false
       - name:     draft
+        i18n: true
         label:    Draft
         widget:   boolean
         required: false
         default:  false
       - name:   body
+        i18n: true
         label:  Contenu
         widget: markdown
         required: false
