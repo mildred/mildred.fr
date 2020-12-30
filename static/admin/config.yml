@@ -15,6 +15,11 @@ local_backend: true
 media_folder: "/assets/media"
 public_folder: "/media"
 
+i18n:
+  structure: multiple_files
+  locales: [fr, en]
+  default_locale: fr
+
 collections:
   - name: "contact"  # in routes
     label: "Contact" # in UI
