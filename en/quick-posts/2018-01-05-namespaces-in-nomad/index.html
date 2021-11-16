@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | Namespaces in Consul/Nomad</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>Namespaces in Consul/Nomad</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/quick-posts/2018-01-05-namespaces-in-nomad/">
+      Namespaces in Consul/Nomad
+    </a>
+  </h1>
+  <div>
+    <p>A namespace is a collection of nomad jobs in the same directory. Sub-directories are sub-namespaces. When instanciated, a namespace is allocated an identifier (8 character unique ID). Before being inserted in nomad, the jobs are modified to include this namespace identifier:</p>
+
+<ul>
+<li>the nomad job name is prefixed by &ldquo;NAMESPACE-&rdquo; (the namespace identifier)</li>
+<li>the consul service definitions are prefixed by &ldquo;NAMESPACE-&rdquo; (the namespace identifier)</li>
+<li>the services have an additional environment variable: CONSUL_NAMESPACE_ID</li>
+</ul>
+
+<p>sub-namespaces are also inserted in the system when their parent namespace is inserted. Each sub-namespace is given an identifier the same way. The parent namespace is instanciated with:</p>
+
+<ul>
+<li>an environment variable CONSUL_NAMESPACE_ID_FOR_subnsname containing the sub namespace identifier</li>
+</ul>
+
+<p>We can imageine a complex system using namespace hierarchy like this:</p>
+
+<ul>
+<li><code>main/</code> application namespace containing:
+
+<ul>
+<li><code>web-service.nomad</code> (instanciated as &ldquo;00000001-web-service&rdquo;)</li>
+<li><code>helper.nomad</code> (instanciated as &ldquo;00000001-helper&rdquo;)</li>
+<li><code>smtp/</code> server sub namespace:
+
+<ul>
+<li><code>exim.nomad</code> (instanciated as &ldquo;00000002-exim&rdquo;)</li>
+<li><code>dovecot.nomad</code> (instanciated as &ldquo;0000002-dovecot&rdquo;)</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>web-service knows how to contact exim because it can find it using the consul name &ldquo;${CONSUL_NAMESPACE_ID_FOR_SMTP}-exim.service.consul&rdquo;</p>
+
+<hr />
+
+<p><em>Edit (2019-03-16): this is reflected in my <a href="https://github.com/mildred/nomadspace">nomadspace</a> project.</em></p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

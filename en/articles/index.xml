@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Articles on Mildred&#39;s Website</title>
+    <link>http://mildred.fr/en/articles/</link>
+    <description>Recent content in Articles on Mildred&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 05 Nov 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://mildred.fr/en/articles/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Configuring Cyrus IMAP</title>
+      <link>http://mildred.fr/en/articles/2020-11-05-configuring-cyrus-imap/</link>
+      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2020-11-05-configuring-cyrus-imap/</guid>
+      <description>I decided to install Cyrus IMAP on a server and create a terraform recipe for automatic configuration management for this installation. My goal is to have an easily maintainable mail server, and I choose Cyrus IMAP because it is pioneer in many modern features such as JMAP. It&amp;rsquo;s quite feature complete too.
+The problem I got was user management. I don&amp;rsquo;t plan to use Docker but I wanted to be able to have a web interface for user management, without sharing a db file on the disk (what if the user management and cyrus are on different servers?</description>
+    </item>
+    
+    <item>
+      <title>Maintain a rpm-ostree chroot</title>
+      <link>http://mildred.fr/en/articles/2020-06-05-maintain-rpm-ostree-chroot/</link>
+      <pubDate>Fri, 05 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2020-06-05-maintain-rpm-ostree-chroot/</guid>
+      <description>After having used containers for quite some time, I&amp;rsquo;m getting away from them because they require an infrastructure quite complex to get a system running and up to date. The ideal infrastructure should only depend on a few and controlled upstreams, possibly mirrored on site to get it working offline, and the Docker containers is the absolute opposite of that.
+As a consequence, I am looking up at alternatives that uses traditional distributiuon packages to work, and manual sandboxing with systemd directives or small other tools to do the job.</description>
+    </item>
+    
+    <item>
+      <title>systemd-nspawn and OSTree</title>
+      <link>http://mildred.fr/en/articles/2019-07-15-systemd-nspawn-and-ostree/</link>
+      <pubDate>Mon, 15 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2019-07-15-systemd-nspawn-and-ostree/</guid>
+      <description>I run my servers and my laptop using Fedora Atomic. This is the next Fedora CoreOS which is curently in devloppment. The current Fedora release is only available through the Silverblue channel, so that&amp;rsquo;s what I&amp;rsquo;m using currently. It features atomic updates and clean package layering. You can easily rollback.
+Now, I have a physical server to mess up with things locally, and I wanted to create multiple virtual environments where I can test different things.</description>
+    </item>
+    
+    <item>
+      <title>Programming good practices</title>
+      <link>http://mildred.fr/en/articles/2016-12-26-programming-good-practices/</link>
+      <pubDate>Mon, 26 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2016-12-26-programming-good-practices/</guid>
+      <description>Inspired by the golang language, especially its interfaces that allows decoupling without introducing dependencies.
+First, some guidelines that shows the direction to take but with no hard rules:
+ Separate private imports from public imports. Private imports are only needed for the implementation. Public imports are exposed to other modules and are visible to them because their types appear in public function signatures or public types.
+ In public module interface, avoid using types from other modules that are not completely abstracted as an interface type.</description>
+    </item>
+    
+  </channel>
+</rss>

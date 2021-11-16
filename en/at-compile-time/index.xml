@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>At Compile Time on Mildred&#39;s Website</title>
+    <link>http://mildred.fr/en/at-compile-time/</link>
+    <description>Recent content in At Compile Time on Mildred&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+	<atom:link href="http://mildred.fr/en/at-compile-time/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/le-danger-des-biblioth%C3%A8ques-externes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/le-danger-des-biblioth%C3%A8ques-externes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/optimis%C3%A9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/optimis%C3%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/parce-que-le-code-est-compil%C3%A9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/parce-que-le-code-est-compil%C3%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/sans-trop-dabstractions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/sans-trop-dabstractions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/%C3%A9loign%C3%A9-de-lobjet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/%C3%A9loign%C3%A9-de-lobjet/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

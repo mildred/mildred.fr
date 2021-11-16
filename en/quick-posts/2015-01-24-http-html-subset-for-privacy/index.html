@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | HTTP/HTML subset for respecting privacy</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>HTTP/HTML subset for respecting privacy</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/quick-posts/2015-01-24-http-html-subset-for-privacy/">
+      HTTP/HTML subset for respecting privacy
+    </a>
+  </h1>
+  <div>
+    <p>We can use HTTBy default, HTTP and HTML is not very respecting of our privacy. But, we could make it way better. Let&rsquo;s imagine that out there, there will be some privacy-respecting web servers and browers, how could we do that?</p>
+
+<ul>
+<li>A privacy respecting browser should follow as much as possible the privacy subset of HTTP/HTML, and warn when websites do not respect this.</li>
+<li>The browser should sandbox web views that are not affiliated. History, cookies, and every setting should not be shared at all.</li>
+<li>The server should use HTTP2 Push to push the assets (including external assets) of a web page served. Any assets that are not part of the push would be considered as not found by the privacy respecting browser.</li>
+<li>The browser will not attempt to fetch any resource that is not part of the HTTP2 Push</li>
+<li>When validating a form, performing a XMLHttpRequest or any network access (html refresh, &hellip;), the browser should tell the user (as all old browsers did) &ldquo;The website is attempting to send information&rdquo; with the choice to view the information, allow or deny. The browser must not allow to discard the dialog for future cases.</li>
+<li>The browser should have an API to allow to bundle multiple network requests together so only one dialog is prompted to the user</li>
+<li>HTTP redirects should also push the redirected location, else the page will fail to load</li>
+<li>The browser should use a minimal set of headers while performing the request (no user agent or content negociation)</li>
+<li>Links should not be followed without asking the user for confirmation unless the link href has not been touched by JavaScript. One solution for that is to build a list of all the links at page startup before running any javascript, and see if the link is on the list, later, when following the link. This list could also be sent by the server on HTTP headers or on the <code>&lt;head&gt;</code> section.</li>
+</ul>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

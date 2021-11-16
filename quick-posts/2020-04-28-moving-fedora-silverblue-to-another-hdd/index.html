@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Move Fedora Silverblue on another hard drive</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Move Fedora Silverblue on another hard drive</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2020-04-28-moving-fedora-silverblue-to-another-hdd/">
+      Move Fedora Silverblue on another hard drive
+    </a>
+  </h1>
+  <div>
+    
+
+<p>Hello, Today, I received a SSD (mSATA) that I installed in my computer in
+addition to the spinning hard drive I have. I want to move the Fedora system off
+to the SSD for better performance. I&rsquo;ll try it and explain what I did.</p>
+
+<p>My setup uses an ext4 boot partition and a btrfs system partition with a
+<code>fedora</code> subvolume for the OSTree system, and a <code>home</code> subvolume for the
+homedirs. it doesn&rsquo;t do LURKS encryption, and I want to add this in the process.</p>
+
+<h3 id="copy-the-files">Copy the files</h3>
+
+<p>Before all, the GPT disk must contains a specific partition that will contain the GRUB boot loader, else you won&rsquo;t be able to install GRUB. You can set up this partition in parted with:</p>
+
+<pre><code># parted /dev/sdb
+(parted) print                                                            
+Model: ATA KINGSTON SUV500M (scsi)
+Disk /dev/sdb: 240GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name  Flags
+ 1      1049kB  17.8MB  16.8MB               grub
+ 3      17.8MB  1001MB  984MB   ext4
+ 2      1001MB  240GB   239GB
+(parted) help toggle                                                      
+  toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER
+
+    NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions
+        from 5 onwards.
+        FLAG is one of: boot, root, swap, hidden, raid, lvm, lba, hp-service, palo, prep, msftres, bios_grub, atvrecv, diag, legacy_boot,
+        msftdata, irst, esp
+(parted) toggle 1 bios_grub
+(parted) quit
+</code></pre>
+
+<p>First, I installed the SSD, booter off the hard drive as before, formatted the
+SSD with a 1GB ext4 boot partition and the rest as a btrfs partition all using
+gnome-disks. Then, I am moving the subvolumes to the SSD using btrfs-send and
+btrfs-receive:</p>
+
+<ol>
+<li><p>Mount the existing HDD root to a new directory, without mounting any
+subvolume:</p>
+
+<pre><code>mkdir /mnt/sda6
+mount /dev/sda6 /mnt/sda6
+</code></pre></li>
+
+<li><p>Create snapshots and checks that there is no child subvolume that I missed:</p>
+
+<pre><code>cd /mnt/sda6
+sub snap -r fedora fedora@2020-04-28
+sub snap -r home home@2020-04-28
+btrfs sub list .
+</code></pre></li>
+
+<li><p>Send over the snapshots to the SSD (which is mounted over
+<code>/media/mildred/system</code> in my case):</p>
+
+<pre><code>btrfs send fedora@2020-04-28 | btrfs receive /media/mildred/system/
+btrfs send home@2020-04-28 | btrfs receive /media/mildred/system/
+</code></pre></li>
+
+<li><p>Now, create a read-write subvolume for the system. I keep the read-only snapshots for now in case I continue to use the system on the HDD and I need to move the newest changes to the SSD (btrfs-send and btrfs-receive can make incremental copies using the snapshot I kept):</p>
+
+<pre><code>cd /media/mildred/system/
+btrfs sub snap fedora@2020-04-28 fedora
+btrfs sub snap home@2020-04-28 home
+</code></pre></li>
+</ol>
+
+<p>Let&rsquo;s move the boot partition over too (SSD boot is mounted over
+<code>/mildred/media/boot</code>):</p>
+
+<pre><code>cp -a /boot/* /media/mildred/boot
+</code></pre>
+
+<p>Note, the SSD does not have any GRUB installed, and the partition references in
+GRUB and in <code>/etc/fstab</code> must be off. I&rsquo;ll need to update this all to get the
+system booting.</p>
+
+<h3 id="find-important-values-to-modify">Find important values to modify</h3>
+
+<p>I will need the partition UUIDs to reconfigure the system. Here is how I get them (the first, sdb2, is system, the second, sdb1, is boot):</p>
+
+<pre><code># ls -l /dev/disk/by-uuid | grep sdb
+lrwxrwxrwx. 1 root root 10 28 avril 13:36 27948583-d046-42ae-bcee-e1394553e0b6 -&gt; ../../sdb2
+lrwxrwxrwx. 1 root root 10 28 avril 13:36 365609fc-83cf-42ce-9ab9-c7a64547c227 -&gt; ../../sdb1
+</code></pre>
+
+<p>I will also need to get the ostree ids for the booted system that I want to configure:</p>
+
+<pre><code># cat /media/mildred/boot/loader/entries/*
+title Fedora 32.20200424.n.0 (Silverblue) (ostree:1)
+version 1
+options resume=UUID=97b54b6f-9147-4879-953e-7619d9c012b6 rhgb quiet root=UUID=55c760d6-d020-4345-893b-839d00b5cff4 ostree=/ostree/boot.0/fedora-workstation/ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/0 rootflags=subvol=fedora rootflags=subvol=fedora
+linux /ostree/fedora-workstation-ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/vmlinuz-5.6.6-300.fc32.x86_64
+initrd /ostree/fedora-workstation-ab7bfac27a7cb9333c9fb1b234887f359ff0b5fb8fe357178a73e3bcf25e0ed3/initramfs-5.6.6-300.fc32.x86_64.img
+title Fedora 32.20200428.0 (Silverblue) (ostree:0)
+version 2
+options resume=UUID=97b54b6f-9147-4879-953e-7619d9c012b6 rhgb quiet root=UUID=55c760d6-d020-4345-893b-839d00b5cff4 ostree=/ostree/boot.0/fedora-workstation/e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/0 rootflags=subvol=fedora rootflags=subvol=fedora
+linux /ostree/fedora-workstation-e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/vmlinuz-5.6.6-300.fc32.x86_64
+initrd /ostree/fedora-workstation-e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a/initramfs-5.6.6-300.fc32.x86_64.img
+</code></pre>
+
+<p>I&rsquo;ll only edit the <code>ostree:0</code> entry which is the latest system. Its boot id is <code>e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a</code>. I&rsquo;ll need the ostree deployment id:</p>
+
+<pre><code># ls -l /media/mildred/system/fedora/ostree/boot.0/fedora-workstation/e140f262f43397a4b27416a51bf82d9d09e06ae16489f56847b9813dbdfda04a
+total 4
+lrwxrwxrwx. 1 root root 108 28 avril 12:17 0 -&gt; ../../../deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+</code></pre>
+
+<p>The deployment id is <code>c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0</code>.</p>
+
+<h3 id="update-configuration">update configuration</h3>
+
+<ol>
+<li><p>Get in the deployment directory</p>
+
+<p>cd /media/mildred/system/fedora/ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0</p></li>
+
+<li><p>First thing, update /etc/fstab to change the partition UUIDs to account for the SSD partitions. The only partition that I kept on the HDD is the swap.</p>
+
+<pre><code>vi ./etc/fstab
+</code></pre>
+
+<p>Update all <code>UUID=*</code> lines with UUID for SSD partition for /boot, and the UUID of the device-mapper system partition for root and home</p></li>
+
+<li><p>Get into the boot partition</p>
+
+<pre><code>cd /media/mildred/boot
+</code></pre></li>
+
+<li><p>Update the loader file (check it&rsquo;s the right file compared to the deployment you modified)</p>
+
+<pre><code>vi loader/entries/ostree-2-fedora-workstation.conf
+</code></pre>
+
+<p>Then, change again all the <code>UUID=*</code> strings to match your newer partitions. Beware, the <code>resume=</code> option should match your swap and <code>root=</code> should match your root partition.</p>
+
+<p>To set up encryption, the command-line options must be used:</p>
+
+<pre><code>rd.luks.name=27948583-d046-42ae-bcee-e1394553e0b6=cryptroot root=/dev/mapper/cryptroot
+</code></pre></li>
+
+<li><p>Update the GRUB configuration manually (because grub2-mkconfig cannot work, even in a chroot, because it will not be able to find the root device). Make sure you change the right entry again, using the same UUIDs as in the loader entry. Also update the <code>set root=</code> and <code>search</code> grub options with the physical address of the boot partition</p>
+
+<pre><code>vi loader/grub.cfg
+</code></pre></li>
+</ol>
+
+<h3 id="get-into-the-chroot-and-install-grub">Get into the chroot and install GRUB</h3>
+
+<p>Create a target mount point:</p>
+
+<pre><code>mkdir /mnt/target
+mount /dev/mapper/luks-27948583-d046-42ae-bcee-e1394553e0b6 /mnt/target -o subvol=fedora
+cd /mnt/target
+</code></pre>
+
+<p>Let&rsquo;s go in the deployment directory to prepare for the chroot:</p>
+
+<pre><code>cd ostree/deploy/fedora-workstation/deploy/c0dcf72a27f8dd1e087fa4953b9e4e8bcf0d196fbcd781432281f33273d7633e.0
+mount --bind /media/mildred/boot ./boot
+mount --bind /dev dev
+mount --bind /dev/pts dev/pts
+mount --bind /proc proc
+mount --bind /sys sys
+chroot .
+</code></pre>
+
+<p>Now, install GRUB (recheck to ensure device names are not improperly cached):</p>
+
+<pre><code>grub2-install --recheck /dev/sdb
+</code></pre>
+
+<h3 id="reboot">Reboot</h3>
+
+<p>Update BIOS boot device and choose the correct option in GRUB. After rebooting, regenerating the GRUB config might help to have something correct in the configuration files all the way.</p>
+
+<p>References:</p>
+
+<ul>
+<li><a href="https://discussion.fedoraproject.org/t/recover-grub-after-reinstall-windows/9123">Forum topic on how to install GRUB from chroot</a></li>
+<li><a href="https://github.com/ostreedev/ostree/issues/1009#issuecomment-506503756">https://github.com/ostreedev/ostree/issues/1009#issuecomment-506503756</a></li>
+</ul>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

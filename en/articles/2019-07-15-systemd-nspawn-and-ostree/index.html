@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | systemd-nspawn and OSTree</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>systemd-nspawn and OSTree</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/articles/2019-07-15-systemd-nspawn-and-ostree/">
+      systemd-nspawn and OSTree
+    </a>
+  </h1>
+  <div>
+    
+
+<p>I run my servers and my laptop using Fedora Atomic. This is the next Fedora
+CoreOS which is curently in devloppment. The current Fedora release is only
+available through the Silverblue channel, so that&rsquo;s what I&rsquo;m using currently. It
+features atomic updates and clean package layering. You can easily rollback.</p>
+
+<p>Now, I have a physical server to mess up with things locally, and I wanted to
+create multiple virtual environments where I can test different things. In
+particular I want to try a Rancher k3s deployment on bare metal. The only thing
+is that physical machines are difficult to clone, so I wanted to setup some kind
+of virtual environment on top of it to be able to start up a different OS
+distribution later on without requiring me to buy a new machine and reconfigure
+it from scratch.</p>
+
+<p>instead of going the virtual machine route, I wanted to test systemd-nspawn and
+systemd-machined to manage my &ldquo;virtual&rdquo; machines wuing <code>machinectl</code>. Also, I
+wanted to boot an OSTree distribution both as host and guest. OSTree is nice
+because it allows to share a single <code>/ostree</code> between various systems. here is
+how I did it.</p>
+
+<h2 id="create-the-ostree-deployment">Create the OSTree deployment</h2>
+
+<p>You need to create a new OSTree deployment without impacting the host. First,
+create a new OS inside your OSTree:</p>
+
+<pre><code>[root@host host]# ostree admin os-init guest
+ostree/deploy/guest initialized as OSTree root
+</code></pre>
+
+<p>You now have a guest OS registered, but it does not have any deployment. A
+deployment is a system image you layer on top of resident data (<code>/var</code>). To
+create a deployment, you need an OSTree commit hash to reference it. Let&rsquo;s start
+with the same commit as the host.</p>
+
+<p>Let&rsquo;s view your deployments:</p>
+
+<pre><code>[root@host host]# ostree admin status
+  fedora 131642a5b3da24dc47f9ff8191f5856bbeced08275ea823fa543327fd20f4862.0 (staged)
+    Version: 30.20190715.0
+    origin: &lt;unknown origin type&gt;
+* fedora 8e721e68bfa7c813361f3067d202b2fd907634e192059451ffa8365ca5733224.0
+    Version: 30.20190713.0
+    origin: &lt;unknown origin type&gt;
+  fedora 38a1f86b1168dda0e8ed80782afb3e56bb1918b1984c1dc0d7216f63f865a7a0.0 (rollback)
+    Version: 30.20190701.0
+    origin: &lt;unknown origin type&gt;
+</code></pre>
+
+<p>here you see I performed an updated (staged) but did not reboot to it. I also
+have the current deployment and the rollback deployment. the hashes are not
+commit ids yet. Perhaps there is another way to get the commit ids, but I did a
+<code>rpm-ostree status</code> to get it:</p>
+
+<pre><code>[root@host host]# rpm-ostree status
+State: idle
+AutomaticUpdates: disabled
+Deployments:
+  ostree://fedora:fedora/30/x86_64/silverblue
+                   Version: 30.20190715.0 (2019-07-15T00:36:07Z)
+                BaseCommit: fa23b170d892d78935de422064e73a84057119ea315257a9030dc7659e726a7b
+                 StateRoot: fedora
+              GPGSignature: Valid signature by F1D8EC98F241AAF20DF69420EF3C111FCFC659B9
+                      Diff: 11 upgraded, 1 added
+           LayeredPackages: net-tools strace systemd-container tcpdump tmux
+
+● ostree://fedora:fedora/30/x86_64/silverblue
+                   Version: 30.20190713.0 (2019-07-13T00:38:50Z)
+                BaseCommit: f8aeed3ee64bddecb6ebfd382db9c4b19c5f5502cb24fdb4eed788b9c4558f62
+                 StateRoot: fedora
+              GPGSignature: Valid signature by F1D8EC98F241AAF20DF69420EF3C111FCFC659B9
+           LayeredPackages: net-tools systemd-container tcpdump tmux
+
+  ostree://fedora:fedora/30/x86_64/silverblue
+                   Version: 30.20190701.0 (2019-07-01T00:36:21Z)
+                BaseCommit: f5efad3126a7bc90b88c0a3ba382c15eb3119e123eef3b1f1e2c4a7f7480fcc1
+                 StateRoot: fedora
+              GPGSignature: Valid signature by F1D8EC98F241AAF20DF69420EF3C111FCFC659B9
+           LayeredPackages: net-tools tcpdump tmux
+</code></pre>
+
+<p>Let&rsquo;s take commit
+<code>fa23b170d892d78935de422064e73a84057119ea315257a9030dc7659e726a7b</code> as a base
+commit for our new <code>guest</code> deployment.</p>
+
+<pre><code>[root@host host]# ostree admin deploy --not-as-default --os=guest fa23b170d892d78935de422064e73a84057119ea315257a9030dc7659e726a7b
+Relabeling /var (no stamp file 'var/.ostree-selabeled' found)
+Bootloader updated; bootconfig swap: yes; deployment count change: 0
+</code></pre>
+
+<p>You need to specify <code>--not-as-default</code> else when the host is going to reboot, it
+will reboot to the guest deployment. That would not be nice.</p>
+
+<h2 id="setup-systemd-nspawn-to-start-the-guest">Setup systemd-nspawn to start the guest</h2>
+
+<p>Because systemd-nspawn is accessing <code>/sysroot</code> and I believe SELinux is not
+configured to allow that by default, you&rsquo;ll have to find a way for SELinux to
+accept what we are doing. You can just test things out first by setting SELinux
+to permissive mode:</p>
+
+<pre><code>[root@host host]# setenforce Permissive
+</code></pre>
+
+<p>(you might want to configure this to keep it across reboots)</p>
+
+<p>Now, you need to create a dropin to <code>systemd-nspawn@guest.service</code> to set up
+option to systemd-nspawn:</p>
+
+<pre><code>[root@host host]# cat /etc/systemd/system/systemd-nspawn@guest.service.d/10-service.conf
+[Service]
+ExecStart=
+Environment=SYSTEMD_NSPAWN_LOCK=0
+ExecStart=/bin/sh -xc ' \
+        deployment=`ostree admin status | sed -ne \'s/. %i \\(\\S*\\)\\( .*\\)*$/\\1/; T; p; q\'`; \
+        exec /usr/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i \
+        --directory=/sysroot \
+        --bind /boot:/boot \
+        --bind +/sysroot/ostree/deploy/%i/var:/var \
+        --pivot-root /ostree/deploy/%i/deploy/$deployment:/sysroot \
+        $SYSTEMD_NSPAWN_FLAGS \
+        '
+RestartForceExitStatus=
+Restart=always
+RestartSec=3s
+</code></pre>
+
+<p>In particular:</p>
+
+<ul>
+<li><p><code>-U</code> is removed because we do not want systemd-nspawn to update the UID/GID in
+/ostree. Unfortunately, this article does not cover how we can separate
+UIDs/GIDs between the host and the guest.</p></li>
+
+<li><p><code>--directory=/sysroot</code> is telling systemd-nspawn to boot <code>/sysroot</code> as root
+directory. This is the filesystem root.</p></li>
+
+<li><p><code>--bind /boot:/boot</code> is telling to keep the boot partition mounted. This is
+necessary for the ostree command-line to work (it looks for files in
+<code>/boot/loader/entries</code>)</p></li>
+
+<li><p><code>--bind +/sysroot/ostree/deploy/%i/var:/var</code> is telling to mount the
+persistent <code>/var</code> directory. Else we would have a complete system read-only.</p></li>
+
+<li><p><code>--pivot-root /ostree/deploy/%i/deploy/$deployment:/sysroot</code> is telling to
+pivot-root to the specific deployment (computed from the sed pipeline above)</p></li>
+
+<li><p><code>Restart=always</code> and <code>RestartSec=3s</code> gives enough time to systemd-machined to
+deregister the machine so the machine can restart without errors (<code>Failed to
+register machine: Machine 'guest' already exists</code>)</p></li>
+</ul>
+
+<p>With that, you can now enable and start the service, and you have a sub-machine
+ready.</p>
+
+<pre><code>[root@host host]# systemctl enable --now systemd-nspawn@guest.service
+[root@host host]# machinectl list
+MACHINE CLASS     SERVICE        OS     VERSION ADDRESSES
+guest   container systemd-nspawn fedora 30      -        
+
+2 machines listed.
+[root@host host]# machinectl shell guest
+Connected to machine guest. Press ^] three times within 1s to exit session.
+
+Welcome to Fedora Silverblue. This terminal is running on the
+immutable host system. You may want to try out the Toolbox for a
+more traditional environment that allows package installation
+with DNF.
+
+For more information, see the documentation.
+
+[root@guest roothome]# ostree admin status
+  fedora 8e721e68bfa7c813361f3067d202b2fd907634e192059451ffa8365ca5733224.0
+    Version: 30.20190713.0
+    origin: &lt;unknown origin type&gt;
+* guest fa23b170d892d78935de422064e73a84057119ea315257a9030dc7659e726a7b.0
+    Version: 30.20190715.0
+    origin refspec: fa23b170d892d78935de422064e73a84057119ea315257a9030dc7659e726a7b
+  fedora 38a1f86b1168dda0e8ed80782afb3e56bb1918b1984c1dc0d7216f63f865a7a0.0
+    Version: 30.20190701.0
+    origin: &lt;unknown origin type&gt;
+</code></pre>
+
+<p>You will also need to enable <code>machines.target</code>:</p>
+
+<pre><code>[root@host host]$ systemctl enable machines.target
+Created symlink /etc/systemd/system/multi-user.target.wants/machines.target → /usr/lib/systemd/system/machines.target.
+</code></pre>
+
+<h2 id="configure-network-bridge">Configure network bridge</h2>
+
+<p>To make the guest machine accessible from the network, it needs to be bridged
+(or otherwise connected) to the host network. By default a network interface
+pair is created but left unconfigured. We&rsquo;ll see how to bridge it to the host
+network.</p>
+
+<p>First, you need to create a bridge on the host. We&rsquo;ll use systemd-networkd which
+is suitable for servers. Ensure it is enabled and started:</p>
+
+<pre><code>[root@host host]# systemctl status systemd-networkd
+● systemd-networkd.service - Network Service
+   Loaded: loaded (/usr/lib/systemd/system/systemd-networkd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2019-07-15 14:34:30 CEST; 22s ago
+</code></pre>
+
+<p>Then you need to create a bridge device:</p>
+
+<pre><code>[root@host host]# cat /etc/systemd/network/br0.netdev
+[NetDev]
+Name=br0
+Kind=bridge
+</code></pre>
+
+<p>Assign the upstream network interfaces to the bridge (beware, if you have static
+DHCP rules, the host MAC address will change to the MAC address of the bridge,
+which is deterministic):</p>
+
+<pre><code>[root@host host]# cat /etc/systemd/network/br0-bind.network
+[Match]
+Name=en*
+
+[Network]
+Bridge=br0
+</code></pre>
+
+<p>And enable DHCP on the bridge:</p>
+
+<pre><code>[root@host host]# cat /etc/systemd/network/br0.network
+[Match]
+Name=br0
+
+[Network]
+DHCP=ipv4
+</code></pre>
+
+<p>And add a systemd-nspawn flag to bridge the machine:</p>
+
+<pre><code>[root@host host]# cat /etc/systemd/system/systemd-nspawn@guest.service.d/10-flags.conf
+[Service]
+Environment=SYSTEMD_NSPAWN_FLAGS=--network-bridge=br0
+</code></pre>
+
+<p>Then, you can restart <code>systemd-networkd</code> and <code>systemd-nspawn@guest</code>.</p>
+
+<h2 id="in-case-you-want-to-run-kubernetes-in-it">In case you want to run Kubernetes in it</h2>
+
+<p>Short answer: it&rsquo;s difficult and need further work</p>
+
+<p>You need to make a few changes. First, you need to disable conntrack tweaking in
+kube-proxy. kube-proxy be default attempts to tweak the nf_conntrack kernel
+module, which is not possible in the nspawn jail because
+<code>/sys/module/nf_conntrack/parameters/hashsize</code> does not exists. Add to the
+kube-proxy command-line:</p>
+
+<pre><code>--conntrack-max-per-core=0
+</code></pre>
+
+<p>If you use btrfs, you may have problems with kubelet which cannot find device
+major and minor number for its data directories. I had a strange error like
+<code>Failed to start ContainerManager failed to get rootfs info: failed to get
+device for dir &quot;/var/lib/rancher/k3s/agent/kubelet&quot;: could not find device with
+major: 0, minor: 44 in cached partitions map</code> which followed a warning <code>stat
+failed on /dev/sda5 with error: no such file or directory</code>.</p>
+
+<p>What kubelet is doing (in fact it&rsquo;s delegated to cadvisor) is it&rsquo;s trying to
+find the device number for the data directory. If the device major number is 0,
+it means that the mount point is a device-less mount point. In this case, a
+btrfs subvolume. To get the proper device, it detects if the filesystem is btrfs
+and is looking up the device number of the btrfs device itself (<code>/dev/sda5</code> in
+my case). Because systemd-nspawn mask the block devices, it fails.</p>
+
+<p>The solution is to add to the systemd-nspawn command-line before the pivot root:</p>
+
+<pre><code>--bind /dev:/dev
+</code></pre>
+
+<p>To get <code>/proc/sys</code> writeable, you need to start systemd-nspawn with:</p>
+
+<pre><code>Environment=SYSTEMD_NSPAWN_API_VFS_WRITABLE=1
+</code></pre>
+
+<p>Then, you&rsquo;ll have a problem because the cgroups hierarchy is read-only. This is
+because cgroups-v1 cannot be delegated properly and there might be conflicts.
+cgroups-v2 might help there but it&rsquo;s still early.</p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

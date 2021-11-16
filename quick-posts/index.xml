@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quick-posts on Chez Mildred</title>
+    <link>http://mildred.fr/quick-posts/</link>
+    <description>Recent content in Quick-posts on Chez Mildred</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 16 Nov 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://mildred.fr/quick-posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Femme enfant et soumission à son mari</title>
+      <link>http://mildred.fr/quick-posts/2021-11-16-femme-enfant-et-soumission/</link>
+      <pubDate>Tue, 16 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2021-11-16-femme-enfant-et-soumission/</guid>
+      <description>Je voulais réagir à votre dernier podcast sur la femme enfant. J&amp;rsquo;avoue me reconnaître par le passé dans bon nombre de ces traits, et ce qui a été d&amp;rsquo;une grande aide pour moi ce fut le mariage. Avec mon mari, nous vivions ensemble depuis plusieurs années mais nous ne nous étions jamais mariés (et pas non plus convertis d&amp;rsquo;ailleurs). J&amp;rsquo;étais toujours indépendante et avait tendance à ne pas forcément accepter les décisions de mon compagnon, quitte à nous disputer ou avoir des moments plus énervés, distants ou froids.</description>
+    </item>
+    
+    <item>
+      <title>Faire fonctionner le i-parapheur avec Linux</title>
+      <link>http://mildred.fr/quick-posts/2020-09-25-installer-libersign-linux-bis/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2020-09-25-installer-libersign-linux-bis/</guid>
+      <description>Solution simple, utiliser java :
+ git clone https://github.com/mildred/docker-firefox-openjdk cd docker-firefox-openjdk ./build.sh ./run.sh  Seul problème, cela ne fonctionne pas&amp;hellip;
+Sinon, si vous avez envie de coder des trucs :
+ Télécharger le driver de Chambersign
+ Décompresser dans un dossier les drivers et modifier le rpath
+patchelf --set-rpath &amp;quot;$PWD&amp;quot; libidolog.so patchelf --set-rpath &amp;quot;$PWD&amp;quot; libidop11.so patchelf --set-rpath &amp;quot;$PWD&amp;quot; libt_ias.so patchelf --set-rpath &amp;quot;$PWD&amp;quot; idocachesrv  Vérifier que vous avec toutes les bibliothèques requises :</description>
+    </item>
+    
+    <item>
+      <title>Installation de LiberSign pour Linux pour utilisation de i-parapheur</title>
+      <link>http://mildred.fr/quick-posts/2020-09-24-installer-libersign-linux/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2020-09-24-installer-libersign-linux/</guid>
+      <description>Note : Wine n&amp;rsquo;a pas de support USB, donc le certificat USB ne sera pas reconnu&amp;hellip; Ceci est donc inutile.
+Nous utiliserons une toolbox avec Fedora pour installer le logiciel compagnon en utilisant Wine afin de faire fonctionner LiberSign.
+ Lire la documentation
+ Installer l&amp;rsquo;extension
+ Télécharger libersign.exe
+ Créer une toolbox wine :
+toolbox create -c app-wine toolbox enter -c app-wine sudo dnf install zsh wine  Installer libersign.</description>
+    </item>
+    
+    <item>
+      <title>Move Fedora Silverblue on another hard drive</title>
+      <link>http://mildred.fr/quick-posts/2020-04-28-moving-fedora-silverblue-to-another-hdd/</link>
+      <pubDate>Tue, 28 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2020-04-28-moving-fedora-silverblue-to-another-hdd/</guid>
+      <description>Hello, Today, I received a SSD (mSATA) that I installed in my computer in addition to the spinning hard drive I have. I want to move the Fedora system off to the SSD for better performance. I&amp;rsquo;ll try it and explain what I did.
+My setup uses an ext4 boot partition and a btrfs system partition with a fedora subvolume for the OSTree system, and a home subvolume for the homedirs.</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Fedora Silverblue 32 when you have rpmfusion packages</title>
+      <link>http://mildred.fr/quick-posts/2020-04-27-upgrade-to-fedora-silverblue-32-with-rpmfusion-repos/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2020-04-27-upgrade-to-fedora-silverblue-32-with-rpmfusion-repos/</guid>
+      <description>As with previous article, here is the procedure to upgrade to Fedora 32 if you have RPMFusion installed (same procedure):
+ Check the repository for Fedora 32 is there:
+sudo ostree remote refs fedora  Download rpmfusion repositories:
+wget https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-branched.noarch.rpm wget https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-branched.noarch.rpm  (you can omit nonfree)
+ Update .repo files to next fedora version:
+sudo sed -i.backup &#39;s/\$releasever/32/g&#39; /etc/yum.repos.d/rpmfusion*.repo  Start rebasing replacing rpmfusion packages. Here I also removed old packages I don&amp;rsquo;t use any more and installed docker-compose.</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Fedora Silverblue 31 when you have rpmfusion packages</title>
+      <link>http://mildred.fr/quick-posts/2019-11-27-upgrade-to-fedora-silverblue-31-with-rpmfusion-repos/</link>
+      <pubDate>Wed, 27 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2019-11-27-upgrade-to-fedora-silverblue-31-with-rpmfusion-repos/</guid>
+      <description>Like last time, here is how I performed my system upgrade. having rpmfusion packages can block your upgrade with the following error message:
+# ostree remote gpg-import fedora -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-31-primary # rpm-ostree rebase fedora:fedora/31/x86_64/silverblue ... error: N’a pas pu depsolve la transaction; 2 problèmes détectés: Probléme 1: package rpmfusion-free-release-30-0.3.noarch requires system-release(30), but none of the providers can be installed - package generic-release-30-0.3.noarch requires generic-release-common = 30-0.3, but none of the providers can be installed - conflicting requests - nothing provides fedora-repos(30) needed by generic-release-common-30-0.</description>
+    </item>
+    
+    <item>
+      <title>Comment faire du web aujourd&#39;hui ? (brouillon)</title>
+      <link>http://mildred.fr/quick-posts/2017-12-05-comment-faire-du-web/</link>
+      <pubDate>Tue, 05 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2017-12-05-comment-faire-du-web/</guid>
+      <description>Comment faire du web aujourd&amp;rsquo;hui ? Une vraie question qui mérite qu&amp;rsquo;on s&amp;rsquo;y attarde un peu. Nous na parlons pas ici de pages documentaires qui sont l&amp;rsquo;origine du web, mais des applications web. Une sorte de chimère qui s&amp;rsquo;est développée de manière organique au dessus des navigateurs, outils servant à la base pour parcourir des bases documentaires.
+Qualifions maintenant cette interrogations que nous avons formulé ? Comment faire du web ?</description>
+    </item>
+    
+    <item>
+      <title>Énergeie libre et force contre électromotrice</title>
+      <link>http://mildred.fr/quick-posts/2016-04-09-energie-libre-et-force-contre-electromotrice/</link>
+      <pubDate>Sat, 09 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/quick-posts/2016-04-09-energie-libre-et-force-contre-electromotrice/</guid>
+      <description>Points clefs pour réduire les dépenses énergétiques dans une machine tournante électrique :
+ Lorsque le champ magnétique d&amp;rsquo;une bobine s&amp;rsquo;effondre, il est possible de récupérer le courant en sortie de la bobine provenant de l&amp;rsquo;effondrement du champ magnétique et stocker l&amp;rsquo;énergeie dans un cendensateur pour la réutiliser et réalimenter une bobine peu après. Le fait qu&amp;rsquo;une self décale dans le temps le passage du courant permet cela. Trouver un agencement de la machine tournante qui permet d&amp;rsquo;éviter que le champ magnétique soit orthogonal aux fils.</description>
+    </item>
+    
+  </channel>
+</rss>

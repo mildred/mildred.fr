@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | Maintain a rpm-ostree chroot</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>Maintain a rpm-ostree chroot</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/articles/2020-06-05-maintain-rpm-ostree-chroot/">
+      Maintain a rpm-ostree chroot
+    </a>
+  </h1>
+  <div>
+    
+
+<p>After having used containers for quite some time, I&rsquo;m getting away from them
+because they require an infrastructure quite complex to get a system running and
+up to date. The ideal infrastructure should only depend on a few and controlled
+upstreams, possibly mirrored on site to get it working offline, and the Docker
+containers is the absolute opposite of that.</p>
+
+<p>As a consequence, I am looking up at alternatives that uses traditional
+distributiuon packages to work, and manual sandboxing with systemd directives or
+small other tools to do the job.</p>
+
+<p>The subject of this article is to learn how to maintain a chroot distribution,
+and to do that I&rsquo;ll using <code>rpm-ostree</code> on top of a Fedora Silverblue
+distribution. I&rsquo;d gladly use Fedora CoreOS but their twaks in the base system
+prevent package layerting to work properly (such as using <code>systemd-networkd</code> on
+a server setup instead of <code>NetworkManager</code>). Also, for now this is still an
+experiment that I&rsquo;ll run on my Silverblue laptop, so I can iron out the rough
+edges without crashing my server.</p>
+
+<p>I&rsquo;ll expand upon my previous article: <a href="/en/articles/2019-07-15-systemd-nspawn-and-ostree/">systemd-nspawn and
+OSTree</a></p>
+
+<h2 id="create-an-os">Create an OS</h2>
+
+<p>Just like previously, run <code>rpm-ostree status</code> to get your OSTree base commit and
+initialize a new OS:</p>
+
+<pre><code>ostree admin os-init guest
+ostree admin deploy --retain --not-as-default --os=guest fedora:fedora/32/x86_64/silverblue
+</code></pre>
+
+<p>(your ostree remote should be named <code>fedora</code>)</p>
+
+<p>You should have an OS deployed in <code>/ostree/deploy/guest/deploy/*/</code></p>
+
+<h2 id="first-method-to-install-layered-packages-and-update-the-system">First method to install layered packages and update the system</h2>
+
+<p>Now comes <code>rpm-ostree</code> and to layer new packages on top of this guest OS, run:</p>
+
+<pre><code>rpm-ostree install --os=guest postfix
+</code></pre>
+
+<p>However, there is a drawback, on next reboot the guest will boot instead of the
+host. You can workaround this by updating the deployment number (unlikely to
+work):</p>
+
+<pre><code>rpm-ostree kargs --os=guest --deploy-index=3
+rpm-ostree kargs --deploy-index=0
+</code></pre>
+
+<h2 id="second-method-hack-around-ostree-staged-deployments">Second method: hack around ostree staged deployments</h2>
+
+<p>On OSTree, deployment can happen in two ways: direct deployment or staged
+deployment. Staged deployment are deployments written to <code>/ostree</code> but not yet
+written to the boot loader. It can be triggered using <code>ostree admin</code> <code>--staged</code>
+option, and it is the default with rpm-ostree when running in an OSTree host.</p>
+
+<p>The good news is that we need to avoid writing to the boot loader only if
+running an OSTree system, so we can rely on the default from <code>rpm-ostree</code>.</p>
+
+<p>The trick is that before updating the guest OSTree and deploying it, we save the
+pending deployments (if there is any) so the host system will deploy as usual.
+We perform the rpm-ostree operation. Then we restore the pending deployment from
+the host and trash the pending deployment from the guest.</p>
+
+<p>The drawback is that the deployment from the guest might be garbage collected.
+The solution might be to pin the deployment. Except pinning works only for
+deployments registered in the boot loader.</p>
+
+<p>If there is already a staged deployment:</p>
+
+<pre><code>mv /run/ostree/staged-deployment /run/ostree/staged-deployment.old
+rpm-ostree install --os=guest postfix
+mv /run/ostree/staged-deployment.old /run/ostree/staged-deployment
+</code></pre>
+
+<p>else:</p>
+
+<pre><code>rpm-ostree install --os=guest postfix
+rm -f /run/ostree/staged-deployment
+</code></pre>
+
+<p>You could even use <code>ostree admin deploy --stage</code> in the first command above to
+ensure that there is never any boot loader entry for your host, but you risk
+getting your deployments pruned.</p>
+
+<p>You can pin your deployment but <code>ostree admin pin</code> does work only for deployment
+in the boot loader. You can manually add the pin to your deployment by modifying
+the deployment file:</p>
+
+<pre><code>DEPLOYMENT_NAME=$(tr '\0' '\n' &lt;/run/ostree/staged-deployment | sed -e '/./p; d' | sed -ne '/name/,/osname/ p' | sed -ne '2 p')
+cat &gt;&gt;/ostree/deploy/guest/deploy/$DEPLOYMENT_NAME.origin &lt;&lt;EOF
+[libostree-transient]
+pinned=true
+EOF
+</code></pre>
+
+<p>Not sure that can work though, as the deployment mignt not be even considered
+pinned as it is not in the boot loader.</p>
+
+<!--
+Note to the future: maybe `- -peer` runs the rpm-ostree code outside of the
+daemon, and `systemd-run -p TemporaryFileSystem=/run/ostree` can be used to call
+rpm-ostree isolated.
+-->
+
+<p>Here is a wrapper that calls rpm-ostree, unstage the resulting deployment, and
+pin it (it only works if the daemon uses the same mount namespace as the client,
+you can use <code>--peer</code> for that):</p>
+
+<pre><code>#!/bin/bash
+
+unwrap(){
+  DEPLOYMENT_NAME=$(tr '\0' '\n' &lt;/run/ostree/staged-deployment | sed -e '/./p; d' | sed -ne '/name/,/osname/ p' | sed -ne '2 p')
+  cat &gt;&gt;/ostree/deploy/guest/deploy/$DEPLOYMENT_NAME.origin &lt;&lt;EOF
+
+[libostree-transient]
+pinned=true
+EOF
+}
+
+if [[ $0 == wrapped-rpm-ostree ]]; then
+  shift
+  rpm-ostree &quot;$@&quot;
+  res=$?
+  unwrap
+  exit $res
+fi
+
+systemd-run -t -p TemporaryFileSystem=/run/ostree &quot;$0&quot; wrapped-rpm-ostree &quot;$@&quot;
+</code></pre>
+
+<h2 id="alternate-option-to-update-the-system-use-rpm-ostree-compose">Alternate option to update the system: use <code>rpm-ostree compose</code></h2>
+
+<p>This second method is the blessed way to work on OSTree commits without
+deploying them. It can be used on a server to build a tree for clients to pull.
+So the compose is done once on a central location.</p>
+
+<p>This is however more complex and you need to write a treefile.</p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

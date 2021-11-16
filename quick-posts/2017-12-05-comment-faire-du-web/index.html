@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Comment faire du web aujourd&#39;hui ? (brouillon)</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Comment faire du web aujourd&#39;hui ? (brouillon)</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2017-12-05-comment-faire-du-web/">
+      Comment faire du web aujourd&#39;hui ? (brouillon)
+    </a>
+  </h1>
+  <div>
+    <p>Comment faire du web aujourd&rsquo;hui ? Une vraie question qui mérite qu&rsquo;on s&rsquo;y attarde un peu. Nous na parlons pas ici de pages documentaires qui sont l&rsquo;origine du web, mais des applications web. Une sorte de chimère qui s&rsquo;est développée de manière organique au dessus des navigateurs, outils servant à la base pour parcourir des bases documentaires.</p>
+
+<p>Qualifions maintenant cette interrogations que nous avons formulé ? Comment faire du web ? Ce que nous cherchons à savoir ici, c&rsquo;est comment écrire des applications web en gardant la simplicité originale de ce que le web représente. Point de framework compliqués, nous cherchons une solution à base de bibliothèques dédiées a une seule tâche.</p>
+
+<p>Une autre propriété du web, c&rsquo;est la séparation des objectifs. Depuis ses débuts, il sépare la structure sémantique du document (HTML) avec son apparence (les styles CSS) et également ses effets (les scripts). Rien n&rsquo;est mélangé à tort et à travers. Il est possible de prendre un même document et lui appliquer des styles et scripts différents. De la même manière, pour une application web, nous chercherons a voir comment séparer ses différents aspects.</p>
+
+<p>Pour résumer, voici une simple liste de ce que nous cherchons :</p>
+
+<pre><code>Orienté composent : c'est la base du HTML, des balises réutilisables
+Une stack technique simple: pas de jQuery, Javascript vanilla marche bien, pas d'extensions comme JSX qui nécessite des compilateurs comme babel
+Pas de templates : c'est la porte ouverte a toutes les failles XSS. On utilise un DOM a la place.
+rapide et léger
+</code></pre>
+
+<p>Ce critères nous emmènent bien loin de framework tout compris comme Angular. Au contraire, les techniques à base de virtual DOM semblent être intéressantes par leur rapidité d&rsquo;exécution. L&rsquo;idée du vitual DOM est de compacter tous les changements faits à la vue dans une structure de donnée, le VDOM, qui est ensuite comparé au DOM du navigateur. Et les changements, si il y en a, sont appliquées en une fois, évitant ainsi au navigateur de faire des rendus intermédiaire de la page.</p>
+
+<p>TODO: trouver une référence pour expliquer les avantages du VDOM dans Firefox</p>
+
+<p>React est la référence en ce qui concerne le Virtual DOM. Ce ne sera pas notre choix. En effet, il est relativement lourd, peu isolé dans ses fonctionnalités et nécessite des extensions (JSX) nécessitant de compiler le code javascript.</p>
+
+<p>Ce que nous voulons, ici, c&rsquo;est une bibliothèque ne s&rsquo;occupant que du Virtual DOM. Le templating serait fourni par une autre bibliothèque indépendante. Il en existe bon nombre, et notre choix s&rsquo;est porté sur citojs qui est léger, très rapide, et dont le format du DOM est un simple JSON, facile a adapter pour notre moteur de template.</p>
+
+<p>TODO: continuer</p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

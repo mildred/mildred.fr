@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred </title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+      <link href="http://mildred.fr/quick-posts/index.xml" rel="alternate" type="application/rss+xml" title="Chez Mildred" />
+      <link href="http://mildred.fr/quick-posts/index.xml" rel="feed" type="application/rss+xml" title="Chez Mildred" />
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2></h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+  <div class="translations">
+  <h4>Traductions</h4>
+  <ul>
+      
+      <li>
+          <a href="http://mildred.fr/en/quick-posts/">en: Quick-posts</a>
+      </li>
+      
+  </ul>
+  </div>
+  
+
+</div>
+
+    <main>
+      
+  <article>
+    <main></main>
+    <section>
+      
+      
+      
+      
+      
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2020-04-27-upgrade-to-fedora-silverblue-32-with-rpmfusion-repos/">
+            Upgrade Fedora Silverblue 32 when you have rpmfusion packages
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">4</span>-<span class="day">27</span>
+          </span>
+        </p>
+        <p class="summary">
+          As with previous article, here is the procedure to upgrade to Fedora 32 if you have RPMFusion installed (same procedure):
+ Check the repository for Fedora 32 is there:
+sudo ostree remote refs fedora  Download rpmfusion repositories:
+wget https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-branched.noarch.rpm wget https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-branched.noarch.rpm  (you can omit nonfree)
+ Update .repo files to next fedora version:
+sudo sed -i.backup 's/\$releasever/32/g' /etc/yum.repos.d/rpmfusion*.repo  Start rebasing replacing rpmfusion packages. Here I also removed old packages I don&rsquo;t use any more and installed docker-compose.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2019-11-27-upgrade-to-fedora-silverblue-31-with-rpmfusion-repos/">
+            Upgrade Fedora Silverblue 31 when you have rpmfusion packages
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">11</span>-<span class="day">27</span>
+          </span>
+        </p>
+        <p class="summary">
+          Like last time, here is how I performed my system upgrade. having rpmfusion packages can block your upgrade with the following error message:
+# ostree remote gpg-import fedora -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-31-primary # rpm-ostree rebase fedora:fedora/31/x86_64/silverblue ... error: N’a pas pu depsolve la transaction; 2 problèmes détectés: Probléme 1: package rpmfusion-free-release-30-0.3.noarch requires system-release(30), but none of the providers can be installed - package generic-release-30-0.3.noarch requires generic-release-common = 30-0.3, but none of the providers can be installed - conflicting requests - nothing provides fedora-repos(30) needed by generic-release-common-30-0.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/articles/2019-10-24-pourquoi-pas-la-tradition/">
+            Pourquoi pas la tradition ?
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">10</span>-<span class="day">24</span>
+          </span>
+        </p>
+        <p class="summary">
+          Cet article fait suite a une analyse que j&rsquo;ai faite préceddament sous le titre de &laquo;L&rsquo;Église et Vatican II&raquo; dans lequel je reprenais trois solution à la crise de l&rsquo;église que nous subissons :
+ le sédévacantisme la position de la Fraternité Saint Pie X l&rsquo;église conciliaire dans la position de l&rsquo;herméneutique de la continuité  Je concluais que le sédévacantisme constitue une mauvaise compréhension des dogmes de l&rsquo;Église, et que la position de la Fraternité Saint Pie X n&rsquo;était pas tenable.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/articles/2019-08-19-pourquoi-la-religion-catholique/">
+            Pourquoi la religion catholique
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">8</span>-<span class="day">19</span>
+          </span>
+        </p>
+        <p class="summary">
+          Je vais vous partager par ce billet le fruit de ma recherche spirituelle, et la raison qui me pousse au baptême catholique. J&rsquo;ai choisi la religion catholique alors que j&rsquo;ai été élevée dans le bouddhisme, et je vais tenter d&rsquo;expliquer pourquoi.
+I. La recherche de la vérité Il existe un postulat préalable a la recherche spirituelle, qui peut mener dans deux voies bien distinctes, c&rsquo;est la position que l&rsquo;on a par rapport à la vérité.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/articles/2019-07-15-systemd-nspawn-and-ostree/">
+            systemd-nspawn and OSTree
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">7</span>-<span class="day">15</span>
+          </span>
+        </p>
+        <p class="summary">
+          I run my servers and my laptop using Fedora Atomic. This is the next Fedora CoreOS which is curently in devloppment. The current Fedora release is only available through the Silverblue channel, so that&rsquo;s what I&rsquo;m using currently. It features atomic updates and clean package layering. You can easily rollback.
+Now, I have a physical server to mess up with things locally, and I wanted to create multiple virtual environments where I can test different things.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/quick-posts/2019-04-07-upgrade-fedora-silverblue-with-rpmfusion/">
+            Upgrade Fedora Silverblue when you have rpmfusion packages
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">4</span>-<span class="day">7</span>
+          </span>
+        </p>
+        <p class="summary">
+          Upgrading Fedora Silverblue should be as easy as rebasing rpm-ostree to the new fedora ostree branch. It should be easy performed with:
+sudo ostree remote gpg-import fedora-workstation -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-30-primary sudo rpm-ostree rebase fedora-workstation:fedora/30/x86_64/silverblue  However, when you have RPMFusion layered packages, this can become a bit more complex, as rpm-ostree will try to layer fedora-29 packages on top of a fedora-30 ostree branch. This should fail with something like:
+error: cannot update repo 'rpmfusion-free-updates': Cannot prepare internal mirrorlist: file &quot;repomd.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/articles/2019-02-25-eglise/">
+            L&#39;Église et Vatican II
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2019</span>-<span class="month">2</span>-<span class="day">25</span>
+          </span>
+        </p>
+        <p class="summary">
+          Dans ma recherche sur la vérité de la foi, je me suis documentée sur un certain nombre de sujets concernant l’état de l’église, et j’aimerais discuter de quelques questions à ce sujet. Se présentent à moi trois thèses principales :
+I. La première est celle des sédévacantistes, qui considèrent que le pape est infaillible, et qu&rsquo;une conséquence de cette infaillibilité est qu&rsquo;il serait impossible pour lui de professer des opinions modernistes.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/articles/2018-04-12-introduction-a-la-gnose/">
+            Introduction à La Gnose
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2018</span>-<span class="month">4</span>-<span class="day">12</span>
+          </span>
+        </p>
+        <p class="summary">
+          La conception gnostique La gnose est une lignée d&rsquo;enseignement philosophique et spirituel qui se caractérise en premier lieu par une volonté de libération totale du monde dans lequel nous sommes incarnés. C&rsquo;est une tradition multiple qui est formée de plusieurs écoles dont certaines sont chrétiennes et qui peuvent se rapprocher de l&rsquo;hermétisme ou de l&rsquo;alchimie par la recherche de la vérité. Pour cette modeste introduction, nous nous baserons sur l&rsquo;évangile « Pistis Sophia » qui compte l&rsquo;enseignement de Jésus après sa résurrection et son commentaire par le Rose Croix Jan Van Rijckenborgh.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/quick-posts/2018-01-05-namespaces-in-nomad/">
+            Namespaces in Consul/Nomad
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2018</span>-<span class="month">1</span>-<span class="day">5</span>
+          </span>
+        </p>
+        <p class="summary">
+          A namespace is a collection of nomad jobs in the same directory. Sub-directories are sub-namespaces. When instanciated, a namespace is allocated an identifier (8 character unique ID). Before being inserted in nomad, the jobs are modified to include this namespace identifier:
+ the nomad job name is prefixed by &ldquo;NAMESPACE-&rdquo; (the namespace identifier) the consul service definitions are prefixed by &ldquo;NAMESPACE-&rdquo; (the namespace identifier) the services have an additional environment variable: CONSUL_NAMESPACE_ID  sub-namespaces are also inserted in the system when their parent namespace is inserted.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2017-12-05-comment-faire-du-web/">
+            Comment faire du web aujourd&#39;hui ? (brouillon)
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2017</span>-<span class="month">12</span>-<span class="day">5</span>
+          </span>
+        </p>
+        <p class="summary">
+          Comment faire du web aujourd&rsquo;hui ? Une vraie question qui mérite qu&rsquo;on s&rsquo;y attarde un peu. Nous na parlons pas ici de pages documentaires qui sont l&rsquo;origine du web, mais des applications web. Une sorte de chimère qui s&rsquo;est développée de manière organique au dessus des navigateurs, outils servant à la base pour parcourir des bases documentaires.
+Qualifions maintenant cette interrogations que nous avons formulé ? Comment faire du web ?
+        </p>
+      </div>
+
+
+      
+    </section>
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/quick-posts/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/quick-posts/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/quick-posts/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/quick-posts/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/quick-posts/page/3/">3</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/quick-posts/page/3/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/quick-posts/page/3/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mildred&#39;s Website</title>
+    <link>http://mildred.fr/en/</link>
+    <description>Recent content on Mildred&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://mildred.fr/en/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Idea about decentralized naming system</title>
+      <link>http://mildred.fr/en/quick-posts/2020-11-11-idea-about-decentralized-naming-system/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2020-11-11-idea-about-decentralized-naming-system/</guid>
+      <description>Genesis I was investigating PeerTube vs LBRY as YouTube alternative, and I came to a mixed conclusion:
+ LBRY seems more popular in the content creators I follow With PeerTube you own the data you publish With LBRY, a simple PC with the app left open is enough to publish content for non tech people With PeerTube you can be censored from the Fediverse as it happened already with Gab.</description>
+    </item>
+    
+    <item>
+      <title>Configuring Cyrus IMAP</title>
+      <link>http://mildred.fr/en/articles/2020-11-05-configuring-cyrus-imap/</link>
+      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2020-11-05-configuring-cyrus-imap/</guid>
+      <description>I decided to install Cyrus IMAP on a server and create a terraform recipe for automatic configuration management for this installation. My goal is to have an easily maintainable mail server, and I choose Cyrus IMAP because it is pioneer in many modern features such as JMAP. It&amp;rsquo;s quite feature complete too.
+The problem I got was user management. I don&amp;rsquo;t plan to use Docker but I wanted to be able to have a web interface for user management, without sharing a db file on the disk (what if the user management and cyrus are on different servers?</description>
+    </item>
+    
+    <item>
+      <title>IP Forwarding winth a Linux bridge</title>
+      <link>http://mildred.fr/en/quick-posts/2020-09-09-ip-forwarding-a-linux-bridge/</link>
+      <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2020-09-09-ip-forwarding-a-linux-bridge/</guid>
+      <description>Background I maintain a mail server at home, and to get its public IP address, I have a VPN on it (so it is independent on how I connect to the Internet). Recently I decided to update my home network router so I could connect directly to the server (instead of going out to the internet and back in via the VPN). I just added a static route to the public IP to using the private IP as gateway.</description>
+    </item>
+    
+    <item>
+      <title>Maintain a rpm-ostree chroot</title>
+      <link>http://mildred.fr/en/articles/2020-06-05-maintain-rpm-ostree-chroot/</link>
+      <pubDate>Fri, 05 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2020-06-05-maintain-rpm-ostree-chroot/</guid>
+      <description>After having used containers for quite some time, I&amp;rsquo;m getting away from them because they require an infrastructure quite complex to get a system running and up to date. The ideal infrastructure should only depend on a few and controlled upstreams, possibly mirrored on site to get it working offline, and the Docker containers is the absolute opposite of that.
+As a consequence, I am looking up at alternatives that uses traditional distributiuon packages to work, and manual sandboxing with systemd directives or small other tools to do the job.</description>
+    </item>
+    
+    <item>
+      <title>Svelte for Nim</title>
+      <link>http://mildred.fr/en/quick-posts/2020-04-30-svelte-with-nim/</link>
+      <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2020-04-30-svelte-with-nim/</guid>
+      <description>How can we combine Svelte.js with Nim as a language. More specifically, what I&amp;rsquo;d like to see is a web frontend micro-framework which:
+ is written in Nim templates values into HTML does not do virtual dom is just a lib thanks to Nim macros, no framework (can emerald be used?) updates the DOM with DOM API calls rather than innerHTML and VDOM diffing  The idea is to get inspired by Svelte v2 which was simpler, and convert it to Nim.</description>
+    </item>
+    
+    <item>
+      <title>systemd-nspawn and OSTree</title>
+      <link>http://mildred.fr/en/articles/2019-07-15-systemd-nspawn-and-ostree/</link>
+      <pubDate>Mon, 15 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2019-07-15-systemd-nspawn-and-ostree/</guid>
+      <description>I run my servers and my laptop using Fedora Atomic. This is the next Fedora CoreOS which is curently in devloppment. The current Fedora release is only available through the Silverblue channel, so that&amp;rsquo;s what I&amp;rsquo;m using currently. It features atomic updates and clean package layering. You can easily rollback.
+Now, I have a physical server to mess up with things locally, and I wanted to create multiple virtual environments where I can test different things.</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Fedora Silverblue when you have rpmfusion packages</title>
+      <link>http://mildred.fr/en/quick-posts/2019-04-07-upgrade-fedora-silverblue-with-rpmfusion/</link>
+      <pubDate>Sun, 07 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2019-04-07-upgrade-fedora-silverblue-with-rpmfusion/</guid>
+      <description>Upgrading Fedora Silverblue should be as easy as rebasing rpm-ostree to the new fedora ostree branch. It should be easy performed with:
+sudo ostree remote gpg-import fedora-workstation -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-30-primary sudo rpm-ostree rebase fedora-workstation:fedora/30/x86_64/silverblue  However, when you have RPMFusion layered packages, this can become a bit more complex, as rpm-ostree will try to layer fedora-29 packages on top of a fedora-30 ostree branch. This should fail with something like:
+error: cannot update repo &#39;rpmfusion-free-updates&#39;: Cannot prepare internal mirrorlist: file &amp;quot;repomd.</description>
+    </item>
+    
+    <item>
+      <title>Namespaces in Consul/Nomad</title>
+      <link>http://mildred.fr/en/quick-posts/2018-01-05-namespaces-in-nomad/</link>
+      <pubDate>Fri, 05 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2018-01-05-namespaces-in-nomad/</guid>
+      <description>A namespace is a collection of nomad jobs in the same directory. Sub-directories are sub-namespaces. When instanciated, a namespace is allocated an identifier (8 character unique ID). Before being inserted in nomad, the jobs are modified to include this namespace identifier:
+ the nomad job name is prefixed by &amp;ldquo;NAMESPACE-&amp;rdquo; (the namespace identifier) the consul service definitions are prefixed by &amp;ldquo;NAMESPACE-&amp;rdquo; (the namespace identifier) the services have an additional environment variable: CONSUL_NAMESPACE_ID  sub-namespaces are also inserted in the system when their parent namespace is inserted.</description>
+    </item>
+    
+    <item>
+      <title>Programming good practices</title>
+      <link>http://mildred.fr/en/articles/2016-12-26-programming-good-practices/</link>
+      <pubDate>Mon, 26 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/articles/2016-12-26-programming-good-practices/</guid>
+      <description>Inspired by the golang language, especially its interfaces that allows decoupling without introducing dependencies.
+First, some guidelines that shows the direction to take but with no hard rules:
+ Separate private imports from public imports. Private imports are only needed for the implementation. Public imports are exposed to other modules and are visible to them because their types appear in public function signatures or public types.
+ In public module interface, avoid using types from other modules that are not completely abstracted as an interface type.</description>
+    </item>
+    
+    <item>
+      <title>HTTP/HTML subset for respecting privacy</title>
+      <link>http://mildred.fr/en/quick-posts/2015-01-24-http-html-subset-for-privacy/</link>
+      <pubDate>Sat, 24 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/quick-posts/2015-01-24-http-html-subset-for-privacy/</guid>
+      <description>We can use HTTBy default, HTTP and HTML is not very respecting of our privacy. But, we could make it way better. Let&amp;rsquo;s imagine that out there, there will be some privacy-respecting web servers and browers, how could we do that?
+ A privacy respecting browser should follow as much as possible the privacy subset of HTTP/HTML, and warn when websites do not respect this. The browser should sandbox web views that are not affiliated.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/le-danger-des-biblioth%C3%A8ques-externes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/le-danger-des-biblioth%C3%A8ques-externes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/optimis%C3%A9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/optimis%C3%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/parce-que-le-code-est-compil%C3%A9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/parce-que-le-code-est-compil%C3%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/sans-trop-dabstractions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/sans-trop-dabstractions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://mildred.fr/en/at-compile-time/%C3%A9loign%C3%A9-de-lobjet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://mildred.fr/en/at-compile-time/%C3%A9loign%C3%A9-de-lobjet/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

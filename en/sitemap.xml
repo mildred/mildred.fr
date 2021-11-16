@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://mildred.fr/en/curriculum-vitae/</loc>
+    <lastmod>2020-12-30T16:16:44+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/curriculum-vitae/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/curriculum-vitae/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2020-11-11-idea-about-decentralized-naming-system/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/articles/2020-11-05-configuring-cyrus-imap/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2020-09-09-ip-forwarding-a-linux-bridge/</loc>
+    <lastmod>2020-09-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/articles/2020-06-05-maintain-rpm-ostree-chroot/</loc>
+    <lastmod>2020-06-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2020-04-30-svelte-with-nim/</loc>
+    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/articles/2019-07-15-systemd-nspawn-and-ostree/</loc>
+    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2019-04-07-upgrade-fedora-silverblue-with-rpmfusion/</loc>
+    <lastmod>2019-04-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2018-01-05-namespaces-in-nomad/</loc>
+    <lastmod>2018-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/articles/2016-12-26-programming-good-practices/</loc>
+    <lastmod>2016-12-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/2015-01-24-http-html-subset-for-privacy/</loc>
+    <lastmod>2015-01-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/le-danger-des-biblioth%C3%A8ques-externes/</loc>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/optimis%C3%A9/</loc>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/parce-que-le-code-est-compil%C3%A9/</loc>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/sans-trop-dabstractions/</loc>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/%C3%A9loign%C3%A9-de-lobjet/</loc>
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/articles/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/articles/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/articles/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/at-compile-time/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/at-compile-time/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/at-compile-time/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/categories/</loc>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/categories/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/quick-posts/</loc>
+    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/quick-posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/quick-posts/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://mildred.fr/en/tags/</loc>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="http://mildred.fr/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="http://mildred.fr/en/tags/"
+                />
+  </url>
+  
+</urlset>

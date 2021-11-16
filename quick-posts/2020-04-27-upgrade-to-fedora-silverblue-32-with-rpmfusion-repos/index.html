@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Upgrade Fedora Silverblue 32 when you have rpmfusion packages</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Upgrade Fedora Silverblue 32 when you have rpmfusion packages</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2020-04-27-upgrade-to-fedora-silverblue-32-with-rpmfusion-repos/">
+      Upgrade Fedora Silverblue 32 when you have rpmfusion packages
+    </a>
+  </h1>
+  <div>
+    <p>As with <a href="/quick-posts/2019-11-27-upgrade-to-fedora-silverblue-31-with-rpmfusion-repos/">previous article</a>, here is the procedure to upgrade to Fedora 32 if you have RPMFusion installed (same procedure):</p>
+
+<ol>
+<li><p>Check the repository for Fedora 32 is there:</p>
+
+<pre><code>sudo ostree remote refs fedora
+</code></pre></li>
+
+<li><p>Download rpmfusion repositories:</p>
+
+<pre><code>wget https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-branched.noarch.rpm
+wget https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-branched.noarch.rpm
+</code></pre>
+
+<p>(you can omit nonfree)</p></li>
+
+<li><p>Update .repo files to next fedora version:</p>
+
+<pre><code>sudo sed -i.backup 's/\$releasever/32/g' /etc/yum.repos.d/rpmfusion*.repo
+</code></pre></li>
+
+<li><p>Start rebasing replacing rpmfusion packages. Here I also removed old packages
+I don&rsquo;t use any more and installed <code>docker-compose</code>.</p>
+
+<pre><code>sudo rpm-ostree rebase fedora:fedora/32/x86_64/silverblue --install docker-compose
+</code></pre></li>
+</ol>
+
+<p>I also removed git related packages because it caused an error like ``</p>
+
+<pre><code>    Forbidden base package replacements:
+      git-core 2.26.0-1.fc32 -&gt; 2.26.2-1.fc32 (updates)
+    This likely means that some of your layered packages have requirements on newer or older versions of some base packages. Doing `rpm-ostree cleanup -m` and `rpm-ostree upgrade` first may help. For more details, see: https://github.com/projectatomic/rpm-osResolving dependencies... done
+    error: Some base packages would be replaced
+</code></pre>
+
+<ol>
+<li><p>Restore repo files from backup:</p>
+
+<p>sudo sh -c &lsquo;for f in /etc/yum.repos.d/rpmfusion-*.repo.backup; do mv $f ${f%.backup}; done&rsquo;</p></li>
+</ol>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred </title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+      <link href="http://mildred.fr/tags/index.xml" rel="alternate" type="application/rss+xml" title="Chez Mildred" />
+      <link href="http://mildred.fr/tags/index.xml" rel="feed" type="application/rss+xml" title="Chez Mildred" />
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2></h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+  <div class="translations">
+  <h4>Traductions</h4>
+  <ul>
+      
+      <li>
+          <a href="http://mildred.fr/en/tags/">en: Tags</a>
+      </li>
+      
+  </ul>
+  </div>
+  
+
+</div>
+
+    <main>
+      
+  <article>
+    <main></main>
+    <section>
+      
+      
+      
+      
+      
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2021-11-16-femme-enfant-et-soumission/">
+            Femme enfant et soumission à son mari
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2021</span>-<span class="month">11</span>-<span class="day">16</span>
+          </span>
+        </p>
+        <p class="summary">
+          Je voulais réagir à votre dernier podcast sur la femme enfant. J&rsquo;avoue me reconnaître par le passé dans bon nombre de ces traits, et ce qui a été d&rsquo;une grande aide pour moi ce fut le mariage. Avec mon mari, nous vivions ensemble depuis plusieurs années mais nous ne nous étions jamais mariés (et pas non plus convertis d&rsquo;ailleurs). J&rsquo;étais toujours indépendante et avait tendance à ne pas forcément accepter les décisions de mon compagnon, quitte à nous disputer ou avoir des moments plus énervés, distants ou froids.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/quick-posts/2020-11-11-idea-about-decentralized-naming-system/">
+            Idea about decentralized naming system
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">11</span>-<span class="day">11</span>
+          </span>
+        </p>
+        <p class="summary">
+          Genesis I was investigating PeerTube vs LBRY as YouTube alternative, and I came to a mixed conclusion:
+ LBRY seems more popular in the content creators I follow With PeerTube you own the data you publish With LBRY, a simple PC with the app left open is enough to publish content for non tech people With PeerTube you can be censored from the Fediverse as it happened already with Gab.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/articles/2020-11-05-configuring-cyrus-imap/">
+            Configuring Cyrus IMAP
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">11</span>-<span class="day">5</span>
+          </span>
+        </p>
+        <p class="summary">
+          I decided to install Cyrus IMAP on a server and create a terraform recipe for automatic configuration management for this installation. My goal is to have an easily maintainable mail server, and I choose Cyrus IMAP because it is pioneer in many modern features such as JMAP. It&rsquo;s quite feature complete too.
+The problem I got was user management. I don&rsquo;t plan to use Docker but I wanted to be able to have a web interface for user management, without sharing a db file on the disk (what if the user management and cyrus are on different servers?
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2020-09-25-installer-libersign-linux-bis/">
+            Faire fonctionner le i-parapheur avec Linux
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">9</span>-<span class="day">23</span>
+          </span>
+        </p>
+        <p class="summary">
+          Solution simple, utiliser java :
+ git clone https://github.com/mildred/docker-firefox-openjdk cd docker-firefox-openjdk ./build.sh ./run.sh  Seul problème, cela ne fonctionne pas&hellip;
+Sinon, si vous avez envie de coder des trucs :
+ Télécharger le driver de Chambersign
+ Décompresser dans un dossier les drivers et modifier le rpath
+patchelf --set-rpath &quot;$PWD&quot; libidolog.so patchelf --set-rpath &quot;$PWD&quot; libidop11.so patchelf --set-rpath &quot;$PWD&quot; libt_ias.so patchelf --set-rpath &quot;$PWD&quot; idocachesrv  Vérifier que vous avec toutes les bibliothèques requises :
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2020-09-24-installer-libersign-linux/">
+            Installation de LiberSign pour Linux pour utilisation de i-parapheur
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">9</span>-<span class="day">23</span>
+          </span>
+        </p>
+        <p class="summary">
+          Note : Wine n&rsquo;a pas de support USB, donc le certificat USB ne sera pas reconnu&hellip; Ceci est donc inutile.
+Nous utiliserons une toolbox avec Fedora pour installer le logiciel compagnon en utilisant Wine afin de faire fonctionner LiberSign.
+ Lire la documentation
+ Installer l&rsquo;extension
+ Télécharger libersign.exe
+ Créer une toolbox wine :
+toolbox create -c app-wine toolbox enter -c app-wine sudo dnf install zsh wine  Installer libersign.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/articles/2020-09-18-jeanne-d-arc/">
+            Jeanne d&#39;Arc
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">9</span>-<span class="day">17</span>
+          </span>
+        </p>
+        <p class="summary">
+          Bonjour,
+Je voulais vous entretenir de réalisations que j&rsquo;eus à la lecture du procès de Jeanne d&rsquo;Arc lu et commenté par Jacques Trémolet de Villiers, et à quel point son martyre est proche du nôtre actuel. En effet, chose que je n&rsquo;avais pas réalisé jusqu&rsquo;alors, Jeanne est confrontée au même dilemme auquel nous devons tous faire face actuellement.
+En effet, Jeanne est jugée par des clercs qui cherchent à lui imposer une obéissance parfaite.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/quick-posts/2020-09-09-ip-forwarding-a-linux-bridge/">
+            IP Forwarding winth a Linux bridge
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">9</span>-<span class="day">9</span>
+          </span>
+        </p>
+        <p class="summary">
+          Background I maintain a mail server at home, and to get its public IP address, I have a VPN on it (so it is independent on how I connect to the Internet). Recently I decided to update my home network router so I could connect directly to the server (instead of going out to the internet and back in via the VPN). I just added a static route to the public IP to using the private IP as gateway.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/articles/2020-06-05-maintain-rpm-ostree-chroot/">
+            Maintain a rpm-ostree chroot
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">6</span>-<span class="day">5</span>
+          </span>
+        </p>
+        <p class="summary">
+          After having used containers for quite some time, I&rsquo;m getting away from them because they require an infrastructure quite complex to get a system running and up to date. The ideal infrastructure should only depend on a few and controlled upstreams, possibly mirrored on site to get it working offline, and the Docker containers is the absolute opposite of that.
+As a consequence, I am looking up at alternatives that uses traditional distributiuon packages to work, and manual sandboxing with systemd directives or small other tools to do the job.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/en/quick-posts/2020-04-30-svelte-with-nim/">
+            Svelte for Nim
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">4</span>-<span class="day">30</span>
+          </span>
+        </p>
+        <p class="summary">
+          How can we combine Svelte.js with Nim as a language. More specifically, what I&rsquo;d like to see is a web frontend micro-framework which:
+ is written in Nim templates values into HTML does not do virtual dom is just a lib thanks to Nim macros, no framework (can emerald be used?) updates the DOM with DOM API calls rather than innerHTML and VDOM diffing  The idea is to get inspired by Svelte v2 which was simpler, and convert it to Nim.
+        </p>
+      </div>
+
+
+      
+      
+      <div class="article summary">
+        <h1>
+          <a href="/quick-posts/2020-04-28-moving-fedora-silverblue-to-another-hdd/">
+            Move Fedora Silverblue on another hard drive
+          </a>
+        </h1>
+        <p class="meta">
+          Updated
+          <span class="meta date">
+            <span class="year">2020</span>-<span class="month">4</span>-<span class="day">28</span>
+          </span>
+        </p>
+        <p class="summary">
+          Hello, Today, I received a SSD (mSATA) that I installed in my computer in addition to the spinning hard drive I have. I want to move the Fedora system off to the SSD for better performance. I&rsquo;ll try it and explain what I did.
+My setup uses an ext4 boot partition and a btrfs system partition with a fedora subvolume for the OSTree system, and a home subvolume for the homedirs.
+        </p>
+      </div>
+
+
+      
+    </section>
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/tags/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item disabled">
+    <a href="" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/tags/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/tags/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/tags/page/3/">3</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/tags/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/tags/page/3/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

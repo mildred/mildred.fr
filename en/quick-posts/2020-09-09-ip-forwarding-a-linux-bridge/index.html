@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | IP Forwarding winth a Linux bridge</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>IP Forwarding winth a Linux bridge</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/quick-posts/2020-09-09-ip-forwarding-a-linux-bridge/">
+      IP Forwarding winth a Linux bridge
+    </a>
+  </h1>
+  <div>
+    
+
+<h2 id="background">Background</h2>
+
+<p>I maintain a mail server at home, and to get its public IP address,
+I have a VPN on it (so it is independent on how I connect to the Internet).
+Recently I decided to update my home network router so I could connect directly
+to the server (instead of going out to the internet and back in via the VPN). I
+just added a static route to the public IP to using the private IP as gateway.</p>
+
+<p>The only problem is that on the mail server, in order to be flexible how it is
+connected to the network, the LAN IP address is configured on a bridge network
+device where the physical device is part of. There are a few VLAN tricks too.</p>
+
+<p>An ascii-art diagram:</p>
+
+<pre><code>-----[ enp1s0 ]-----------------------------------------------
+         |
+         |                            [tun0] 193.33.56.74
+     [ bridge ] 192.168.5.16
+</code></pre>
+
+<h2 id="the-problem">The problem</h2>
+
+<p>When an IP packet with the destination IP set to the public IP
+(193.33.56.74 in the diagram) arrives on the physical network, it never gets to
+the bridge device. When I tcpdump <code>enp1s0</code>, I see the packet, when I tcpdump
+<code>bridge</code> the packet does not appear.</p>
+
+<p>This is because the bridge address only has the LAN IP address and not the
+public IP address. Even though I have IP forwarding in place, it does not work.</p>
+
+<h2 id="the-solution">The solution</h2>
+
+<p>The trick is to add to <code>sysctl.conf</code></p>
+
+<pre><code># bridge forward
+net.bridge.bridge-nf-call-arptables=0
+net.bridge.bridge-nf-call-iptables=0
+</code></pre>
+
+<p>And this can only work if the correct kernel module is loaded at boot time:</p>
+
+<pre><code># /etc/modules-load.d/bridge-forward.conf
+br_netfilter
+</code></pre>
+
+<h2 id="details-about-bridge-configuration">Details about bridge configuration</h2>
+
+<p>For reference, this is how I configure the bridge with systemd-networkd:</p>
+
+<p><code>en.network</code>:</p>
+
+<pre><code>[Match]
+Name=en* !en*.610 !en*u*
+
+[Network]
+Bridge=bridge
+
+[BridgeVLAN]
+VLAN=1
+PVID=1
+EgressUntagged=1
+
+[BridgeVLAN]
+VLAN=610
+</code></pre>
+
+<p><code>bridge.netdev</code>:</p>
+
+<pre><code>[NetDev]
+Name=bridge
+Kind=bridge
+
+[Bridge]
+DefaultPVID=1
+VLANFiltering=yes
+</code></pre>
+
+<p><code>bridge.network</code>:</p>
+
+<pre><code>[Match]
+Name=bridge
+
+[Network]
+VLAN=lan
+VLAN=vlan610
+
+[BridgeVLAN]
+VLAN=1
+
+[BridgeVLAN]
+VLAN=610
+</code></pre>
+
+<p><code>lan.netdev</code>:</p>
+
+<pre><code>[NetDev]
+Name=lan
+Kind=vlan
+
+[VLAN]
+Id=1
+</code></pre>
+
+<p><code>lan.network</code>:</p>
+
+<pre><code>[Match]
+Name=lan
+
+[Network]
+#DHCP=ipv4
+Address=192.168.5.16/24
+Gateway=192.168.5.1
+DNS=X.X.X.X
+DNS=X.X.X.X
+</code></pre>
+
+<p>(<code>vlan610.netdev</code> and <code>vlan610.network</code> not shown)</p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

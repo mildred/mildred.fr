@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | Upgrade Fedora Silverblue when you have rpmfusion packages</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>Upgrade Fedora Silverblue when you have rpmfusion packages</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/quick-posts/2019-04-07-upgrade-fedora-silverblue-with-rpmfusion/">
+      Upgrade Fedora Silverblue when you have rpmfusion packages
+    </a>
+  </h1>
+  <div>
+    <p>Upgrading Fedora Silverblue should be as easy as rebasing rpm-ostree to the new
+fedora ostree branch. It should be easy performed with:</p>
+
+<pre><code>sudo ostree remote gpg-import fedora-workstation -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-30-primary
+sudo rpm-ostree rebase fedora-workstation:fedora/30/x86_64/silverblue
+</code></pre>
+
+<p>However, when you have RPMFusion layered packages, this can become a bit more
+complex, as rpm-ostree will try to layer fedora-29 packages on top of a
+fedora-30 ostree branch. This should fail with something like:</p>
+
+<pre><code>error: cannot update repo 'rpmfusion-free-updates': Cannot prepare internal mirrorlist: file &quot;repomd.xml&quot; was not found in metalink
+</code></pre>
+
+<p>The solution is to install the RPMFusion repository for fedora 30 on top of the fedora 30 ostree branch, and then have rpm-ostree will layer correctly the packages on top of that.</p>
+
+<p><code>rpm-ostree status</code> shows for me:</p>
+
+<pre><code>● ostree://fedora-workstation:fedora/29/x86_64/silverblue
+               Version: 29.20190331.0 (2019-03-31T01:09:00Z)
+            BaseCommit: 6973b513b3475e749d37e9957bd4e38563c92487f501b42c8ce3857fe745fd7c
+          GPGSignature: Valid signature by 5A03B4DD8254ECA02FDA1637A20AA56B429476B4
+       LayeredPackages: ansible atomic bluecap bwrap-oci claws-mail claws-mail-plugins
+                        fedora-toolbox ffmpeg-libs git-gui gitk gnome-tweak-tool
+                        gstreamer-plugins-bad hledger htop hugin iotop jq neovim oathtool pass
+                        picocom podman-docker rkt smartmontools stow strace sway thunderbird
+                        weston zsh
+         LocalPackages: rpmfusion-free-release-29-1.noarch
+</code></pre>
+
+<p><code>/etc</code> is persistent, so you can update the rpmfusion repository information to get the fedora 30 version. Modify <code>/etc/yum.repos.d/rpmfusion*.repo</code> files to reference fedora 30 instead of fedora 29.</p>
+
+<p>First, remove the locally installed <code>rpmfusion-free-release-29-1.noarch</code> package that contains the dnf repository for rpmfusion:</p>
+
+<pre><code>rpm-ostree uninstall rpmfusion-free-release-29-1.noarch
+</code></pre>
+
+<p>For that, you need to have executed the <code>ostree remote gpg-import</code> command above, then you need to remove the rpmfusion repository</p>
+
+<pre><code>sudo rpm-ostree rebase --cache-only fedora-workstation:fedora/30/x86_64/silverblue
+</code></pre>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

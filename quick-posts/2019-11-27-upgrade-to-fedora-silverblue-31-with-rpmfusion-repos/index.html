@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Upgrade Fedora Silverblue 31 when you have rpmfusion packages</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Upgrade Fedora Silverblue 31 when you have rpmfusion packages</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2019-11-27-upgrade-to-fedora-silverblue-31-with-rpmfusion-repos/">
+      Upgrade Fedora Silverblue 31 when you have rpmfusion packages
+    </a>
+  </h1>
+  <div>
+    <p>Like last time, here is how I performed my system upgrade. having rpmfusion
+packages can block your upgrade with the following error message:</p>
+
+<pre><code># ostree remote gpg-import fedora -k /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-31-primary
+# rpm-ostree rebase fedora:fedora/31/x86_64/silverblue
+...
+error: N’a pas pu depsolve la transaction; 2 problèmes détectés:
+ Probléme 1: package rpmfusion-free-release-30-0.3.noarch requires system-release(30), but none of the providers can be installed
+  - package generic-release-30-0.3.noarch requires generic-release-common = 30-0.3, but none of the providers can be installed
+  - conflicting requests
+  - nothing provides fedora-repos(30) needed by generic-release-common-30-0.3.noarch
+ Probléme 2: package rpmfusion-nonfree-release-30-0.3.noarch requires system-release(30), but none of the providers can be installed
+  - package generic-release-30-0.3.noarch requires generic-release-common = 30-0.3, but none of the providers can be installed
+  - conflicting requests
+  - nothing provides fedora-repos(30) needed by generic-release-common-30-0.3.noarch
+</code></pre>
+
+<p>Before you continue, you&rsquo;ll have to upgrade the rpmfusion repos&hellip; To prevent
+unneeded reboot, you can do it manually:</p>
+
+<pre><code># sed -i.backup 's/\$releasever/31/g' /etc/yum.repos.d/rpmfusion*.repo
+</code></pre>
+
+<p>Then, upgrade:</p>
+
+<pre><code># wget https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-31.noarch.rpm
+# wget https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-31.noarch.rpm
+# rpm-ostree rebase fedora:fedora/31/x86_64/silverblue --uninstall atomic --uninstall rpmfusion-free-release-30-0.3.noarch --uninstall rpmfusion-nonfree-release-30-0.3.noarch --install rpmfusion-free-release-31.noarch.rpm --install rpmfusion-nonfree-release-31.noarch.rpm
+</code></pre>
+
+<p>I had to specify to remove atomic, which is a tool for deprecated Fedora Atomic
+which I had installed and is no longer there.</p>
+
+<p>After that, it should have worked, just reboot to Fedora 31.</p>
+
+<p>Last thing, revert back the rpmfusion repo files modified above:</p>
+
+<pre><code># for f in /etc/yum.repos.d/rpmfusion-*.repo.backup; do echo mv $f ${f%.backup}; done
+</code></pre>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

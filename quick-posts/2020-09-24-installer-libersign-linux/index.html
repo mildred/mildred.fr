@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Installation de LiberSign pour Linux pour utilisation de i-parapheur</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Installation de LiberSign pour Linux pour utilisation de i-parapheur</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2020-09-24-installer-libersign-linux/">
+      Installation de LiberSign pour Linux pour utilisation de i-parapheur
+    </a>
+  </h1>
+  <div>
+    <p><strong>Note :</strong> Wine n&rsquo;a pas de support USB, donc le certificat USB ne sera pas
+reconnu&hellip; Ceci est donc inutile.</p>
+
+<p>Nous utiliserons une toolbox avec Fedora pour installer le logiciel compagnon en
+utilisant Wine afin de faire fonctionner LiberSign.</p>
+
+<ul>
+<li><p>Lire la <a href="https://www.cc-saulnois.fr/extranet/libersign.php">documentation</a></p></li>
+
+<li><p>Installer l&rsquo;<a href="https://libersign.libriciel.fr/extension.xpi">extension</a></p></li>
+
+<li><p>Télécharger <a href="https://libersign.libriciel.fr/libersign.exe">libersign.exe</a></p></li>
+
+<li><p>Créer une toolbox wine :</p>
+
+<pre><code>toolbox create -c app-wine
+toolbox enter -c app-wine
+sudo dnf install zsh wine
+</code></pre></li>
+
+<li><p>Installer <code>libersign.exe</code> dans la toolbox :</p>
+
+<pre><code>wine ./libersign.exe
+</code></pre>
+
+<p>LiberSign est installé dans <code>~/.wine/drive_c/users/$(whoami)/Local\ Settings/Application\ Data/LiberSign/</code></p></li>
+
+<li><p>Créer un manifest <code>~/.mozilla/native-messaging-hosts/org.adullact.libersign.json</code> :</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;org.adullact.libersign&quot;,
+  &quot;description&quot;: &quot;Chrome Native Messaging LiberSign Extension&quot;,
+  &quot;path&quot;: &quot;/home/mildred/.mozilla/native-messaging-hosts/org.adullact.libersign.sh&quot;,
+  &quot;type&quot;: &quot;stdio&quot;,
+  &quot;allowed_extensions&quot;: [
+    &quot;@libersign&quot;
+  ]
+}
+</code></pre></li>
+
+<li><p>Créer le script <code>/home/mildred/.mozilla/native-messaging-hosts/org.adullact.libersign.sh</code> :</p>
+
+<pre><code>#!/bin/sh
+
+set -e
+passthrough=false
+passthrough_out=true
+single=true
+
+mkdir -p ~/.run
+fifo=&quot;$(mktemp -u ~/.run/org.adullact.libersign.XXXXXXXX.fifo)&quot;
+mkfifo &quot;$fifo.in&quot;
+mkfifo &quot;$fifo.out&quot;
+mkfifo &quot;$fifo.sig&quot;
+touch &quot;$fifo.continue&quot;
+log=&quot;$HOME/.run/org.adullact.libersign.log&quot;
+id=$$
+
+if $single; then
+  rm -f &quot;$fifo.in&quot;
+fi
+
+exec 4&lt;&amp;0 5&gt;&amp;1 &lt;/dev/null &gt;&quot;$log&quot; 2&gt;&gt;&quot;$log&quot; 0&lt;&amp;-
+
+echo &quot;$id: FIFO are $fifo.*&quot;
+trap clean_fifo 0
+clean_fifo(){
+  set +e
+  rm -f &quot;$fifo.in&quot; &quot;$fifo.out&quot;
+  echo &quot;$id: rm -f $fifo.in $fifo.out $fifo.sig $fifo.continue&quot;
+}
+
+
+if $passthrough; then
+  cat &lt;&amp;4 &gt;&quot;$fifo.in&quot; &amp; in=$!
+else
+  (
+    continue=false
+    echo &quot;$id: wait for toolbox to be ready&quot;
+    :&gt;&quot;$fifo.sig&quot; # Wait for toolbox binary to start
+
+    exec 6&gt;&quot;$fifo.in&quot;
+    while true; do
+      len=$(head -c 4 &lt;&amp;4 | od -An -t u4 | xargs)
+      if [ -z &quot;$len&quot; ]; then
+        if $single; then
+          rm -f &quot;$fifo.in&quot;
+          :&gt;&quot;$fifo.sig&quot; # Wait for toolbox binary to start
+        fi
+        echo &quot;$id: No more messages: quit&quot;
+        exec 6&gt;&amp;-
+        break
+      elif $continue &amp;&amp; $single; then
+        exec 6&gt;&amp;-
+        echo &quot;$id: wait for toolbox to be ready&quot;
+        :&gt;&quot;$fifo.sig&quot; # Wait for toolbox binary to start
+
+        exec 6&gt;&quot;$fifo.in&quot;
+      fi
+      msg=&quot;$(head -c $len &lt;&amp;4)&quot;
+      echo &quot;$id: message $len $msg&quot;
+
+      binlen=$(printf %08x $len)
+      binlen_le=&quot;\x${binlen:6:2}\x${binlen:4:2}\x${binlen:2:2}\x${binlen:0:2}&quot;
+
+      if $single; then
+        touch &quot;$fifo.continue&quot;
+      fi
+
+      #printf '%b%s' &quot;$binlen_le&quot; &quot;$msg&quot; | hexdump -C
+      printf '%b%s' &quot;$binlen_le&quot; &quot;$msg&quot; &gt;&amp;6
+      echo &quot;$id: message sent&quot;
+      continue=true
+    done
+  ) &amp; in=$!
+fi
+
+if $passthrough_out; then
+  cat &lt;&quot;$fifo.out&quot; &gt;&amp;5 &amp; out=$!
+else
+  (
+    exec 7&lt;&quot;$fifo.out&quot;
+    while false; do
+      len=$(head -c 4 &lt;&amp;7 | od -An -t u4 | xargs)
+      if [ -z &quot;$len&quot; ]; then
+        echo &quot;$id: No more responses: quit&quot;
+        break
+      fi
+      echo &quot;$id: response $len&quot;
+      msg=&quot;$(head -c $len &lt;&amp;7)&quot;
+      echo &quot;$id: response $len $msg&quot;
+
+      binlen=$(printf %08x 76)
+      binlen_le=&quot;\x${binlen:6:2}\x${binlen:4:2}\x${binlen:2:2}\x${binlen:0:2}&quot;
+      #printf '%b%s' &quot;$binlen_le&quot; &quot;$msg&quot; | hexdump -C
+      printf '%b%s' &quot;$binlen_le&quot; &quot;$msg&quot; &gt;&amp;5
+    done
+  ) &amp; out=$!
+fi
+
+toolbox run -c app-wine sh -c '
+  cd ~/.wine/drive_c/users/$(whoami)/Local\ Settings/Application\ Data/LiberSign/;
+  export WINEDEBUG=-all;
+  id=&quot;$0&quot;
+  fifo=&quot;$1&quot;;
+  exec 4&gt;&quot;$fifo.out&quot;
+  while [ -e &quot;$fifo.continue&quot; ]; do
+    echo &quot;$id: toolbox starting&quot;
+    rm -f &quot;$fifo.continue&quot;
+    echo &quot;$id: toolbox ready&quot;
+    :&lt;&quot;$fifo.sig&quot; # Signal ready
+    rm -f &quot;$fifo.sig&quot;
+    mkfifo &quot;$fifo.sig&quot;
+    echo &quot;$id: wine ./jre/bin/libersign -jar ./NativeHost.jar&quot;
+    wine ./jre/bin/libersign -jar ./NativeHost.jar &lt;&quot;$fifo.in&quot; &gt;&amp;4
+  done
+  echo &quot;$id: toolbox stopped&quot;
+' &quot;$id&quot; &quot;$fifo&quot; &amp; job=$!
+
+wait $in $out $job
+exit $?
+</code></pre>
+
+<p>Puis</p>
+
+<pre><code>chmod +x /home/mildred/.mozilla/native-messaging-hosts/org.adullact.libersign.sh
+</code></pre></li>
+</ul>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

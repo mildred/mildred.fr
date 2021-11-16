@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Chez Mildred  | Faire fonctionner le i-parapheur avec Linux</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Chez Mildred</h1>
+  <h2>Faire fonctionner le i-parapheur avec Linux</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/quick-posts/2020-09-25-installer-libersign-linux-bis/">
+      Faire fonctionner le i-parapheur avec Linux
+    </a>
+  </h1>
+  <div>
+    <p>Solution simple, utiliser java :</p>
+
+<ul>
+<li><code>git clone https://github.com/mildred/docker-firefox-openjdk</code></li>
+<li><code>cd docker-firefox-openjdk</code></li>
+<li><code>./build.sh</code></li>
+<li><code>./run.sh</code></li>
+</ul>
+
+<p>Seul problème, cela ne fonctionne pas&hellip;</p>
+
+<p>Sinon, si vous avez envie de coder des trucs :</p>
+
+<ul>
+<li><p>Télécharger le <a href="http://support.chambersign.fr/index.php?option=com_chambersign&amp;task=autoconnect&amp;p=dD00">driver de Chambersign</a></p></li>
+
+<li><p>Décompresser dans un dossier les drivers et modifier le rpath</p>
+
+<pre><code>patchelf --set-rpath &quot;$PWD&quot; libidolog.so
+patchelf --set-rpath &quot;$PWD&quot; libidop11.so
+patchelf --set-rpath &quot;$PWD&quot; libt_ias.so
+patchelf --set-rpath &quot;$PWD&quot; idocachesrv
+</code></pre></li>
+
+<li><p>Vérifier que vous avec toutes les bibliothèques requises :</p>
+
+<pre><code>ldd libidolog.so
+ldd libidop11.so
+ldd libt_ias.so
+ldd idocachesrv
+</code></pre>
+
+<p>Il me manque <code>libcrypto.so.1.0.0</code> et <code>libpcsclite.so.1</code>, cherchez sur
+<a href="https://pkgs.org/">pkgs.org</a>. J&rsquo;ai pris le package libssh de slackware et ai copié les
+fichiers dans le dossier courant.</p>
+
+<p>Vérifier avec <code>ldd * | grep &quot;not found&quot;</code> et utiliser <code>patchelf</code> au besoin.</p></li>
+
+<li><p>Configurer Firefox avec un <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#PKCS_11_manifests">fichier manifest</a> :</p>
+
+<pre><code>mkdir -p ~/.mozilla/pkcs11-modules
+cat &lt;&lt;EOF &gt;~/.mozilla/pkcs11-modules/chambersign.json
+{
+  &quot;name&quot;: &quot;chambersign&quot;,
+  &quot;description&quot;: &quot;Chambersign PKCS#11&quot;,
+  &quot;type&quot;: &quot;pkcs11&quot;,
+  &quot;path&quot;: &quot;$PWD/libidop11.so&quot;,
+  &quot;allowed_extensions&quot;: []
+}
+EOF
+</code></pre></li>
+
+<li><p>Installer la configuration :</p>
+
+<pre><code>cat &lt;&lt;EOF &gt;~/.idoss.global.conf
+SecuritySuite {
+        Shell = #
+}
+TokenInterfaces2 {
+        IAS = libt_ias.so
+}
+EOF
+</code></pre></li>
+
+<li><p>Démarrer le service (nécessaire à chaque fois) :</p>
+
+<p>journalctl -f &amp;
+  ./idocachesrv</p></li>
+
+<li><p>Écrire un extension Firefox pour remplacer Libersign en utilisant pkcs11</p></li>
+</ul>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Chez Mildred </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

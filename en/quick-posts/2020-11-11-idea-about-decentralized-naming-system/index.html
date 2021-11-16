@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | Idea about decentralized naming system</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>Idea about decentralized naming system</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/quick-posts/2020-11-11-idea-about-decentralized-naming-system/">
+      Idea about decentralized naming system
+    </a>
+  </h1>
+  <div>
+    
+
+<h2 id="genesis">Genesis</h2>
+
+<p>I was investigating PeerTube vs LBRY as YouTube alternative, and I came to a
+mixed conclusion:</p>
+
+<ul>
+<li>LBRY seems more popular in the content creators I follow</li>
+<li>With PeerTube you own the data you publish</li>
+<li>With LBRY, a simple PC with the app left open is enough to publish content for
+non tech people</li>
+<li>With PeerTube you can be censored from the Fediverse as it happened already
+with <a href="http://gab.com">Gab</a>. I also heard that some PeerTube instances were
+enforcing a COVID19 policy, how long before this policy is enforced in
+PeerTube peering?</li>
+<li>With LBRY, there is no censorship possible, but you cannot take down illegal
+content</li>
+<li>LBRY can only work because of a blockchain where you need to spend LBC tokens
+for every action (except looking at the content). You need coin to create a
+channel, create a content, publish a comment. For the moment LBRY Inc is
+liberally giving out credits, but how can it work long term?</li>
+</ul>
+
+<p>LBRY makes use of its coin to claim a name. For content publishing, it uses a
+BitTorrent-like protocol. The blockchain serves as a database for all the
+available content, and content is indexed by name which requires LBC to
+register.</p>
+
+<p>Thus, I&rsquo;m thinking at solutions to avoid this blockchain, and because the issue
+is with name claiming, I&rsquo;m thinking about a generic solution to that problem.
+That could also help with DNS.</p>
+
+<p>Also, LBRY name claiming is quite ingenious. Instead of spending a fixed amount
+of coins to register a name, you block an amount of coins, and you can get back
+your coins when you decide to unregister the name you claimed. If a name is
+popular, someone else can bid a higher amount on the same name and there is a
+system that takes into account the duration you had the name in possession that
+may eventually award the name to the highest bidder. It&rsquo;s a better scheme than
+first come first served.</p>
+
+<h2 id="solutions">Solutions</h2>
+
+<ul>
+<li><p>Blockchains is great to build consensus, but there is no need to have coins on
+top of them. Merkle-trees can be constructed with arbitrary data in it and there
+is no need to reuse the Bitcoin code and logic that much.</p></li>
+
+<li><p>Proof of Work is mostly there to avoid Sybil attack. However there exists the
+Duniter project that aims at creating a free money system that has a web of
+trust ensuring that for each registered account, there is a unique human behind.
+Reusing this, we can ensure that participants in a blockchain are unique humans.</p></li>
+</ul>
+
+<h2 id="naming-system">Naming system</h2>
+
+<ul>
+<li><p>A blockchain database where each block can contain:</p>
+
+<ul>
+<li><p>A name registration, associated with any kind of data (limited in length).
+It could be an IP address, a Torrent(-like) hash or anything really. A
+public key and duration will be associated with each registration.</p></li>
+
+<li><p>a name revocation that can happen automatically (by forging nodes) when a
+name expires or manually (with a signed revocation document)</p></li>
+
+<li><p>a forger key signed by a human member</p></li>
+
+<li><p>a forger key revocation</p></li>
+</ul></li>
+
+<li><p>Blocks also contain reference to a previous block, universal time, block
+count, hash, forger identification and signature</p></li>
+
+<li><p>Blockchain forgers that are freely providing the service.</p>
+
+<ul>
+<li>A forger has a unique key pair, each block is signed by the forger key</li>
+<li>The public key must be signed by a Duniter/Ğ1 active member</li>
+<li>The key expires when the above signature expires, when the Duniter/Ğ1
+member expires or when a revocation document is published</li>
+</ul></li>
+
+<li><p>Forgers are sharing pending operations that must be included in the next block</p></li>
+
+<li><p>Deterministic algorithm decides who should forge the next block among the
+active forgers. If a block is not forged, the next forger decided by the
+algorithm should forge the block in a next timeslot.</p></li>
+</ul>
+
+<p>This might be the most difficult and a proof of work might help not having two
+  blocks created concurrently.</p>
+
+<ul>
+<li>Anyone can submit to any forger a pending operation</li>
+</ul>
+
+<h3 id="resolve-name-squatting">Resolve name squatting</h3>
+
+<p>A name bidding system can be added on top of that where some Ğ1 money is left on
+a Ğ1 non member account. The name is valid as long as this account keeps its
+money. If it is withdrawn, the name is no longer valid. Someone else could place
+a bid with a higher amount on another account to claim the name.</p>
+
+<h3 id="future-proof">Future-proof</h3>
+
+<p>Blocks older than a year can be forgotten if every operation on the blockchain
+has an expiration duration of a year. Forger public keys will need to be signed
+again and name registered again. If you forging node is offline for more than a
+year, it makes sense to resynchronize the full blockchain.</p>
+
+<h3 id="sharing-operations-before-making-a-block-and-sharing-new-blocks">Sharing operations before making a block and sharing new blocks</h3>
+
+<p>A flood algorithm might be needed. Bloom filters can come in handy.</p>
+
+<h3 id="resolve-forks">Resolve forks</h3>
+
+<p>Either:</p>
+
+<ul>
+<li><p>A deterministic algorithm decides which forger wins, the operations from the
+diverging blocks operations are put back in the pending operations</p></li>
+
+<li><p>A deterministic merge block is generated and published (not signed by a
+forger, the merge block should be generated identically across all forgers)</p></li>
+</ul>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+

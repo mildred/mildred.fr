@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Mildred&#39;s Website  | Programming good practices</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.52" />
+
+    
+    <link rel="stylesheet" href="/style.css" />
+
+    
+      
+    
+
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Mildred&#39;s Website</h1>
+  <h2>Programming good practices</h2>
+</header>
+    <nav>
+      <ul>
+      
+      
+        <li><a
+          class=""
+          href="/"
+          title="">Accueil</a></li>
+      
+        <li><a
+          class=""
+          href="/en/"
+          title="">Home</a></li>
+      
+        <li><a
+          class=""
+          href="/curriculum-vitae/"
+          title="">Curriculum Vitæ</a></li>
+      
+        <li><a
+          class=""
+          href="/contact/"
+          title="">Contact</a></li>
+      
+      </ul>
+    </nav>
+
+
+<div class="left">
+  <img alt="" class="photo" src="/Images/IMG_5669_square_128.jpeg">
+  <img alt="" class="photo" src="/Images/ident-photo-2-128.jpeg">
+  <img alt="" class="photo" src="/Images/all128.jpeg">
+
+  
+
+</div>
+
+    <main>
+      
+<article>
+  <h1>
+    <a href="/en/articles/2016-12-26-programming-good-practices/">
+      Programming good practices
+    </a>
+  </h1>
+  <div>
+    <p>Inspired by the golang language, especially its interfaces that allows decoupling without introducing dependencies.</p>
+
+<p>First, some guidelines that shows the direction to take but with no hard rules:</p>
+
+<ul>
+<li><p>Separate private imports from public imports. Private imports are only needed for the implementation. Public imports are exposed to other modules and are visible to them because their types appear in public function signatures or public types.</p></li>
+
+<li><p>In public module interface, avoid using types from other modules that are not completely abstracted as an interface type. Do not use pointer to struct defined elsewhere in your public function arguments. Except probably from platform types (<code>*net.URL</code> or <code>*context.Context</code> probably applies).</p></li>
+
+<li><p>Use basic types with no object characteristics, no defined methods, in public module interfaces. Better to rely on value to be a good exchange format than on complex objects that return objects and objects. This simplifies code and ensures that there is no side effects. Data layout is protocol.</p></li>
+
+<li><p>Extract side effect generating code from logic modules (most of the code) to put this in dedicated modules that implements an interface. Composition between logic modules and side effect generating modules should happen at top level only.</p></li>
+</ul>
+
+<p>Some metrics (lower is better):</p>
+
+<ul>
+<li>median module code size (not average)</li>
+<li>maximum module code size</li>
+<li>absolute number of public imports (imports used in public interfaces). An imported module is only counted once for the entire codebase</li>
+<li>absolute number of public imported types that are not interfaces (a public type is counted once per module of the application)</li>
+</ul>
+
+<p>These should not be at zero. Just measure when they augment. Either you have a good reason and can explain it, or it should&rsquo;t happen. Increase can be interpreted as increase of the common/runtime interface.</p>
+
+<p>See also the <a href="https://www.destroyallsoftware.com/talks/boundaries">boundaries task by destroy all software</a></p>
+
+  </div>
+  
+
+
+</article>
+
+    </main>
+    <footer>
+    <footer>
+  <a href="http://mildred.fr/"> &copy; 2021 Mildred&#39;s Website </a>
+</footer>
+
+    <script type="text/javascript"
+        src="/comments-static.js"></script>
+
+    </footer>
+  </body>
+</html>
+
